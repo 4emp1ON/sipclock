@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { describe, expect, it } from 'vitest';
 import { createMemoryRateLimitStore, rateLimit } from './rate-limit.ts';
 
-function setup(opts: { limit?: number; trustProxy?: boolean } = {}) {
+function setup(opts: { limit?: number; trustedProxyHops?: number } = {}) {
   let t = 1_000_000;
   const now = () => t;
   const store = createMemoryRateLimitStore({ now, cleanupIntervalMs: 0 });
@@ -15,7 +15,7 @@ function setup(opts: { limit?: number; trustProxy?: boolean } = {}) {
       limit: opts.limit ?? 2,
       windowMs: 60_000,
       now,
-      trustProxy: opts.trustProxy ?? false,
+      trustedProxyHops: opts.trustedProxyHops ?? 0,
     }) as never,
   );
   app.get('/', (c) => c.text('ok'));
@@ -76,15 +76,28 @@ describe('rateLimit middleware', () => {
     expect((await app.request('/')).status).toBe(200);
   });
 
-  it('keys by first X-Forwarded-For hop only when trusted', async () => {
-    const trusted = setup({ limit: 1, trustProxy: true });
-    await trusted.app.request('/', { headers: { 'x-forwarded-for': '1.1.1.1' } });
+  it('keys by the X-Forwarded-For entry appended by the trusted proxy, not client-supplied ones', async () => {
+    const trusted = setup({ limit: 1, trustedProxyHops: 1 });
+    // The proxy appends the real address (203.0.113.9); the client rotates spoofed entries on the left.
+    await trusted.app.request('/', { headers: { 'x-forwarded-for': '10.0.0.1, 203.0.113.9' } });
     expect(
-      (await trusted.app.request('/', { headers: { 'x-forwarded-for': '2.2.2.2' } })).status,
-    ).toBe(200);
-    expect(
-      (await trusted.app.request('/', { headers: { 'x-forwarded-for': '1.1.1.1, 9.9.9.9' } }))
+      (await trusted.app.request('/', { headers: { 'x-forwarded-for': '10.0.0.2, 203.0.113.9' } }))
         .status,
+    ).toBe(429);
+    expect(
+      (await trusted.app.request('/', { headers: { 'x-forwarded-for': '198.51.100.7' } })).status,
+    ).toBe(200);
+
+    const twoHops = setup({ limit: 1, trustedProxyHops: 2 });
+    await twoHops.app.request('/', {
+      headers: { 'x-forwarded-for': 'spoof, 203.0.113.9, 10.1.1.1' },
+    });
+    expect(
+      (
+        await twoHops.app.request('/', {
+          headers: { 'x-forwarded-for': 'other, 203.0.113.9, 10.1.1.2' },
+        })
+      ).status,
     ).toBe(429);
 
     const untrusted = setup({ limit: 1 });
@@ -92,5 +105,12 @@ describe('rateLimit middleware', () => {
     expect(
       (await untrusted.app.request('/', { headers: { 'x-forwarded-for': '2.2.2.2' } })).status,
     ).toBe(429);
+  });
+
+  it('caps the number of tracked keys', async () => {
+    const store = createMemoryRateLimitStore({ cleanupIntervalMs: 0, maxKeys: 3 });
+    for (let i = 0; i < 10; i++) await store.hit(`k${i}`, 60_000);
+    expect(store.size()).toBe(3);
+    store.close();
   });
 });

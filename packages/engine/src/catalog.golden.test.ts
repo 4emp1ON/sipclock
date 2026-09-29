@@ -5,6 +5,7 @@ import { estimateAbv } from './abv.ts';
 import { createIndex } from './graph.ts';
 import { input, moment } from './helpers.test-util.ts';
 import { recommend } from './recommend.ts';
+import { partsBase } from './units.ts';
 
 const index = createIndex(catalog);
 const recipe = (id: string) => {
@@ -40,6 +41,24 @@ describe('real catalog: ABV', () => {
 });
 
 describe('real catalog: recommendations', () => {
+  it('a bar with a single ingredient still gets a pick', () => {
+    for (const bar of [['mint'], ['gin'], []]) {
+      const rec = recommend(input({ bar }), catalog);
+      expect(rec.pick, JSON.stringify(bar)).not.toBeNull();
+    }
+    const zero = recommend(input({ bar: ['gin'], alcoholFree: true }), catalog);
+    expect(zero.pick?.abv).toBe(0);
+  });
+
+  it('parts are based on required ingredients, not optional floats', () => {
+    const r = recipe('smoky-ginger-sour');
+    const base = partsBase(r);
+    const required = r.ingredients.filter(
+      (i) => !i.optional && !i.garnish && i.amount.unit === 'ml',
+    );
+    expect(required.some((i) => i.amount.unit === 'ml' && i.amount.value === base)).toBe(true);
+  });
+
   it('hot Friday aperitif with gin and tonic at home → Gin & Tonic, ready', () => {
     const rec = recommend(
       input({

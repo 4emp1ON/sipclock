@@ -108,15 +108,27 @@ describe('recommend: properties', () => {
     );
   });
 
-  it('known bar ⇒ no result exceeds maxMissing; unknown bar ⇒ all unknown', () => {
+  it('known bar ⇒ results respect maxMissing unless nothing does (fallback); unknown bar ⇒ all unknown', () => {
     fc.assert(
       fc.property(inputArb, (i) => {
         const rec = recommend(i, fixtureCatalog);
-        for (const s of [rec.pick, ...rec.alternatives]) {
-          if (!s) continue;
-          if (i.bar === null) expect(s.availability.status).toBe('unknown');
-          else expect(missingCount(s.availability)).toBeLessThanOrEqual(defaultRules.maxMissing);
+        const results = [rec.pick, ...rec.alternatives].filter((s) => s !== null);
+        if (i.bar === null) {
+          for (const s of results) expect(s.availability.status).toBe('unknown');
+          return;
         }
+        const within = results.map((s) => missingCount(s.availability) <= defaultRules.maxMissing);
+        // Either every result is within the cap, or the cap removed everything and none is.
+        expect(within.every(Boolean) || within.every((w) => !w)).toBe(true);
+      }),
+    );
+  });
+
+  it('never returns an empty pick when the catalog has candidates', () => {
+    fc.assert(
+      fc.property(inputArb, (i) => {
+        const rec = recommend({ ...i, alcoholFree: false }, fixtureCatalog);
+        expect(rec.pick).not.toBeNull();
       }),
     );
   });

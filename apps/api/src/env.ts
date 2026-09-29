@@ -18,10 +18,7 @@ export const envSchema = z.object({
   BETTER_AUTH_URL: z.url(),
   CORS_ORIGINS: csv.default(['http://localhost:3000', 'http://localhost:8081']),
   SENTRY_DSN: z.preprocess((v) => (v === '' ? undefined : v), z.url().optional()),
-  TRUST_PROXY: z
-    .enum(['true', 'false'])
-    .default('false')
-    .transform((v) => v === 'true'),
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
   RATE_LIMIT_RECOMMEND_PER_MIN: z.coerce.number().int().min(1).max(100_000).default(60),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error', 'silent']).default('info'),
 });

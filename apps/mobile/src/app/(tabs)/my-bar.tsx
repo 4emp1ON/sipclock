@@ -80,12 +80,14 @@ export default function MyBarScreen() {
           label={s.starterBar}
           variant="secondary"
           className="flex-1"
+          disabled={ids === null}
           onPress={() => bar.replaceAll(STARTER_BAR)}
         />
         <Button
           label={s.clearBar}
           variant="secondary"
           className="flex-1"
+          disabled={ids === null}
           onPress={() => setConfirmingClear(true)}
         />
       </View>

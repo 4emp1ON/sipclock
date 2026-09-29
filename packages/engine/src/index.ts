@@ -1,4 +1,4 @@
-export { amountMl, DILUTION, estimateAbv } from './abv.ts';
+export { amountMl, DILUTION, estimateAbv, isAlcoholFree } from './abv.ts';
 export {
   type AvailabilityDetail,
   analyzeAvailability,

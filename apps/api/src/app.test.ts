@@ -11,7 +11,7 @@ function makeApp(ping: () => Promise<void> = async () => {}) {
     env: {
       CORS_ORIGINS: ['http://localhost:3000'],
       NODE_ENV: 'test',
-      TRUST_PROXY: false,
+      TRUST_PROXY_HOPS: 0,
       RATE_LIMIT_RECOMMEND_PER_MIN: 60,
     },
     catalog,

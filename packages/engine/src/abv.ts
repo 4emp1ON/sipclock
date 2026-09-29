@@ -52,8 +52,19 @@ export function estimateAbv(recipe: Recipe, index: CatalogIndex): number {
     liquid += ml;
     if (abv > ZERO_ABV_THRESHOLD) alcohol += (ml * abv) / 100;
   }
-  if (liquid === 0 || alcohol === 0) return 0;
+  if (alcohol === 0) return isAlcoholFree(recipe, index) ? 0 : 1;
+  if (liquid === 0) return 0;
   // 0% is reserved for drinks with no alcoholic ingredient at all: a few dashes of bitters still make
   // a drink unsuitable for someone who avoids alcohol, so it never rounds down to 0.
   return Math.max(1, Math.round((alcohol / (liquid * (1 + DILUTION[recipe.method]))) * 100));
+}
+
+/**
+ * True only if no line of the recipe, optional and garnish included, is alcoholic.
+ * This is the definition behind "alcohol-free" everywhere: `estimateAbv` returns 0 exactly for these.
+ */
+export function isAlcoholFree(recipe: Recipe, index: CatalogIndex): boolean {
+  return recipe.ingredients.every(
+    (item) => (index.ingredients.get(item.ingredient)?.abv ?? 0) <= ZERO_ABV_THRESHOLD,
+  );
 }

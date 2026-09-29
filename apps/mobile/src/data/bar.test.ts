@@ -1,7 +1,7 @@
 import { addToBar, listBar, removeFromBar, replaceBar } from './bar';
 import { MIGRATIONS, migrate } from './db';
 import { createFakeDb } from './fake-db.test-util';
-import { loadRecent, pushRecent, saveRecent } from './kv';
+import { loadRecent, mergeRecent, pushRecent, saveRecent } from './kv';
 
 describe('migrate', () => {
   it('applies migrations once and is idempotent', async () => {
@@ -52,6 +52,11 @@ describe('bar repository', () => {
 });
 
 describe('recent picks', () => {
+  it('mergeRecent keeps picks made before loading in front of stored history', () => {
+    expect(mergeRecent(['x'], ['a', 'x', 'b'])).toEqual(['x', 'a', 'b']);
+    expect(mergeRecent([], ['a'])).toEqual(['a']);
+  });
+
   it('pushRecent puts newest first, dedupes and caps', () => {
     expect(pushRecent(['a', 'b', 'c'], 'b')).toEqual(['b', 'a', 'c']);
     expect(pushRecent(['a', 'b'], 'c', 2)).toEqual(['c', 'a']);

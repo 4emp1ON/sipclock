@@ -20,6 +20,8 @@ export interface MemoryStoreOptions {
   now?: () => number;
   /** How often expired windows are dropped. `0` disables the timer. Default 60s. */
   cleanupIntervalMs?: number;
+  /** Upper bound on tracked keys; the oldest windows are evicted beyond it. Default 100 000. */
+  maxKeys?: number;
 }
 
 export interface MemoryRateLimitStore extends RateLimitStore {
@@ -31,6 +33,7 @@ export interface MemoryRateLimitStore extends RateLimitStore {
 
 export function createMemoryRateLimitStore(options: MemoryStoreOptions = {}): MemoryRateLimitStore {
   const now = options.now ?? Date.now;
+  const maxKeys = options.maxKeys ?? 100_000;
   const windows = new Map<string, RateLimitHit>();
 
   function sweep(): number {
@@ -55,6 +58,15 @@ export function createMemoryRateLimitStore(options: MemoryStoreOptions = {}): Me
       const current = windows.get(key);
       if (!current || current.resetAt <= t) {
         const fresh = { count: 1, resetAt: t + windowMs };
+        windows.delete(key);
+        if (windows.size >= maxKeys) {
+          sweep();
+          // Map iterates in insertion order, so the first keys hold the oldest windows.
+          for (const k of windows.keys()) {
+            if (windows.size < maxKeys) break;
+            windows.delete(k);
+          }
+        }
         windows.set(key, fresh);
         return { ...fresh };
       }
@@ -71,15 +83,23 @@ export function createMemoryRateLimitStore(options: MemoryStoreOptions = {}): Me
 }
 
 export interface ClientIpOptions {
-  /** Trust the first `X-Forwarded-For` hop (only behind a proxy that sets it). */
-  trustProxy: boolean;
+  /**
+   * Number of reverse proxies in front of the API that append to `X-Forwarded-For`. `0` ignores the
+   * header. Proxies append the address they saw, so the client is the entry `trustedProxyHops` from
+   * the right; everything to its left is client-controlled and never trusted.
+   */
+  trustedProxyHops: number;
 }
 
-/** Best-effort client address: proxy header when trusted, else the socket address, else a shared fallback. */
-export function clientIp(c: Context, { trustProxy }: ClientIpOptions): string {
-  if (trustProxy) {
-    const first = c.req.header('x-forwarded-for')?.split(',')[0]?.trim();
-    if (first) return first;
+/** Best-effort client address: trusted proxy hop, else the socket address, else a shared fallback. */
+export function clientIp(c: Context, { trustedProxyHops }: ClientIpOptions): string {
+  if (trustedProxyHops > 0) {
+    const hops = (c.req.header('x-forwarded-for') ?? '')
+      .split(',')
+      .map((h) => h.trim())
+      .filter(Boolean);
+    const client = hops[hops.length - trustedProxyHops];
+    if (client) return client;
   }
   try {
     const address = getConnInfo(c).remote.address;
@@ -97,7 +117,8 @@ export interface RateLimitOptions {
   /** Max requests per window. */
   limit: number;
   windowMs?: number;
-  trustProxy?: boolean;
+  /** See {@link ClientIpOptions.trustedProxyHops}. Default 0. */
+  trustedProxyHops?: number;
   /** Clock; must match the store's clock. */
   now?: () => number;
   /** Requests for which this returns false are not counted. */
@@ -111,7 +132,7 @@ export function rateLimit(options: RateLimitOptions): MiddlewareHandler<AppEnv> 
   const now = options.now ?? Date.now;
   return async (c, next) => {
     if (options.skip?.(c)) return next();
-    const ip = clientIp(c, { trustProxy: options.trustProxy ?? false });
+    const ip = clientIp(c, { trustedProxyHops: options.trustedProxyHops ?? 0 });
     const { count, resetAt } = await store.hit(`${name}:${ip}`, windowMs);
     const resetSeconds = Math.max(0, Math.ceil((resetAt - now()) / 1000));
     const headers: Record<string, string> = {

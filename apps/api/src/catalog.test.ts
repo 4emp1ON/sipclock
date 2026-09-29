@@ -11,7 +11,7 @@ function makeApp() {
     env: {
       CORS_ORIGINS: [],
       NODE_ENV: 'test',
-      TRUST_PROXY: false,
+      TRUST_PROXY_HOPS: 0,
       RATE_LIMIT_RECOMMEND_PER_MIN: 60,
     },
     catalog,

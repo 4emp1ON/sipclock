@@ -12,7 +12,7 @@ import { Chip } from '@/components/chip';
 import { PickCard } from '@/components/pick-card';
 import { Screen } from '@/components/screen';
 import { Text } from '@/components/text';
-import { loadRecent, pushRecent, saveRecent } from '@/data/kv';
+import { loadRecent, mergeRecent, pushRecent, saveRecent } from '@/data/kv';
 import { useBar } from '@/hooks/use-bar';
 import { useNow } from '@/hooks/use-now';
 import { availabilityLabel } from '@/lib/availability-label';
@@ -36,12 +36,19 @@ export default function TodayScreen() {
   const [filter, setFilter] = useState<Filter>(null);
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 0x7fffffff));
   const [recent, setRecent] = useState<string[]>([]);
+  const [recentLoaded, setRecentLoaded] = useState(false);
 
   useEffect(() => {
     loadRecent(db)
-      .then(setRecent)
-      .catch(() => undefined);
+      .then((stored) => setRecent((early) => mergeRecent(early, stored)))
+      .catch(() => undefined)
+      .finally(() => setRecentLoaded(true));
   }, [db]);
+
+  // Persist only after the stored history is merged in, so an early tap can't overwrite it.
+  useEffect(() => {
+    if (recentLoaded) saveRecent(db, recent).catch(() => undefined);
+  }, [db, recent, recentLoaded]);
 
   const occasion = filter && filter !== 'no-alcohol' ? filter : null;
   const alcoholFree = filter === 'no-alcohol';
@@ -62,11 +69,9 @@ export default function TodayScreen() {
   const openRecipe = useCallback((id: string) => router.push(`/recipe/${id}`), []);
 
   const anotherIdea = useCallback(() => {
-    const next = pick ? pushRecent(recent, pick.recipeId) : recent;
-    setRecent(next);
+    if (pick) setRecent((cur) => pushRecent(cur, pick.recipeId));
     setSeed(Math.floor(Math.random() * 0x7fffffff));
-    saveRecent(db, next).catch(() => undefined);
-  }, [db, pick, recent]);
+  }, [pick]);
 
   const toggle = (next: Filter) => setFilter((cur) => (cur === next ? null : next));
 

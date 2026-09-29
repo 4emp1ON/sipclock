@@ -11,7 +11,7 @@ function makeApp(perMin = 60) {
     env: {
       CORS_ORIGINS: [],
       NODE_ENV: 'test',
-      TRUST_PROXY: true,
+      TRUST_PROXY_HOPS: 1,
       RATE_LIMIT_RECOMMEND_PER_MIN: perMin,
     },
     catalog,
@@ -129,5 +129,15 @@ describe('POST /v1/recommendations', () => {
     }
     expect((await app.request('/api/auth/sign-in', { method: 'POST' })).status).toBe(429);
     expect((await app.request('/api/auth/get-session')).status).toBe(200);
+  });
+
+  it('rejects an oversized body with 413 problem+json before parsing it', async () => {
+    const res = await makeApp().request('/v1/recommendations', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ pad: 'x'.repeat(64 * 1024) }),
+    });
+    expect(res.status).toBe(413);
+    expect(res.headers.get('content-type')).toContain('application/problem+json');
   });
 });

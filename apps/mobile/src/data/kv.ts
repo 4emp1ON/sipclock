@@ -22,6 +22,15 @@ export function pushRecent(recent: readonly string[], id: string, limit = RECENT
   return [id, ...recent.filter((r) => r !== id)].slice(0, limit);
 }
 
+/** Merge picks made before the stored history finished loading in front of it. */
+export function mergeRecent(
+  early: readonly string[],
+  stored: readonly string[],
+  limit = RECENT_LIMIT,
+): string[] {
+  return [...new Set([...early, ...stored])].slice(0, limit);
+}
+
 export async function loadRecent(db: Db): Promise<string[]> {
   const raw = await getValue(db, RECENT_KEY);
   if (!raw) return [];

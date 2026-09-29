@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fixtureCatalog } from './__fixtures__/catalog.ts';
-import { estimateAbv } from './abv.ts';
+import { estimateAbv, isAlcoholFree } from './abv.ts';
 import { createIndex } from './graph.ts';
 
 const index = createIndex(fixtureCatalog);
@@ -62,5 +62,28 @@ describe('estimateAbv', () => {
     if (!negroni) throw new Error('negroni');
     const without = { ...negroni, ingredients: negroni.ingredients.filter((i) => !i.garnish) };
     expect(estimateAbv(without, index)).toBe(estimateAbv(negroni, index));
+  });
+});
+
+describe('isAlcoholFree', () => {
+  it('counts optional and garnish lines, so an optional dash of bitters is not alcohol-free', () => {
+    const zero = index.recipes.get('virgin-mojito');
+    const bitters = fixtureCatalog.ingredients.find((i) => i.abv > 40);
+    if (!zero || !bitters) throw new Error('fixture');
+    expect(isAlcoholFree(zero, index)).toBe(true);
+    const withDash = {
+      ...zero,
+      ingredients: [
+        ...zero.ingredients,
+        {
+          ingredient: bitters.id,
+          amount: { unit: 'dash' as const, value: 1 },
+          optional: true,
+          garnish: false,
+        },
+      ],
+    };
+    expect(isAlcoholFree(withDash, index)).toBe(false);
+    expect(estimateAbv(withDash, index)).toBe(1);
   });
 });

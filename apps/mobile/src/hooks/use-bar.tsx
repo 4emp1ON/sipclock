@@ -11,6 +11,7 @@ import {
 } from 'react';
 
 import { addToBar, listBar, removeFromBar, replaceBar } from '@/data/bar';
+import { createWriteQueue } from '@/data/write-queue';
 
 export interface BarApi {
   /** Ingredient ids in the bar; `null` until the first load finishes. */
@@ -27,7 +28,6 @@ const BarContext = createContext<BarApi | null>(null);
 export function BarProvider({ children }: { children: ReactNode }) {
   const db = useSQLiteContext();
   const [ids, setIds] = useState<readonly string[] | null>(null);
-  const queue = useRef<Promise<void>>(Promise.resolve());
   const current = useRef<readonly string[] | null>(null);
 
   const apply = useCallback((next: readonly string[]) => {
@@ -35,22 +35,28 @@ export function BarProvider({ children }: { children: ReactNode }) {
     setIds(next);
   }, []);
 
-  const reload = useCallback(async () => {
-    apply(await listBar(db));
+  // One queue per database; after a failed write it reloads the stored truth once it has drained.
+  const queue = useMemo(() => {
+    const q = createWriteQueue(async () => {
+      const stored = await listBar(db);
+      // A write queued while we were reading will resync again if needed; don't clobber it.
+      if (q.pending() === 0) apply(stored);
+    });
+    return q;
   }, [db, apply]);
 
   useEffect(() => {
-    reload().catch(() => apply([]));
-  }, [reload, apply]);
+    // Nothing can be written before the first load (toggle/replaceAll wait for it).
+    listBar(db)
+      .then(apply)
+      .catch(() => apply([]));
+  }, [db, apply]);
 
   const enqueue = useCallback(
     (write: () => Promise<void>) => {
-      queue.current = queue.current
-        .then(write)
-        .catch(() => reload())
-        .catch(() => undefined);
+      void queue.enqueue(write);
     },
-    [reload],
+    [queue],
   );
 
   const toggle = useCallback(
@@ -70,6 +76,7 @@ export function BarProvider({ children }: { children: ReactNode }) {
 
   const replaceAll = useCallback(
     (next: readonly string[]) => {
+      if (current.current === null) return; // still loading
       const unique = [...new Set(next)];
       apply(unique);
       enqueue(() => replaceBar(db, unique));

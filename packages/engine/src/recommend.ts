@@ -8,8 +8,8 @@ import type {
   ScoredRecipe,
   WeatherFit,
 } from '@sipclock/domain';
-import { estimateAbv } from './abv.ts';
-import { analyzeAvailability, availability } from './availability.ts';
+import { estimateAbv, isAlcoholFree } from './abv.ts';
+import { analyzeAvailability, availability, missingCount } from './availability.ts';
 import { type CatalogIndex, createIndex } from './graph.ts';
 import { unitJitter } from './random.ts';
 import {
@@ -178,14 +178,16 @@ export function recommend(
   rules: Rules = defaultRules,
 ): Recommendation {
   const index = createIndex(catalog);
-  const candidates: ScoredRecipe[] = [];
+  const scored: ScoredRecipe[] = [];
   for (const recipe of catalog.recipes) {
+    if (input.alcoholFree && !isAlcoholFree(recipe, index)) continue;
     const abv = estimateAbv(recipe, index);
-    if (input.alcoholFree && abv !== 0) continue;
     const avail = availability(recipe, input.bar, index);
-    if (avail.status === 'missing' && avail.missing.length > rules.maxMissing) continue;
-    candidates.push(scoreRecipe(recipe, abv, avail, input, index, rules));
+    scored.push(scoreRecipe(recipe, abv, avail, input, index, rules));
   }
+  const withinCap = scored.filter((c) => missingCount(c.availability) <= rules.maxMissing);
+  // A tiny or empty bar can rule out everything; then rank the whole catalog rather than show nothing.
+  const candidates = withinCap.length > 0 ? withinCap : scored;
   candidates.sort(compareScored);
 
   const pick = candidates.find((c) => !isMissing(c)) ?? candidates[0] ?? null;

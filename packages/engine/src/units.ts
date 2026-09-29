@@ -34,7 +34,7 @@ export function scaleAmount(amount: Amount, servings: number): Amount {
 export function partsBase(recipe: Recipe): number | null {
   let base: number | null = null;
   for (const item of recipe.ingredients) {
-    if (item.garnish || item.amount.unit !== 'ml') continue;
+    if (item.garnish || item.optional || item.amount.unit !== 'ml') continue;
     if (base === null || item.amount.value < base) base = item.amount.value;
   }
   return base;

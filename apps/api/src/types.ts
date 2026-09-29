@@ -6,7 +6,7 @@ import type { RateLimitStore } from './middleware/rate-limit.ts';
 import type { CatalogService } from './services/catalog.ts';
 
 export interface AppDeps {
-  env: Pick<Env, 'CORS_ORIGINS' | 'NODE_ENV' | 'TRUST_PROXY' | 'RATE_LIMIT_RECOMMEND_PER_MIN'>;
+  env: Pick<Env, 'CORS_ORIGINS' | 'NODE_ENV' | 'TRUST_PROXY_HOPS' | 'RATE_LIMIT_RECOMMEND_PER_MIN'>;
   catalog: CatalogService;
   rateLimitStore: RateLimitStore;
   auth: AuthHandler;
