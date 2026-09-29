@@ -30,6 +30,19 @@ describe('reasons', () => {
     );
   });
 
+  it('uses sentence case for title-cased catalog names', () => {
+    const titled = (id: string, l: 'en' | 'ru') => {
+      const n = name(id, l);
+      return n.charAt(0).toUpperCase() + n.slice(1);
+    };
+    expect(reasonText({ code: 'in-bar', ingredients: ['gin', 'lime'] }, 'en', titled)).toBe(
+      'You have gin and lime',
+    );
+    expect(reasonText({ code: 'swap', need: 'lime', use: 'lemon' }, 'ru', titled)).toBe(
+      'Лимон вместо: лайм',
+    );
+  });
+
   it('joins the strongest reasons into one line', () => {
     const line = reasonLine(
       [

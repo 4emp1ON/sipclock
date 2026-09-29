@@ -6,8 +6,10 @@ import { daypartLabel, flavorLabel, type Locale, occasionLabel, seasonLabel } fr
 export type IngredientName = (id: string, locale: Locale) => string;
 
 /** One short clause per reason. Apps join the first two or three into the "why this one" line. */
-export function reasonText(reason: Reason, locale: Locale, name: IngredientName): string {
+export function reasonText(reason: Reason, locale: Locale, displayName: IngredientName): string {
   const ru = locale === 'ru';
+  // Catalog names are title-cased for lists and headings; inside a sentence they read as common nouns.
+  const name: IngredientName = (id, l) => lowerFirst(displayName(id, l));
   const names = (ids: string[]) =>
     listFormat(
       ids.map((id) => name(id, locale)),
@@ -66,6 +68,10 @@ export function reasonLine(
   const parts = reasons.slice(0, max).map((r) => reasonText(r, locale, name));
   if (parts.length === 0) return '';
   return `${parts.join('. ')}.`;
+}
+
+function lowerFirst(s: string): string {
+  return s.charAt(0).toLocaleLowerCase() + s.slice(1);
 }
 
 function capitalize(s: string): string {
