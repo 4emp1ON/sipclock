@@ -73,8 +73,10 @@ jobs:
           ssh -i ~/.ssh/deploy_key -p "$PORT" "deploy@$HOST" "$TAG"
       - name: Smoke test
         run: |
-          for i in $(seq 1 12); do
-            if curl -fsS https://4db4f06b3824.vps.myjino.ru/sipclock/ready; then exit 0; fi
+          for i in $(seq 1 6); do
+            if curl -fsS --max-time 10 https://4db4f06b3824.vps.myjino.ru/sipclock/ready; then exit 0; fi
             sleep 5
           done
+          echo "::error::API not reachable from the runner"
+          curl -sv --max-time 10 https://4db4f06b3824.vps.myjino.ru/sipclock/ready 2>&1 | tail -20
           exit 1
