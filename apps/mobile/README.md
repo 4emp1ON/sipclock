@@ -28,10 +28,11 @@ Then `pnpm --filter @sipclock/mobile start` and open the dev client. Profiles ar
 ## Structure
 
 ```
-src/app/          Expo Router routes: _layout (fonts, splash, Sentry, native tabs), index (Today), my-bar, favorites, search
+src/app/          Expo Router: _layout (fonts, splash, Sentry, SQLite + bar providers, Stack), (tabs)/ native tabs (index = Today, my-bar, favorites, search), recipe/[id]
 src/components/   Screen, Text, Chip, Button, AbvBadge, PickCard, Placeholder, app-tabs
-src/hooks/        useTheme, useNow
-src/lib/          time (formatTime), theme, typography, fonts (+ tests)
+src/hooks/        useTheme, useNow, useBar (BarProvider)
+src/data/         expo-sqlite: db (migrations, sipclock.db), bar + kv repositories (injected Db, tested with a fake)
+src/lib/          time, theme, typography, fonts, locale, strings (en/ru UI copy), recommend-input, availability-label, makeable (+ tests)
 src/global.css    Tailwind + Uniwind entry, imports the token stylesheet
 metro.config.js   withUniwindConfig wrapper
 ```

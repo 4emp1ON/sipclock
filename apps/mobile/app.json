@@ -28,11 +28,14 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#17102E",
-          "dark": { "backgroundColor": "#17102E" },
+          "dark": {
+            "backgroundColor": "#17102E"
+          },
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,

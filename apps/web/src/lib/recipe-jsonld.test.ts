@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { recipes } from '@/data/recipes';
-import { buildRecipeJsonLd, serializeJsonLd, toIsoDuration } from './recipe-jsonld';
+import { recipesById } from '@/lib/catalog';
+import { buildRecipeJsonLd, recipePath, serializeJsonLd, toIsoDuration } from './recipe-jsonld';
 
-const gt = recipes[0];
+const gt = recipesById.get('gin-and-tonic');
 if (!gt) throw new Error('fixture missing');
 
 describe('toIsoDuration', () => {
@@ -14,21 +14,37 @@ describe('toIsoDuration', () => {
 });
 
 describe('buildRecipeJsonLd', () => {
-  const ld = buildRecipeJsonLd(gt, 'https://sipclock.app');
+  const en = buildRecipeJsonLd(gt, 'en', 'https://sipclock.app');
+  const ru = buildRecipeJsonLd(gt, 'ru', 'https://sipclock.app');
 
   it('has required schema.org Recipe fields', () => {
-    expect(ld['@context']).toBe('https://schema.org');
-    expect(ld['@type']).toBe('Recipe');
-    expect(ld.name).toBe('Gin & Tonic');
-    expect(ld.recipeCategory).toBe('Cocktail');
-    expect(ld.totalTime).toBe('PT2M');
-    expect(ld.url).toBe('https://sipclock.app/recipes/gin-and-tonic');
-    expect(ld.recipeIngredient).toContain('50 ml London dry gin');
+    expect(en['@context']).toBe('https://schema.org');
+    expect(en['@type']).toBe('Recipe');
+    expect(en.name).toBe('Gin & Tonic');
+    expect(en.inLanguage).toBe('en');
+    expect(en.recipeCategory).toBe('Cocktail');
+    expect(en.totalTime).toBe('PT2M');
+    expect(en.url).toBe('https://sipclock.app/en/recipes/gin-and-tonic');
+    expect(en.recipeIngredient).toContain('50 ml Gin');
+    expect(en.recipeIngredient).toContain('Ice (to fill)');
   });
 
   it('lists instructions as ordered HowToStep', () => {
-    expect(ld.recipeInstructions).toHaveLength(gt.steps.length);
-    expect(ld.recipeInstructions[0]).toMatchObject({ '@type': 'HowToStep', position: 1 });
+    expect(en.recipeInstructions).toHaveLength(gt.steps.length);
+    expect(en.recipeInstructions[0]).toMatchObject({ '@type': 'HowToStep', position: 1 });
+  });
+
+  it('localizes name, ingredients and steps', () => {
+    expect(ru.name).toBe('Джин-тоник');
+    expect(ru.url).toBe('https://sipclock.app/ru/recipes/gin-and-tonic');
+    expect(ru.recipeIngredient).toContain('50 мл Джин');
+    expect(ru.recipeInstructions[1]?.text).toBe('Влейте джин.');
+  });
+});
+
+describe('recipePath', () => {
+  it('is locale-prefixed', () => {
+    expect(recipePath('ru', 'negroni')).toBe('/ru/recipes/negroni');
   });
 });
 

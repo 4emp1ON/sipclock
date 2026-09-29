@@ -29,8 +29,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Lint and format
         run: pnpm exec biome ci .
-      - name: Design tokens are up to date
-        run: pnpm --filter @sipclock/tokens run check
+      - name: Generated files are up to date
+        run: |
+          pnpm --filter @sipclock/tokens run check
+          pnpm --filter @sipclock/catalog run check
       - name: Typecheck
         run: pnpm typecheck
       - name: Unit tests

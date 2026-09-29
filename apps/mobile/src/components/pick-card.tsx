@@ -8,7 +8,8 @@ export interface PickCardProps {
   style: string;
   mood: string;
   abv: number;
-  availability: string;
+  /** Availability pill text; omitted when the bar is unknown. */
+  availability?: string | null;
 }
 
 /** Simple highball glass drawn with views until real drink photos exist. */
@@ -32,11 +33,13 @@ export function PickCard({ name, style, mood, abv, availability }: PickCardProps
       <View className="flex-1 items-center justify-center pb-24">
         <GlassPlaceholder />
       </View>
-      <View className="absolute top-4 left-4 rounded-pill bg-mint px-3 py-2">
-        <Text variant="label" tone="onMint">
-          {availability}
-        </Text>
-      </View>
+      {availability ? (
+        <View className="absolute top-4 left-4 rounded-pill bg-mint px-3 py-2">
+          <Text variant="label" tone="onMint">
+            {availability}
+          </Text>
+        </View>
+      ) : null}
       <View className="absolute inset-x-0 bottom-0 flex-row items-end gap-3 bg-photo-scrim p-5">
         <View className="flex-1 gap-1">
           <Text variant="drink-title" tone="onPhoto">

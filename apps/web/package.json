@@ -15,7 +15,11 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "@sipclock/tokens": "workspace:*",
-    "@sentry/nextjs": "11.1.0"
+    "@sentry/nextjs": "11.1.0",
+    "@sipclock/domain": "workspace:*",
+    "@sipclock/catalog": "workspace:*",
+    "@sipclock/engine": "workspace:*",
+    "@sipclock/i18n": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

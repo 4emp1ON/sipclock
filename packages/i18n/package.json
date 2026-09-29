@@ -1,0 +1,22 @@
+{
+  "name": "@sipclock/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "EN/RU copy for domain enums and recommendation reasons, plus amount formatting.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sipclock/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.2"
+  }
+}

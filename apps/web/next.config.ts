@@ -20,7 +20,13 @@ const csp = [
 const nextConfig: NextConfig = {
   reactCompiler: true,
   typedRoutes: true,
-  transpilePackages: ['@sipclock/tokens'],
+  transpilePackages: [
+    '@sipclock/tokens',
+    '@sipclock/domain',
+    '@sipclock/catalog',
+    '@sipclock/engine',
+    '@sipclock/i18n',
+  ],
   poweredByHeader: false,
   async headers() {
     return [

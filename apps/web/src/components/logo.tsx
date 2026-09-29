@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { Locale } from '@/i18n/ui';
 
 export function LogoMark({ size = 28 }: { size?: number }) {
   return (
@@ -15,9 +16,9 @@ export function LogoMark({ size = 28 }: { size?: number }) {
   );
 }
 
-export function Logo() {
+export function Logo({ locale }: { locale: Locale }) {
   return (
-    <Link href="/" className="inline-flex min-h-12 items-center gap-2">
+    <Link href={`/${locale}`} className="inline-flex min-h-12 items-center gap-2">
       <LogoMark />
       <span className="font-display text-lg font-semibold">Sipclock</span>
     </Link>

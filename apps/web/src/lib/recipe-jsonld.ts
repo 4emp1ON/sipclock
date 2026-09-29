@@ -1,4 +1,6 @@
-import type { Recipe } from '@/data/recipes';
+import type { Recipe } from '@sipclock/domain';
+import { flavorLabel, glassLabel, type Locale, methodLabel } from '@sipclock/i18n';
+import { ingredientLine } from '@/lib/catalog';
 
 export interface RecipeJsonLd {
   '@context': 'https://schema.org';
@@ -6,6 +8,7 @@ export interface RecipeJsonLd {
   name: string;
   description: string;
   url: string;
+  inLanguage: Locale;
   recipeCategory: 'Cocktail';
   recipeIngredient: string[];
   recipeInstructions: { '@type': 'HowToStep'; position: number; text: string }[];
@@ -23,23 +26,33 @@ export function toIsoDuration(minutes: number): string {
   return m === 0 ? `PT${h}H` : `PT${h}H${m}M`;
 }
 
-export function buildRecipeJsonLd(recipe: Recipe, siteUrl: string): RecipeJsonLd {
+export function recipePath(locale: Locale, id: string): string {
+  return `/${locale}/recipes/${id}`;
+}
+
+export function buildRecipeJsonLd(recipe: Recipe, locale: Locale, siteUrl: string): RecipeJsonLd {
+  const keywords = [
+    ...recipe.tags.flavors.map((f) => flavorLabel[locale][f]),
+    glassLabel[locale][recipe.glass],
+    methodLabel[locale][recipe.method],
+  ];
   return {
     '@context': 'https://schema.org',
     '@type': 'Recipe',
-    name: recipe.name,
-    description: recipe.description,
-    url: `${siteUrl}/recipes/${recipe.slug}`,
+    name: recipe.name[locale],
+    description: recipe.description[locale],
+    url: `${siteUrl}${recipePath(locale, recipe.id)}`,
+    inLanguage: locale,
     recipeCategory: 'Cocktail',
-    recipeIngredient: recipe.ingredients.map((i) => `${i.amount} ${i.name}`),
-    recipeInstructions: recipe.steps.map((text, idx) => ({
+    recipeIngredient: recipe.ingredients.map((i) => ingredientLine(i, locale)),
+    recipeInstructions: recipe.steps.map((step, idx) => ({
       '@type': 'HowToStep',
       position: idx + 1,
-      text,
+      text: step[locale],
     })),
-    totalTime: toIsoDuration(recipe.minutes),
-    recipeYield: recipe.yield,
-    keywords: recipe.keywords.join(', '),
+    totalTime: toIsoDuration(recipe.timeMinutes),
+    recipeYield: locale === 'ru' ? '1 порция' : '1 serving',
+    keywords: keywords.join(', '),
   };
 }
 

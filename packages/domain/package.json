@@ -1,0 +1,22 @@
+{
+  "name": "@sipclock/domain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sipclock domain model: ingredients, recipes, catalog and recommendation contracts, with Zod schemas.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.2"
+  }
+}

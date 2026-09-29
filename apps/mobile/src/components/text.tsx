@@ -6,6 +6,9 @@ import { type TextVariant, textStyle } from '@/lib/typography';
 const TONES = {
   ink: 'text-ink',
   muted: 'text-ink-muted',
+  primary: 'text-primary',
+  accent: 'text-accent',
+  danger: 'text-danger',
   onPrimary: 'text-on-primary',
   onAccent: 'text-on-accent',
   onMint: 'text-on-mint',

@@ -1,10 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { createApp } from './app.ts';
 import { silentLogger } from './lib/logger.ts';
+import { createMemoryRateLimitStore } from './middleware/rate-limit.ts';
+import { createBundledCatalogService } from './services/catalog.ts';
+
+const catalog = createBundledCatalogService();
 
 function makeApp(ping: () => Promise<void> = async () => {}) {
   return createApp({
-    env: { CORS_ORIGINS: ['http://localhost:3000'], NODE_ENV: 'test' },
+    env: {
+      CORS_ORIGINS: ['http://localhost:3000'],
+      NODE_ENV: 'test',
+      TRUST_PROXY: false,
+      RATE_LIMIT_RECOMMEND_PER_MIN: 60,
+    },
+    catalog,
+    rateLimitStore: createMemoryRateLimitStore({ cleanupIntervalMs: 0 }),
     auth: { handler: async () => new Response('auth-ok') },
     ping,
     logger: silentLogger,
@@ -48,7 +59,7 @@ describe('system routes', () => {
     expect(res.status).toBe(200);
     const body = (await res.json()) as Record<string, unknown>;
     expect(body.apiVersion).toBe('1');
-    expect(body.catalogVersion).toBeNull();
+    expect(body.catalogVersion).toMatch(/^\d{4}\.\d{2}\.\d{2}/);
     expect(new Date(String(body.time)).toISOString()).toBe(body.time);
   });
 });

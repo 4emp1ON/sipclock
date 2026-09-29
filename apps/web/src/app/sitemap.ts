@@ -1,14 +1,22 @@
 import type { MetadataRoute } from 'next';
-import { recipes } from '@/data/recipes';
+import { LOCALES } from '@/i18n/ui';
+import { catalog } from '@/lib/catalog';
 import { SITE_URL } from '@/lib/site';
+
+function entry(path: string, changeFrequency: 'weekly' | 'monthly', priority: number) {
+  const languages = Object.fromEntries(LOCALES.map((l) => [l, `${SITE_URL}/${l}${path}`]));
+  return LOCALES.map((l) => ({
+    url: `${SITE_URL}/${l}${path}`,
+    changeFrequency,
+    priority,
+    alternates: { languages },
+  }));
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    { url: SITE_URL, changeFrequency: 'weekly', priority: 1 },
-    ...recipes.map((r) => ({
-      url: `${SITE_URL}/recipes/${r.slug}`,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    })),
+    ...entry('', 'weekly', 1),
+    ...entry('/recipes', 'weekly', 0.8),
+    ...catalog.recipes.flatMap((r) => entry(`/recipes/${r.id}`, 'monthly', 0.7)),
   ];
 }

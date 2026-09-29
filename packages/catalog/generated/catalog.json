@@ -1,0 +1,6115 @@
+{
+  "version": "2026.09.29",
+  "ingredients": [
+    {
+      "id": "gin",
+      "name": {
+        "en": "Gin",
+        "ru": "Джин"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [
+        {
+          "id": "vodka",
+          "note": {
+            "en": "Less botanical, still works",
+            "ru": "Меньше трав, но подойдёт"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "london-dry-gin",
+      "name": {
+        "en": "London dry gin",
+        "ru": "Лондонский сухой джин"
+      },
+      "kind": "spirit",
+      "parent": "gin",
+      "abv": 42,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "vodka",
+      "name": {
+        "en": "Vodka",
+        "ru": "Водка"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "rum",
+      "name": {
+        "en": "Rum",
+        "ru": "Ром"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "white-rum",
+      "name": {
+        "en": "White rum",
+        "ru": "Белый ром"
+      },
+      "kind": "spirit",
+      "parent": "rum",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "dark-rum",
+      "name": {
+        "en": "Dark rum",
+        "ru": "Тёмный ром"
+      },
+      "kind": "spirit",
+      "parent": "rum",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "spiced-rum",
+      "name": {
+        "en": "Spiced rum",
+        "ru": "Пряный ром"
+      },
+      "kind": "spirit",
+      "parent": "rum",
+      "abv": 35,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "whisky",
+      "name": {
+        "en": "Whisky",
+        "ru": "Виски"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "bourbon",
+      "name": {
+        "en": "Bourbon",
+        "ru": "Бурбон"
+      },
+      "kind": "spirit",
+      "parent": "whisky",
+      "abv": 45,
+      "substitutes": [
+        {
+          "id": "rye-whiskey",
+          "note": {
+            "en": "Drier and spicier",
+            "ru": "Суше и пряннее"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "rye-whiskey",
+      "name": {
+        "en": "Rye whiskey",
+        "ru": "Ржаной виски"
+      },
+      "kind": "spirit",
+      "parent": "whisky",
+      "abv": 45,
+      "substitutes": [
+        {
+          "id": "bourbon",
+          "note": {
+            "en": "Softer and sweeter",
+            "ru": "Мягче и слаще"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "scotch-whisky",
+      "name": {
+        "en": "Scotch whisky",
+        "ru": "Шотландский виски"
+      },
+      "kind": "spirit",
+      "parent": "whisky",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "irish-whiskey",
+      "name": {
+        "en": "Irish whiskey",
+        "ru": "Ирландский виски"
+      },
+      "kind": "spirit",
+      "parent": "whisky",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "tequila",
+      "name": {
+        "en": "Tequila",
+        "ru": "Текила"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "blanco-tequila",
+      "name": {
+        "en": "Blanco tequila",
+        "ru": "Текила бланко"
+      },
+      "kind": "spirit",
+      "parent": "tequila",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "reposado-tequila",
+      "name": {
+        "en": "Reposado tequila",
+        "ru": "Текила репосадо"
+      },
+      "kind": "spirit",
+      "parent": "tequila",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "mezcal",
+      "name": {
+        "en": "Mezcal",
+        "ru": "Мескаль"
+      },
+      "kind": "spirit",
+      "abv": 42,
+      "substitutes": [
+        {
+          "id": "tequila",
+          "note": {
+            "en": "Loses the smoke",
+            "ru": "Без дымного оттенка"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "cachaca",
+      "name": {
+        "en": "Cachaça",
+        "ru": "Кашаса"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [
+        {
+          "id": "white-rum",
+          "note": {
+            "en": "Close enough, less grassy",
+            "ru": "Похоже, но менее травянисто"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "brandy",
+      "name": {
+        "en": "Brandy",
+        "ru": "Бренди"
+      },
+      "kind": "spirit",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cognac",
+      "name": {
+        "en": "Cognac",
+        "ru": "Коньяк"
+      },
+      "kind": "spirit",
+      "parent": "brandy",
+      "abv": 40,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "orange-liqueur",
+      "name": {
+        "en": "Orange liqueur",
+        "ru": "Апельсиновый ликёр"
+      },
+      "kind": "liqueur",
+      "abv": 30,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "red-bitter-aperitif",
+      "name": {
+        "en": "Red bitter aperitif",
+        "ru": "Красный горький аперитив"
+      },
+      "kind": "liqueur",
+      "abv": 25,
+      "substitutes": [
+        {
+          "id": "orange-aperitivo",
+          "note": {
+            "en": "Sweeter and lighter",
+            "ru": "Слаще и легче"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "orange-aperitivo",
+      "name": {
+        "en": "Orange aperitivo",
+        "ru": "Апельсиновый аперитиво"
+      },
+      "kind": "liqueur",
+      "abv": 11,
+      "substitutes": [
+        {
+          "id": "red-bitter-aperitif",
+          "note": {
+            "en": "More bitter and stronger",
+            "ru": "Горче и крепче"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "coffee-liqueur",
+      "name": {
+        "en": "Coffee liqueur",
+        "ru": "Кофейный ликёр"
+      },
+      "kind": "liqueur",
+      "abv": 20,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cream-liqueur",
+      "name": {
+        "en": "Cream liqueur",
+        "ru": "Сливочный ликёр"
+      },
+      "kind": "liqueur",
+      "abv": 17,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "maraschino-liqueur",
+      "name": {
+        "en": "Maraschino liqueur",
+        "ru": "Ликёр мараскино"
+      },
+      "kind": "liqueur",
+      "abv": 32,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "elderflower-liqueur",
+      "name": {
+        "en": "Elderflower liqueur",
+        "ru": "Ликёр из бузины"
+      },
+      "kind": "liqueur",
+      "abv": 20,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "green-herbal-liqueur",
+      "name": {
+        "en": "Green herbal liqueur",
+        "ru": "Зелёный травяной ликёр"
+      },
+      "kind": "liqueur",
+      "abv": 55,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "violet-liqueur",
+      "name": {
+        "en": "Violet liqueur",
+        "ru": "Фиалковый ликёр"
+      },
+      "kind": "liqueur",
+      "abv": 22,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "sweet-vermouth",
+      "name": {
+        "en": "Sweet vermouth",
+        "ru": "Сладкий вермут"
+      },
+      "kind": "wine",
+      "abv": 16,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "dry-vermouth",
+      "name": {
+        "en": "Dry vermouth",
+        "ru": "Сухой вермут"
+      },
+      "kind": "wine",
+      "abv": 18,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "sparkling-wine",
+      "name": {
+        "en": "Sparkling wine",
+        "ru": "Игристое вино"
+      },
+      "kind": "wine",
+      "abv": 11.5,
+      "substitutes": [
+        {
+          "id": "soda-water",
+          "note": {
+            "en": "Lighter, alcohol-free version",
+            "ru": "Легче, без алкоголя"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "red-wine",
+      "name": {
+        "en": "Red wine",
+        "ru": "Красное вино"
+      },
+      "kind": "wine",
+      "abv": 13,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "aromatic-bitters",
+      "name": {
+        "en": "Aromatic bitters",
+        "ru": "Ароматический биттер"
+      },
+      "kind": "bitters",
+      "abv": 44,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "orange-bitters",
+      "name": {
+        "en": "Orange bitters",
+        "ru": "Апельсиновый биттер"
+      },
+      "kind": "bitters",
+      "abv": 40,
+      "substitutes": [
+        {
+          "id": "aromatic-bitters"
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "ginger-beer",
+      "name": {
+        "en": "Ginger beer",
+        "ru": "Имбирное пиво"
+      },
+      "kind": "mixer",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "ginger-ale",
+          "note": {
+            "en": "Milder, less spicy",
+            "ru": "Мягче, менее пряный"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "tonic-water",
+      "name": {
+        "en": "Tonic water",
+        "ru": "Тоник"
+      },
+      "kind": "mixer",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "soda-water",
+      "name": {
+        "en": "Soda water",
+        "ru": "Содовая"
+      },
+      "kind": "mixer",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cola",
+      "name": {
+        "en": "Cola",
+        "ru": "Кола"
+      },
+      "kind": "mixer",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "grapefruit-soda",
+      "name": {
+        "en": "Grapefruit soda",
+        "ru": "Грейпфрутовая газировка"
+      },
+      "kind": "mixer",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "grapefruit-juice",
+          "note": {
+            "en": "Add soda water on top",
+            "ru": "Добавьте содовую сверху"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "ginger-ale",
+      "name": {
+        "en": "Ginger ale",
+        "ru": "Имбирный эль"
+      },
+      "kind": "mixer",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "ginger-beer",
+          "note": {
+            "en": "Spicier",
+            "ru": "Пряннее"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "lime-juice",
+      "name": {
+        "en": "Lime juice",
+        "ru": "Сок лайма"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "lemon-juice",
+          "note": {
+            "en": "Slightly softer sourness",
+            "ru": "Кислинка чуть мягче"
+          }
+        }
+      ],
+      "madeFrom": "lime",
+      "staple": false
+    },
+    {
+      "id": "lemon-juice",
+      "name": {
+        "en": "Lemon juice",
+        "ru": "Лимонный сок"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "lime-juice",
+          "note": {
+            "en": "Sharper, a bit more bitter",
+            "ru": "Резче и чуть горчее"
+          }
+        }
+      ],
+      "madeFrom": "lemon",
+      "staple": false
+    },
+    {
+      "id": "orange-juice",
+      "name": {
+        "en": "Orange juice",
+        "ru": "Апельсиновый сок"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [],
+      "madeFrom": "orange",
+      "staple": false
+    },
+    {
+      "id": "grapefruit-juice",
+      "name": {
+        "en": "Grapefruit juice",
+        "ru": "Грейпфрутовый сок"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cranberry-juice",
+      "name": {
+        "en": "Cranberry juice",
+        "ru": "Клюквенный морс"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "pineapple-juice",
+      "name": {
+        "en": "Pineapple juice",
+        "ru": "Ананасовый сок"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "tomato-juice",
+      "name": {
+        "en": "Tomato juice",
+        "ru": "Томатный сок"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "lime",
+      "name": {
+        "en": "Lime",
+        "ru": "Лайм"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "lemon",
+          "note": {
+            "en": "Works the same way",
+            "ru": "Работает так же"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "lemon",
+      "name": {
+        "en": "Lemon",
+        "ru": "Лимон"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "lime"
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "orange",
+      "name": {
+        "en": "Orange",
+        "ru": "Апельсин"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "mint",
+      "name": {
+        "en": "Mint",
+        "ru": "Мята"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cucumber",
+      "name": {
+        "en": "Cucumber",
+        "ru": "Огурец"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "egg-white",
+      "name": {
+        "en": "Egg white",
+        "ru": "Яичный белок"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cocktail-cherry",
+      "name": {
+        "en": "Cocktail cherry",
+        "ru": "Коктейльная вишня"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "green-olive",
+      "name": {
+        "en": "Green olive",
+        "ru": "Зелёная оливка"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "celery-stalk",
+      "name": {
+        "en": "Celery stalk",
+        "ru": "Стебель сельдерея"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "fresh-ginger",
+      "name": {
+        "en": "Fresh ginger",
+        "ru": "Свежий имбирь"
+      },
+      "kind": "fresh",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "simple-syrup",
+      "name": {
+        "en": "Simple syrup",
+        "ru": "Сахарный сироп"
+      },
+      "kind": "syrup",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "honey-syrup"
+        },
+        {
+          "id": "agave-syrup"
+        }
+      ],
+      "madeFrom": "sugar",
+      "staple": false
+    },
+    {
+      "id": "honey-syrup",
+      "name": {
+        "en": "Honey syrup",
+        "ru": "Медовый сироп"
+      },
+      "kind": "syrup",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "simple-syrup"
+        }
+      ],
+      "madeFrom": "honey",
+      "staple": false
+    },
+    {
+      "id": "grenadine",
+      "name": {
+        "en": "Grenadine",
+        "ru": "Гренадин"
+      },
+      "kind": "syrup",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "cranberry-juice",
+          "note": {
+            "en": "Less sweet, tarter",
+            "ru": "Менее сладко, кислее"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "agave-syrup",
+      "name": {
+        "en": "Agave syrup",
+        "ru": "Сироп агавы"
+      },
+      "kind": "syrup",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "simple-syrup"
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "demerara-syrup",
+      "name": {
+        "en": "Demerara syrup",
+        "ru": "Сироп из тростникового сахара"
+      },
+      "kind": "syrup",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "simple-syrup"
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "cream",
+      "name": {
+        "en": "Cream",
+        "ru": "Сливки"
+      },
+      "kind": "dairy",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "milk",
+          "note": {
+            "en": "Thinner body",
+            "ru": "Менее плотная текстура"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "milk",
+      "name": {
+        "en": "Milk",
+        "ru": "Молоко"
+      },
+      "kind": "dairy",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "sugar",
+      "name": {
+        "en": "Sugar",
+        "ru": "Сахар"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "honey",
+      "name": {
+        "en": "Honey",
+        "ru": "Мёд"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "honey-syrup"
+        },
+        {
+          "id": "simple-syrup"
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "salt",
+      "name": {
+        "en": "Salt",
+        "ru": "Соль"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "espresso",
+      "name": {
+        "en": "Espresso",
+        "ru": "Эспрессо"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "brewed-coffee",
+          "note": {
+            "en": "Brew it extra strong",
+            "ru": "Заварите очень крепким"
+          }
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "brewed-coffee",
+      "name": {
+        "en": "Hot brewed coffee",
+        "ru": "Горячий чёрный кофе"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "celery-salt",
+      "name": {
+        "en": "Celery salt",
+        "ru": "Сельдерейная соль"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [
+        {
+          "id": "salt"
+        }
+      ],
+      "staple": false
+    },
+    {
+      "id": "worcestershire-style-sauce",
+      "name": {
+        "en": "Worcestershire-style sauce",
+        "ru": "Вустерский соус"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "hot-sauce",
+      "name": {
+        "en": "Hot pepper sauce",
+        "ru": "Острый перечный соус"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "black-pepper",
+      "name": {
+        "en": "Black pepper",
+        "ru": "Чёрный перец"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "nutmeg",
+      "name": {
+        "en": "Nutmeg",
+        "ru": "Мускатный орех"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cinnamon-stick",
+      "name": {
+        "en": "Cinnamon stick",
+        "ru": "Палочка корицы"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "cloves",
+      "name": {
+        "en": "Cloves",
+        "ru": "Гвоздика"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "star-anise",
+      "name": {
+        "en": "Star anise",
+        "ru": "Звёздчатый анис"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "coconut-cream",
+      "name": {
+        "en": "Coconut cream",
+        "ru": "Кокосовые сливки"
+      },
+      "kind": "pantry",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "apple-juice",
+      "name": {
+        "en": "Apple juice",
+        "ru": "Яблочный сок"
+      },
+      "kind": "juice",
+      "abv": 0,
+      "substitutes": [],
+      "staple": false
+    },
+    {
+      "id": "ice",
+      "name": {
+        "en": "Ice",
+        "ru": "Лёд"
+      },
+      "kind": "staple",
+      "abv": 0,
+      "substitutes": [],
+      "staple": true
+    },
+    {
+      "id": "water",
+      "name": {
+        "en": "Water",
+        "ru": "Вода"
+      },
+      "kind": "staple",
+      "abv": 0,
+      "substitutes": [],
+      "staple": true
+    }
+  ],
+  "recipes": [
+    {
+      "id": "negroni",
+      "name": {
+        "en": "Negroni",
+        "ru": "Негрони"
+      },
+      "description": {
+        "en": "Equal parts gin, bitter aperitif and sweet vermouth: bittersweet, bold and beautifully simple.",
+        "ru": "Три равные части джина, горького аперитива и вермута: горько-сладкий, яркий и на редкость простой."
+      },
+      "glass": "rocks",
+      "method": "stir",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "red-bitter-aperitif",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sweet-vermouth",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a mixing glass with ice.",
+          "ru": "Наполните смесительный стакан льдом."
+        },
+        {
+          "en": "Add the gin, bitter aperitif and sweet vermouth.",
+          "ru": "Влейте джин, горький аперитив и сладкий вермут."
+        },
+        {
+          "en": "Stir for about 30 seconds until well chilled.",
+          "ru": "Размешивайте около 30 секунд до охлаждения."
+        },
+        {
+          "en": "Strain into a rocks glass over a large ice cube.",
+          "ru": "Процедите в рокс со свежим крупным кубиком льда."
+        },
+        {
+          "en": "Express an orange peel over the top and drop it in.",
+          "ru": "Выжмите над напитком цедру апельсина и опустите её в бокал."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "date"
+        ],
+        "flavors": [
+          "bitter",
+          "boozy"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "mild",
+          "cold"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "old-fashioned",
+      "name": {
+        "en": "Old Fashioned",
+        "ru": "Олд фешен"
+      },
+      "description": {
+        "en": "Whiskey, a touch of sugar and bitters over ice: the slow-sipping benchmark of the brown-spirit world.",
+        "ru": "Виски, немного сахара и биттер на льду: эталон неспешного напитка на основе выдержанного спирта."
+      },
+      "glass": "rocks",
+      "method": "stir",
+      "ingredients": [
+        {
+          "ingredient": "bourbon",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "demerara-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 7
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "aromatic-bitters",
+          "amount": {
+            "unit": "dash",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Add the syrup and bitters to a rocks glass.",
+          "ru": "Влейте сироп и биттер в бокал рокс."
+        },
+        {
+          "en": "Add one large ice cube and the bourbon.",
+          "ru": "Положите крупный кубик льда и налейте бурбон."
+        },
+        {
+          "en": "Stir gently for 20 seconds.",
+          "ru": "Аккуратно размешивайте 20 секунд."
+        },
+        {
+          "en": "Express an orange peel over the glass and drop it in.",
+          "ru": "Выжмите над бокалом цедру апельсина и добавьте в напиток."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "date"
+        ],
+        "flavors": [
+          "boozy",
+          "sweet"
+        ],
+        "dayparts": [
+          "late",
+          "evening"
+        ],
+        "weather": [
+          "cold",
+          "rainy",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "manhattan",
+      "name": {
+        "en": "Manhattan",
+        "ru": "Манхэттен"
+      },
+      "description": {
+        "en": "Rye, sweet vermouth and bitters, stirred until silky: a dark, elegant classic served up.",
+        "ru": "Ржаной виски, сладкий вермут и биттер, размешанные до шелковистости: тёмная элегантная классика без льда."
+      },
+      "glass": "coupe",
+      "method": "stir",
+      "ingredients": [
+        {
+          "ingredient": "rye-whiskey",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sweet-vermouth",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "aromatic-bitters",
+          "amount": {
+            "unit": "dash",
+            "value": 1
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cocktail-cherry",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a coupe with ice water.",
+          "ru": "Охладите бокал купе ледяной водой."
+        },
+        {
+          "en": "Stir the whiskey, vermouth and bitters with ice for 30 seconds.",
+          "ru": "Размешайте виски, вермут и биттер со льдом 30 секунд."
+        },
+        {
+          "en": "Strain into the chilled coupe.",
+          "ru": "Процедите в охлаждённое купе."
+        },
+        {
+          "en": "Garnish with a cocktail cherry.",
+          "ru": "Украсьте коктейльной вишней."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date",
+          "after-work"
+        ],
+        "flavors": [
+          "boozy",
+          "sweet",
+          "herbal"
+        ],
+        "dayparts": [
+          "evening",
+          "late"
+        ],
+        "weather": [
+          "cold",
+          "rainy",
+          "mild"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": true
+    },
+    {
+      "id": "dry-martini",
+      "name": {
+        "en": "Dry Martini",
+        "ru": "Драй мартини"
+      },
+      "description": {
+        "en": "Gin with a whisper of dry vermouth, ice cold and crisp. Minimal, sharp and endlessly debated.",
+        "ru": "Джин с лёгким намёком на сухой вермут, ледяной и чёткий. Минимализм, о котором бесконечно спорят."
+      },
+      "glass": "martini",
+      "method": "stir",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 60
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "dry-vermouth",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "green-olive",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "ingredient": "lemon",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a martini glass in the freezer or with ice.",
+          "ru": "Охладите бокал для мартини в морозилке или льдом."
+        },
+        {
+          "en": "Stir the gin and dry vermouth with plenty of ice for 30 to 40 seconds.",
+          "ru": "Размешайте джин и сухой вермут с большим количеством льда 30–40 секунд."
+        },
+        {
+          "en": "Strain into the chilled glass.",
+          "ru": "Процедите в охлаждённый бокал."
+        },
+        {
+          "en": "Finish with an olive or a lemon twist.",
+          "ru": "Украсьте оливкой или полоской лимонной цедры."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date",
+          "after-work"
+        ],
+        "flavors": [
+          "boozy",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "mild",
+          "cold"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": true
+    },
+    {
+      "id": "boulevardier",
+      "name": {
+        "en": "Boulevardier",
+        "ru": "Бульвардье"
+      },
+      "description": {
+        "en": "Negroni's warmer cousin: whiskey replaces gin for a rounder, richer bittersweet sip.",
+        "ru": "Более тёплый родственник негрони: виски вместо джина делает вкус круглее и насыщеннее."
+      },
+      "glass": "rocks",
+      "method": "stir",
+      "ingredients": [
+        {
+          "ingredient": "bourbon",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "red-bitter-aperitif",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sweet-vermouth",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a mixing glass with ice.",
+          "ru": "Наполните смесительный стакан льдом."
+        },
+        {
+          "en": "Add bourbon, bitter aperitif and vermouth.",
+          "ru": "Добавьте бурбон, горький аперитив и вермут."
+        },
+        {
+          "en": "Stir for 30 seconds.",
+          "ru": "Размешивайте 30 секунд."
+        },
+        {
+          "en": "Strain over a large ice cube in a rocks glass.",
+          "ru": "Процедите в рокс на крупный кубик льда."
+        },
+        {
+          "en": "Garnish with an orange peel.",
+          "ru": "Украсьте цедрой апельсина."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "date"
+        ],
+        "flavors": [
+          "bitter",
+          "boozy",
+          "sweet"
+        ],
+        "dayparts": [
+          "evening",
+          "late"
+        ],
+        "weather": [
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "americano",
+      "name": {
+        "en": "Americano",
+        "ru": "Американо"
+      },
+      "description": {
+        "en": "A light, bubbly, bittersweet long drink that opens the appetite without going to your head.",
+        "ru": "Лёгкий пузырчатый горько-сладкий лонг, который будит аппетит и не ударяет в голову."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "red-bitter-aperitif",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sweet-vermouth",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 60
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Pour in the bitter aperitif and sweet vermouth.",
+          "ru": "Влейте горький аперитив и сладкий вермут."
+        },
+        {
+          "en": "Top with soda water.",
+          "ru": "Долейте содовой."
+        },
+        {
+          "en": "Stir once and garnish with an orange slice.",
+          "ru": "Аккуратно перемешайте и украсьте долькой апельсина."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "chill"
+        ],
+        "flavors": [
+          "bitter",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": true
+    },
+    {
+      "id": "smoky-ginger-sour",
+      "name": {
+        "en": "Smoky Honey Ginger Sour",
+        "ru": "Медово-имбирный смоки сауэр"
+      },
+      "description": {
+        "en": "Whisky, lemon, honey and fresh ginger with an optional smoky float: a warming sour for gloomy evenings.",
+        "ru": "Виски, лимон, мёд и свежий имбирь с необязательной дымной ноткой: согревающий сауэр для хмурых вечеров."
+      },
+      "glass": "rocks",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "scotch-whisky",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "honey-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "fresh-ginger",
+          "amount": {
+            "unit": "piece",
+            "value": 3,
+            "noun": {
+              "en": "slices",
+              "ru": "кружка"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "mezcal",
+          "amount": {
+            "unit": "ml",
+            "value": 7
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Muddle the ginger slices in a shaker.",
+          "ru": "Разомните кружки имбиря в шейкере."
+        },
+        {
+          "en": "Add the whisky, lemon juice and honey syrup, then fill with ice.",
+          "ru": "Добавьте виски, лимонный сок и медовый сироп, наполните шейкер льдом."
+        },
+        {
+          "en": "Shake hard for 12 seconds.",
+          "ru": "Энергично встряхивайте 12 секунд."
+        },
+        {
+          "en": "Double strain into a rocks glass over fresh ice.",
+          "ru": "Процедите через два сита в рокс со свежим льдом."
+        },
+        {
+          "en": "Float the mezcal on top if you like some smoke.",
+          "ru": "Если хочется дымка, налейте сверху мескаль."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "after-work"
+        ],
+        "flavors": [
+          "sour",
+          "spicy",
+          "smoky"
+        ],
+        "dayparts": [
+          "evening",
+          "late"
+        ],
+        "weather": [
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 5,
+      "iba": false
+    },
+    {
+      "id": "daiquiri",
+      "name": {
+        "en": "Daiquiri",
+        "ru": "Дайкири"
+      },
+      "description": {
+        "en": "White rum, fresh lime and sugar in perfect balance: three ingredients, zero hiding places.",
+        "ru": "Белый ром, свежий лайм и сахар в идеальном балансе: три ингредиента, и спрятаться негде."
+      },
+      "glass": "coupe",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "white-rum",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a coupe.",
+          "ru": "Охладите бокал купе."
+        },
+        {
+          "en": "Add rum, lime juice and simple syrup to a shaker with ice.",
+          "ru": "Налейте ром, сок лайма и сахарный сироп в шейкер со льдом."
+        },
+        {
+          "en": "Shake hard for 10 to 12 seconds.",
+          "ru": "Энергично встряхивайте 10–12 секунд."
+        },
+        {
+          "en": "Strain into the chilled coupe.",
+          "ru": "Процедите в охлаждённое купе."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date",
+          "after-work"
+        ],
+        "flavors": [
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "evening",
+          "aperitif"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "margarita",
+      "name": {
+        "en": "Margarita",
+        "ru": "Маргарита"
+      },
+      "description": {
+        "en": "Tequila, orange liqueur and lime with a salty rim: zesty, tangy and always a crowd-pleaser.",
+        "ru": "Текила, апельсиновый ликёр и лайм с солёной каймой: цитрусовый, задорный и всегда к месту."
+      },
+      "glass": "coupe",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "blanco-tequila",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "salt",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "pinch for the rim",
+              "ru": "щепотка для каймы"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Wet the rim of a coupe with lime and dip it in salt, if you like.",
+          "ru": "При желании смочите край купе лаймом и обмакните в соль."
+        },
+        {
+          "en": "Add tequila, orange liqueur and lime juice to a shaker with ice.",
+          "ru": "Налейте текилу, апельсиновый ликёр и сок лайма в шейкер со льдом."
+        },
+        {
+          "en": "Shake hard for 10 seconds.",
+          "ru": "Энергично встряхивайте 10 секунд."
+        },
+        {
+          "en": "Strain into the glass.",
+          "ru": "Процедите в бокал."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "date"
+        ],
+        "flavors": [
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "cosmopolitan",
+      "name": {
+        "en": "Cosmopolitan",
+        "ru": "Космополитан"
+      },
+      "description": {
+        "en": "Vodka, cranberry, orange liqueur and lime: a tart, rosy-pink city classic.",
+        "ru": "Водка, клюква, апельсиновый ликёр и лайм: кисловатая розовая городская классика."
+      },
+      "glass": "martini",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "vodka",
+          "amount": {
+            "unit": "ml",
+            "value": 40
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cranberry-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a martini glass.",
+          "ru": "Охладите бокал для мартини."
+        },
+        {
+          "en": "Add all liquid ingredients to a shaker filled with ice.",
+          "ru": "Налейте все жидкие ингредиенты в шейкер со льдом."
+        },
+        {
+          "en": "Shake well for about 10 seconds.",
+          "ru": "Хорошо встряхивайте около 10 секунд."
+        },
+        {
+          "en": "Strain into the glass and add an orange twist.",
+          "ru": "Процедите в бокал и добавьте полоску апельсиновой цедры."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "date"
+        ],
+        "flavors": [
+          "fruity",
+          "sour"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "whiskey-sour",
+      "name": {
+        "en": "Whiskey Sour",
+        "ru": "Виски сауэр"
+      },
+      "description": {
+        "en": "Bourbon, lemon and sugar, with an egg white for a silky foam. Sweet, sharp and comforting.",
+        "ru": "Бурбон, лимон и сахар, а белок даёт шелковистую пену. Сладко, остро и по-домашнему уютно."
+      },
+      "glass": "rocks",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "bourbon",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "egg-white",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cocktail-cherry",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Add bourbon, lemon juice, syrup and egg white (if using) to a shaker without ice.",
+          "ru": "Налейте бурбон, лимонный сок, сироп и белок (если используете) в шейкер без льда."
+        },
+        {
+          "en": "Shake hard for 10 seconds to build the foam.",
+          "ru": "Встряхивайте 10 секунд, чтобы получилась пена."
+        },
+        {
+          "en": "Add ice and shake again for 10 seconds.",
+          "ru": "Добавьте лёд и снова встряхивайте 10 секунд."
+        },
+        {
+          "en": "Strain over fresh ice in a rocks glass.",
+          "ru": "Процедите в рокс со свежим льдом."
+        },
+        {
+          "en": "Garnish with a cherry.",
+          "ru": "Украсьте вишней."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "date"
+        ],
+        "flavors": [
+          "sour",
+          "sweet",
+          "boozy"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "mild",
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": true
+    },
+    {
+      "id": "gimlet",
+      "name": {
+        "en": "Gimlet",
+        "ru": "Гимлет"
+      },
+      "description": {
+        "en": "Gin and lime, nothing more: sharp, clean and refreshing.",
+        "ru": "Джин и лайм, и ничего лишнего: резкий, чистый и освежающий."
+      },
+      "glass": "coupe",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 60
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a coupe.",
+          "ru": "Охладите бокал купе."
+        },
+        {
+          "en": "Shake gin, lime juice and syrup with ice for 10 seconds.",
+          "ru": "Встряхните джин, сок лайма и сироп со льдом 10 секунд."
+        },
+        {
+          "en": "Strain into the coupe.",
+          "ru": "Процедите в купе."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date",
+          "after-work"
+        ],
+        "flavors": [
+          "sour",
+          "fresh",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": false
+    },
+    {
+      "id": "sidecar",
+      "name": {
+        "en": "Sidecar",
+        "ru": "Сайдкар"
+      },
+      "description": {
+        "en": "Cognac, orange liqueur and lemon: a smooth, fruity sour with old-world charm.",
+        "ru": "Коньяк, апельсиновый ликёр и лимон: мягкий фруктовый сауэр с шармом старой школы."
+      },
+      "glass": "coupe",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "cognac",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a coupe.",
+          "ru": "Охладите бокал купе."
+        },
+        {
+          "en": "Add cognac, orange liqueur and lemon juice to a shaker with ice.",
+          "ru": "Налейте коньяк, апельсиновый ликёр и лимонный сок в шейкер со льдом."
+        },
+        {
+          "en": "Shake for 10 seconds.",
+          "ru": "Встряхивайте 10 секунд."
+        },
+        {
+          "en": "Strain into the chilled coupe.",
+          "ru": "Процедите в охлаждённое купе."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date"
+        ],
+        "flavors": [
+          "sour",
+          "fruity",
+          "boozy"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "mild",
+          "cold"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "aviation",
+      "name": {
+        "en": "Aviation",
+        "ru": "Авиация"
+      },
+      "description": {
+        "en": "Gin, maraschino and lemon with a floral violet hint: pale, elegant and vintage.",
+        "ru": "Джин, мараскино и лимон с цветочным фиалковым штрихом: бледный, элегантный, в винтажном духе."
+      },
+      "glass": "coupe",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "maraschino-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "violet-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 7
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cocktail-cherry",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a coupe.",
+          "ru": "Охладите бокал купе."
+        },
+        {
+          "en": "Add gin, maraschino, lemon juice and violet liqueur to a shaker with ice.",
+          "ru": "Налейте джин, мараскино, лимонный сок и фиалковый ликёр в шейкер со льдом."
+        },
+        {
+          "en": "Shake well for 10 seconds.",
+          "ru": "Хорошо встряхивайте 10 секунд."
+        },
+        {
+          "en": "Strain into the coupe and drop in a cherry.",
+          "ru": "Процедите в купе и добавьте вишню."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date"
+        ],
+        "flavors": [
+          "sour",
+          "herbal"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "mild"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": true
+    },
+    {
+      "id": "last-word",
+      "name": {
+        "en": "Last Word",
+        "ru": "Ласт ворд"
+      },
+      "description": {
+        "en": "Four equal parts: gin, green herbal liqueur, maraschino and lime. Punchy, herbal and oddly harmonious.",
+        "ru": "Четыре равные части: джин, зелёный травяной ликёр, мараскино и лайм. Мощный, травяной и удивительно гармоничный."
+      },
+      "glass": "coupe",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 22
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "green-herbal-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 22
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "maraschino-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 22
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 22
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a coupe.",
+          "ru": "Охладите бокал купе."
+        },
+        {
+          "en": "Add all four ingredients to a shaker with ice.",
+          "ru": "Налейте все четыре ингредиента в шейкер со льдом."
+        },
+        {
+          "en": "Shake hard for 10 seconds.",
+          "ru": "Энергично встряхивайте 10 секунд."
+        },
+        {
+          "en": "Strain into the chilled coupe.",
+          "ru": "Процедите в охлаждённое купе."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date",
+          "party"
+        ],
+        "flavors": [
+          "herbal",
+          "sour",
+          "boozy"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "mild"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 3,
+      "iba": true
+    },
+    {
+      "id": "gin-sour",
+      "name": {
+        "en": "Gin Sour",
+        "ru": "Джин сауэр"
+      },
+      "description": {
+        "en": "Gin, lemon and syrup, optionally frothed with egg white: crisp, bright and quick to make.",
+        "ru": "Джин, лимон и сироп, при желании со взбитым белком: свежий, яркий и быстрый в приготовлении."
+      },
+      "glass": "rocks",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "egg-white",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Add gin, lemon juice, syrup and egg white (if using) to a shaker without ice.",
+          "ru": "Налейте джин, лимонный сок, сироп и белок (если используете) в шейкер без льда."
+        },
+        {
+          "en": "Shake hard for 10 seconds.",
+          "ru": "Встряхивайте 10 секунд."
+        },
+        {
+          "en": "Add ice and shake for another 10 seconds.",
+          "ru": "Добавьте лёд и встряхивайте ещё 10 секунд."
+        },
+        {
+          "en": "Strain over fresh ice in a rocks glass.",
+          "ru": "Процедите в рокс со свежим льдом."
+        },
+        {
+          "en": "Garnish with a lemon slice.",
+          "ru": "Украсьте долькой лимона."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "date"
+        ],
+        "flavors": [
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "evening",
+          "aperitif"
+        ],
+        "weather": [
+          "mild",
+          "hot"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": false
+    },
+    {
+      "id": "espresso-martini",
+      "name": {
+        "en": "Espresso Martini",
+        "ru": "Эспрессо мартини"
+      },
+      "description": {
+        "en": "Vodka, coffee liqueur and fresh espresso shaken into a velvety, foamy pick-me-up.",
+        "ru": "Водка, кофейный ликёр и свежий эспрессо, взбитые в бархатистую пенную бодрящую смесь."
+      },
+      "glass": "martini",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "vodka",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "coffee-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "espresso",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 5
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Brew a fresh espresso and let it cool slightly.",
+          "ru": "Сварите свежий эспрессо и дайте ему немного остыть."
+        },
+        {
+          "en": "Add vodka, coffee liqueur, espresso and syrup (if using) to a shaker with ice.",
+          "ru": "Налейте водку, кофейный ликёр, эспрессо и сироп (если нужен) в шейкер со льдом."
+        },
+        {
+          "en": "Shake very hard for 15 seconds to build the foam.",
+          "ru": "Очень энергично встряхивайте 15 секунд, чтобы получилась пена."
+        },
+        {
+          "en": "Double strain into a chilled martini glass.",
+          "ru": "Процедите через два сита в охлаждённый бокал для мартини."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "date"
+        ],
+        "flavors": [
+          "sweet",
+          "bitter",
+          "boozy"
+        ],
+        "dayparts": [
+          "late",
+          "evening"
+        ],
+        "weather": [
+          "mild",
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 5,
+      "zeroProofTwin": "espresso-tonic",
+      "iba": true
+    },
+    {
+      "id": "gin-and-tonic",
+      "name": {
+        "en": "Gin & Tonic",
+        "ru": "Джин-тоник"
+      },
+      "description": {
+        "en": "Gin and tonic over lots of ice with a squeeze of lime: the easiest way to look like you know what you are doing.",
+        "ru": "Джин и тоник с большим количеством льда и лаймом: самый простой способ выглядеть настоящим барменом."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "tonic-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "wedge",
+              "ru": "долька"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass to the top with ice.",
+          "ru": "Доверху наполните хайбол льдом."
+        },
+        {
+          "en": "Pour in the gin.",
+          "ru": "Влейте джин."
+        },
+        {
+          "en": "Top with chilled tonic water, about 120 ml.",
+          "ru": "Долейте охлаждённый тоник, около 120 мл."
+        },
+        {
+          "en": "Squeeze in a lime wedge and drop it in. Stir once.",
+          "ru": "Выжмите дольку лайма и опустите её в бокал. Один раз перемешайте."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "chill"
+        ],
+        "flavors": [
+          "bitter",
+          "fresh",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "zeroProofTwin": "lemon-tonic",
+      "iba": false
+    },
+    {
+      "id": "tequila-tonic",
+      "name": {
+        "en": "Tequila & Tonic",
+        "ru": "Текила-тоник"
+      },
+      "description": {
+        "en": "Blanco tequila stands in for gin: crisp, slightly peppery and very easy to like.",
+        "ru": "Текила бланко вместо джина: свежо, слегка перчено и очень легко пьётся."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "blanco-tequila",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "tonic-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "wedge",
+              "ru": "долька"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Add the tequila.",
+          "ru": "Налейте текилу."
+        },
+        {
+          "en": "Top with chilled tonic water.",
+          "ru": "Долейте охлаждённый тоник."
+        },
+        {
+          "en": "Squeeze in a lime wedge and stir gently.",
+          "ru": "Выжмите дольку лайма и аккуратно перемешайте."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "party"
+        ],
+        "flavors": [
+          "bitter",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "zeroProofTwin": "lemon-tonic",
+      "iba": false
+    },
+    {
+      "id": "tom-collins",
+      "name": {
+        "en": "Tom Collins",
+        "ru": "Том Коллинз"
+      },
+      "description": {
+        "en": "A tall, fizzy lemonade for grown-ups: gin, lemon, sugar and soda.",
+        "ru": "Высокая газированная лимонадная классика для взрослых: джин, лимон, сахар и содовая."
+      },
+      "glass": "collins",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 60
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a collins glass with ice.",
+          "ru": "Наполните бокал коллинз льдом."
+        },
+        {
+          "en": "Add gin, lemon juice and simple syrup.",
+          "ru": "Добавьте джин, лимонный сок и сахарный сироп."
+        },
+        {
+          "en": "Top with soda water.",
+          "ru": "Долейте содовой."
+        },
+        {
+          "en": "Stir gently and garnish with a lemon slice.",
+          "ru": "Аккуратно перемешайте и украсьте долькой лимона."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "after-work",
+          "chill"
+        ],
+        "flavors": [
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "zeroProofTwin": "lemon-fizz",
+      "iba": true
+    },
+    {
+      "id": "mojito",
+      "name": {
+        "en": "Mojito",
+        "ru": "Мохито"
+      },
+      "description": {
+        "en": "Rum, muddled mint, lime and soda over crushed ice: the summer refresher that never goes out of style.",
+        "ru": "Ром, размятая мята, лайм и содовая на колотом льду: летняя свежесть, которая не выходит из моды."
+      },
+      "glass": "highball",
+      "method": "muddle",
+      "ingredients": [
+        {
+          "ingredient": "white-rum",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "mint",
+          "amount": {
+            "unit": "piece",
+            "value": 10,
+            "noun": {
+              "en": "leaves",
+              "ru": "листьев"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 60
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Gently muddle the mint with the syrup and lime juice in a highball glass.",
+          "ru": "Аккуратно разомните мяту с сиропом и соком лайма прямо в хайболе."
+        },
+        {
+          "en": "Add the rum and fill the glass with crushed ice.",
+          "ru": "Влейте ром и наполните бокал колотым льдом."
+        },
+        {
+          "en": "Stir to mix and chill.",
+          "ru": "Перемешайте, чтобы охладить."
+        },
+        {
+          "en": "Top with soda water and a fresh mint sprig.",
+          "ru": "Долейте содовой и добавьте свежую веточку мяты."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill"
+        ],
+        "flavors": [
+          "fresh",
+          "sour",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 5,
+      "zeroProofTwin": "virgin-mojito",
+      "iba": true
+    },
+    {
+      "id": "paloma",
+      "name": {
+        "en": "Paloma",
+        "ru": "Палома"
+      },
+      "description": {
+        "en": "Tequila and grapefruit soda with a squeeze of lime: bright, bubbly and effortless.",
+        "ru": "Текила и грейпфрутовая газировка с лаймом: яркая, пузырчатая и совсем нехитрая."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "blanco-tequila",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "grapefruit-soda",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "salt",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "pinch for the rim",
+              "ru": "щепотка для каймы"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Salt the rim of a highball glass if you like.",
+          "ru": "При желании посолите край хайбола."
+        },
+        {
+          "en": "Fill the glass with ice.",
+          "ru": "Наполните бокал льдом."
+        },
+        {
+          "en": "Add tequila and lime juice.",
+          "ru": "Добавьте текилу и сок лайма."
+        },
+        {
+          "en": "Top with grapefruit soda and stir once.",
+          "ru": "Долейте грейпфрутовой газировкой и один раз перемешайте."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "after-work"
+        ],
+        "flavors": [
+          "fruity",
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "zeroProofTwin": "grapefruit-cooler",
+      "iba": false
+    },
+    {
+      "id": "moscow-mule",
+      "name": {
+        "en": "Moscow Mule",
+        "ru": "Московский мул"
+      },
+      "description": {
+        "en": "Vodka, lime and spicy ginger beer, served ice-cold in a copper mug.",
+        "ru": "Водка, лайм и острое имбирное пиво, подаётся ледяным в медной кружке."
+      },
+      "glass": "copper-mug",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "vodka",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ginger-beer",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "wedge",
+              "ru": "долька"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a mug or highball glass with ice.",
+          "ru": "Наполните кружку или хайбол льдом."
+        },
+        {
+          "en": "Add vodka and lime juice.",
+          "ru": "Добавьте водку и сок лайма."
+        },
+        {
+          "en": "Top with ginger beer.",
+          "ru": "Долейте имбирным пивом."
+        },
+        {
+          "en": "Stir briefly and garnish with a lime wedge.",
+          "ru": "Коротко перемешайте и украсьте долькой лайма."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "after-work"
+        ],
+        "flavors": [
+          "spicy",
+          "fresh",
+          "sour"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "zeroProofTwin": "ginger-lime-mule",
+      "iba": true
+    },
+    {
+      "id": "dark-rum-ginger",
+      "name": {
+        "en": "Dark Rum & Ginger",
+        "ru": "Тёмный ром с имбирём"
+      },
+      "description": {
+        "en": "Dark rum over ginger beer with a squeeze of lime: spicy, deep and dead simple.",
+        "ru": "Тёмный ром с имбирным пивом и лаймом: пряный, глубокий и предельно простой."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "dark-rum",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ginger-beer",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "wedge",
+              "ru": "долька"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Pour in the ginger beer and lime juice.",
+          "ru": "Влейте имбирное пиво и сок лайма."
+        },
+        {
+          "en": "Slowly float the dark rum on top.",
+          "ru": "Аккуратно налейте сверху тёмный ром."
+        },
+        {
+          "en": "Garnish with a lime wedge.",
+          "ru": "Украсьте долькой лайма."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "after-work"
+        ],
+        "flavors": [
+          "spicy",
+          "boozy"
+        ],
+        "dayparts": [
+          "evening",
+          "late"
+        ],
+        "weather": [
+          "mild",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "zeroProofTwin": "ginger-lime-mule",
+      "iba": false
+    },
+    {
+      "id": "rum-and-cola",
+      "name": {
+        "en": "Rum & Cola",
+        "ru": "Ром с колой (Куба либре)"
+      },
+      "description": {
+        "en": "White rum, cola and a good squeeze of lime: the party staple that goes with anything.",
+        "ru": "Белый ром, кола и хороший сок лайма: вечериночная классика, которая подходит ко всему."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "white-rum",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cola",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "wedge",
+              "ru": "долька"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Add rum and lime juice.",
+          "ru": "Добавьте ром и сок лайма."
+        },
+        {
+          "en": "Top with cola.",
+          "ru": "Долейте колой."
+        },
+        {
+          "en": "Stir gently and add a lime wedge.",
+          "ru": "Аккуратно перемешайте и добавьте дольку лайма."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party"
+        ],
+        "flavors": [
+          "sweet",
+          "fresh"
+        ],
+        "dayparts": [
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": true
+    },
+    {
+      "id": "caipirinha",
+      "name": {
+        "en": "Caipirinha",
+        "ru": "Кайпиринья"
+      },
+      "description": {
+        "en": "Cachaça, muddled lime and sugar over crushed ice: raw, zesty and very Brazilian.",
+        "ru": "Кашаса, размятый лайм и сахар на колотом льду: дерзкая, цитрусовая и очень бразильская."
+      },
+      "glass": "rocks",
+      "method": "muddle",
+      "ingredients": [
+        {
+          "ingredient": "cachaca",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sugar",
+          "amount": {
+            "unit": "barspoon",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Cut the lime into wedges and put them in a rocks glass with the sugar.",
+          "ru": "Нарежьте лайм дольками и положите в рокс с сахаром."
+        },
+        {
+          "en": "Muddle firmly to release the juice and oils.",
+          "ru": "Хорошо разомните, чтобы выделились сок и масла."
+        },
+        {
+          "en": "Fill the glass with crushed ice and add the cachaça.",
+          "ru": "Наполните бокал колотым льдом и налейте кашасу."
+        },
+        {
+          "en": "Stir well from the bottom up.",
+          "ru": "Тщательно перемешайте снизу вверх."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill"
+        ],
+        "flavors": [
+          "sour",
+          "fresh",
+          "boozy"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": true
+    },
+    {
+      "id": "tequila-sunrise",
+      "name": {
+        "en": "Tequila Sunrise",
+        "ru": "Текила санрайз"
+      },
+      "description": {
+        "en": "Tequila and orange juice with grenadine sinking to the bottom: a sunset in a glass.",
+        "ru": "Текила и апельсиновый сок, а гренадин стекает на дно: закат прямо в бокале."
+      },
+      "glass": "highball",
+      "method": "layer",
+      "ingredients": [
+        {
+          "ingredient": "tequila",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 90
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "grenadine",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Pour in the tequila and the orange juice, then stir.",
+          "ru": "Влейте текилу и апельсиновый сок, перемешайте."
+        },
+        {
+          "en": "Slowly pour the grenadine down the side of the glass.",
+          "ru": "Медленно влейте гренадин по стенке бокала."
+        },
+        {
+          "en": "Let it settle and garnish with an orange slice.",
+          "ru": "Дайте ему осесть и украсьте долькой апельсина."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "brunch",
+          "party"
+        ],
+        "flavors": [
+          "fruity",
+          "sweet"
+        ],
+        "dayparts": [
+          "brunch",
+          "aperitif"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "zeroProofTwin": "virgin-sunrise",
+      "iba": true
+    },
+    {
+      "id": "pina-colada",
+      "name": {
+        "en": "Piña Colada",
+        "ru": "Пина колада"
+      },
+      "description": {
+        "en": "Rum, coconut cream and pineapple blended with ice: a creamy tropical holiday drink.",
+        "ru": "Ром, кокосовые сливки и ананас, взбитые со льдом: сливочный тропический напиток для отпуска."
+      },
+      "glass": "hurricane",
+      "method": "blend",
+      "ingredients": [
+        {
+          "ingredient": "white-rum",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "coconut-cream",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "pineapple-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Add rum, coconut cream and pineapple juice to a blender.",
+          "ru": "Добавьте ром, кокосовые сливки и ананасовый сок в блендер."
+        },
+        {
+          "en": "Add a cup of ice.",
+          "ru": "Положите стакан льда."
+        },
+        {
+          "en": "Blend until smooth.",
+          "ru": "Взбейте до однородности."
+        },
+        {
+          "en": "Pour into a tall glass.",
+          "ru": "Перелейте в высокий бокал."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill"
+        ],
+        "flavors": [
+          "creamy",
+          "sweet",
+          "fruity"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 5,
+      "zeroProofTwin": "virgin-pina-colada",
+      "iba": true
+    },
+    {
+      "id": "cucumber-gin-cooler",
+      "name": {
+        "en": "Cucumber Gin Cooler",
+        "ru": "Огуречный джин-кулер"
+      },
+      "description": {
+        "en": "Gin, muddled cucumber, lime and soda: cool, green and calming on a hot afternoon.",
+        "ru": "Джин, размятый огурец, лайм и содовая: прохладный, зелёный и умиротворяющий в жаркий день."
+      },
+      "glass": "collins",
+      "method": "muddle",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cucumber",
+          "amount": {
+            "unit": "piece",
+            "value": 4,
+            "noun": {
+              "en": "slices",
+              "ru": "кружка"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 60
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Muddle three cucumber slices with the syrup in a shaker.",
+          "ru": "Разомните три кружка огурца с сиропом в шейкере."
+        },
+        {
+          "en": "Add the gin and lime juice, fill with ice and shake for 10 seconds.",
+          "ru": "Добавьте джин и сок лайма, наполните льдом и встряхивайте 10 секунд."
+        },
+        {
+          "en": "Strain into a collins glass filled with fresh ice.",
+          "ru": "Процедите в бокал коллинз со свежим льдом."
+        },
+        {
+          "en": "Top with soda water and float the last cucumber slice.",
+          "ru": "Долейте содовой и положите сверху оставшийся кружок огурца."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "party"
+        ],
+        "flavors": [
+          "fresh",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 5,
+      "zeroProofTwin": "cucumber-cooler",
+      "iba": false
+    },
+    {
+      "id": "spritz",
+      "name": {
+        "en": "Spritz",
+        "ru": "Спритц"
+      },
+      "description": {
+        "en": "Bright orange aperitivo, sparkling wine and a splash of soda: the sunny classic of the pre-dinner hour.",
+        "ru": "Яркий апельсиновый аперитиво, игристое вино и немного содовой: солнечная классика предужинного часа."
+      },
+      "glass": "wine",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "orange-aperitivo",
+          "amount": {
+            "unit": "ml",
+            "value": 60
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sparkling-wine",
+          "amount": {
+            "unit": "ml",
+            "value": 90
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a large wine glass with ice.",
+          "ru": "Наполните большой бокал для вина льдом."
+        },
+        {
+          "en": "Pour in the sparkling wine, then the aperitivo.",
+          "ru": "Влейте игристое вино, затем аперитиво."
+        },
+        {
+          "en": "Add a splash of soda water.",
+          "ru": "Добавьте немного содовой."
+        },
+        {
+          "en": "Stir once and garnish with an orange slice.",
+          "ru": "Один раз перемешайте и украсьте долькой апельсина."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "brunch",
+          "after-work"
+        ],
+        "flavors": [
+          "bitter",
+          "fruity",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "brunch"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": false
+    },
+    {
+      "id": "french-75",
+      "name": {
+        "en": "French 75",
+        "ru": "Французский 75"
+      },
+      "description": {
+        "en": "Gin and lemon topped with champagne-style bubbles: light on its feet, strong in the glass.",
+        "ru": "Джин и лимон, увенчанные игристыми пузырьками: лёгкий на вкус и коварный по крепости."
+      },
+      "glass": "flute",
+      "method": "shake",
+      "ingredients": [
+        {
+          "ingredient": "gin",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sparkling-wine",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 60
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill a flute.",
+          "ru": "Охладите бокал флюте."
+        },
+        {
+          "en": "Shake gin, lemon juice and syrup with ice for 10 seconds.",
+          "ru": "Встряхните джин, лимонный сок и сироп со льдом 10 секунд."
+        },
+        {
+          "en": "Strain into the flute.",
+          "ru": "Процедите во флюте."
+        },
+        {
+          "en": "Top slowly with sparkling wine.",
+          "ru": "Медленно долейте игристым вином."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "date",
+          "party"
+        ],
+        "flavors": [
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "mild"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 4,
+      "iba": true
+    },
+    {
+      "id": "mimosa",
+      "name": {
+        "en": "Mimosa",
+        "ru": "Мимоза"
+      },
+      "description": {
+        "en": "Sparkling wine and orange juice in equal measure: the easiest brunch toast there is.",
+        "ru": "Игристое вино и апельсиновый сок поровну: самый простой тост для позднего завтрака."
+      },
+      "glass": "flute",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "sparkling-wine",
+          "amount": {
+            "unit": "ml",
+            "value": 75
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 75
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Chill both ingredients well.",
+          "ru": "Хорошо охладите оба ингредиента."
+        },
+        {
+          "en": "Pour the orange juice into a flute.",
+          "ru": "Налейте апельсиновый сок во флюте."
+        },
+        {
+          "en": "Top slowly with sparkling wine.",
+          "ru": "Медленно долейте игристым вином."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "brunch",
+          "party"
+        ],
+        "flavors": [
+          "fruity",
+          "fresh"
+        ],
+        "dayparts": [
+          "brunch"
+        ],
+        "weather": [
+          "mild",
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": true
+    },
+    {
+      "id": "bloody-mary",
+      "name": {
+        "en": "Bloody Mary",
+        "ru": "Кровавая Мэри"
+      },
+      "description": {
+        "en": "Vodka with spiced tomato juice, lemon and a savoury kick: the brunch table’s favourite wake-up call.",
+        "ru": "Водка с пряным томатным соком, лимоном и острым акцентом: любимый напиток для позднего завтрака."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "vodka",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "tomato-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 90
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "worcestershire-style-sauce",
+          "amount": {
+            "unit": "dash",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "hot-sauce",
+          "amount": {
+            "unit": "dash",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "celery-salt",
+          "amount": {
+            "unit": "dash",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "black-pepper",
+          "amount": {
+            "unit": "dash",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "celery-stalk",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a tall glass with ice.",
+          "ru": "Наполните высокий бокал льдом."
+        },
+        {
+          "en": "Add vodka, tomato juice and lemon juice.",
+          "ru": "Добавьте водку, томатный сок и лимонный сок."
+        },
+        {
+          "en": "Season with the sauces, celery salt and pepper.",
+          "ru": "Приправьте соусами, сельдерейной солью и перцем."
+        },
+        {
+          "en": "Roll gently between two glasses or stir well.",
+          "ru": "Аккуратно перелейте между двумя стаканами или хорошо перемешайте."
+        },
+        {
+          "en": "Garnish with a celery stalk.",
+          "ru": "Украсьте стеблем сельдерея."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "brunch"
+        ],
+        "flavors": [
+          "spicy",
+          "sour"
+        ],
+        "dayparts": [
+          "brunch"
+        ],
+        "weather": [
+          "mild",
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "zeroProofTwin": "virgin-mary",
+      "iba": true
+    },
+    {
+      "id": "white-russian",
+      "name": {
+        "en": "White Russian",
+        "ru": "Белый русский"
+      },
+      "description": {
+        "en": "Vodka, coffee liqueur and cream: a smooth dessert-like sipper on ice.",
+        "ru": "Водка, кофейный ликёр и сливки: мягкий десертный напиток на льду."
+      },
+      "glass": "rocks",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "vodka",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "coffee-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cream",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a rocks glass with ice.",
+          "ru": "Наполните рокс льдом."
+        },
+        {
+          "en": "Pour in the vodka and coffee liqueur.",
+          "ru": "Влейте водку и кофейный ликёр."
+        },
+        {
+          "en": "Float the cream on top over the back of a spoon.",
+          "ru": "Аккуратно налейте сверху сливки по ложке."
+        },
+        {
+          "en": "Stir before drinking, or leave it layered.",
+          "ru": "Перед употреблением размешайте или оставьте слоями."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "date"
+        ],
+        "flavors": [
+          "creamy",
+          "sweet"
+        ],
+        "dayparts": [
+          "late",
+          "evening"
+        ],
+        "weather": [
+          "cold",
+          "rainy",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": true
+    },
+    {
+      "id": "black-russian",
+      "name": {
+        "en": "Black Russian",
+        "ru": "Чёрный русский"
+      },
+      "description": {
+        "en": "Vodka and coffee liqueur over ice: dark, sweet and dangerously simple.",
+        "ru": "Водка и кофейный ликёр на льду: тёмный, сладкий и коварно простой."
+      },
+      "glass": "rocks",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "vodka",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "coffee-liqueur",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a rocks glass with ice.",
+          "ru": "Наполните рокс льдом."
+        },
+        {
+          "en": "Add the vodka and coffee liqueur.",
+          "ru": "Добавьте водку и кофейный ликёр."
+        },
+        {
+          "en": "Stir gently for 10 seconds.",
+          "ru": "Аккуратно помешивайте 10 секунд."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "after-work"
+        ],
+        "flavors": [
+          "sweet",
+          "boozy"
+        ],
+        "dayparts": [
+          "late",
+          "evening"
+        ],
+        "weather": [
+          "cold",
+          "rainy",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": true
+    },
+    {
+      "id": "irish-coffee",
+      "name": {
+        "en": "Irish Coffee",
+        "ru": "Айриш кофе"
+      },
+      "description": {
+        "en": "Hot coffee, Irish whiskey and a little sugar under a cool cap of cream: dessert and nightcap in one glass.",
+        "ru": "Горячий кофе, ирландский виски и щепотка сахара под прохладной сливочной шапкой: десерт и ночной бокал в одном."
+      },
+      "glass": "irish-coffee",
+      "method": "heat",
+      "ingredients": [
+        {
+          "ingredient": "irish-whiskey",
+          "amount": {
+            "unit": "ml",
+            "value": 40
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "brewed-coffee",
+          "amount": {
+            "unit": "ml",
+            "value": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "sugar",
+          "amount": {
+            "unit": "barspoon",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cream",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Warm a heatproof glass with hot water, then empty it.",
+          "ru": "Прогрейте жаропрочный бокал горячей водой и вылейте её."
+        },
+        {
+          "en": "Add the sugar, hot coffee and whiskey, and stir until dissolved.",
+          "ru": "Добавьте сахар, горячий кофе и виски, размешайте до растворения."
+        },
+        {
+          "en": "Lightly whip the cream so it is thick but still pourable.",
+          "ru": "Слегка взбейте сливки, чтобы они загустели, но оставались текучими."
+        },
+        {
+          "en": "Pour the cream over the back of a spoon so it floats on top.",
+          "ru": "Вылейте сливки по спинке ложки, чтобы они легли сверху."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "date"
+        ],
+        "flavors": [
+          "creamy",
+          "sweet",
+          "boozy"
+        ],
+        "dayparts": [
+          "late",
+          "evening"
+        ],
+        "weather": [
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 2,
+      "timeMinutes": 6,
+      "iba": true
+    },
+    {
+      "id": "hot-toddy",
+      "name": {
+        "en": "Hot Toddy",
+        "ru": "Горячий тодди"
+      },
+      "description": {
+        "en": "Whisky, honey, lemon and hot water with warm spices: a soothing mug for cold, damp days.",
+        "ru": "Виски, мёд, лимон и горячая вода с тёплыми специями: успокаивающая кружка для холодных сырых дней."
+      },
+      "glass": "irish-coffee",
+      "method": "heat",
+      "ingredients": [
+        {
+          "ingredient": "scotch-whisky",
+          "amount": {
+            "unit": "ml",
+            "value": 45
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "honey",
+          "amount": {
+            "unit": "barspoon",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "water",
+          "amount": {
+            "unit": "ml",
+            "value": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cinnamon-stick",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        },
+        {
+          "ingredient": "cloves",
+          "amount": {
+            "unit": "piece",
+            "value": 3,
+            "noun": {
+              "en": "buds",
+              "ru": "бутона"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Heat the water until steaming, but not boiling.",
+          "ru": "Нагрейте воду до пара, но не до кипения."
+        },
+        {
+          "en": "Put the honey and lemon juice in a heatproof mug.",
+          "ru": "Положите мёд и налейте лимонный сок в жаропрочную кружку."
+        },
+        {
+          "en": "Pour in the hot water and stir until the honey dissolves.",
+          "ru": "Влейте горячую воду и размешайте до растворения мёда."
+        },
+        {
+          "en": "Add the whisky and stir once more.",
+          "ru": "Добавьте виски и ещё раз размешайте."
+        },
+        {
+          "en": "Garnish with a cinnamon stick and cloves.",
+          "ru": "Украсьте палочкой корицы и гвоздикой."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill"
+        ],
+        "flavors": [
+          "sweet",
+          "sour",
+          "spicy"
+        ],
+        "dayparts": [
+          "evening",
+          "late"
+        ],
+        "weather": [
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 5,
+      "zeroProofTwin": "hot-honey-lemon",
+      "iba": false
+    },
+    {
+      "id": "mulled-wine",
+      "name": {
+        "en": "Mulled Wine",
+        "ru": "Глинтвейн"
+      },
+      "description": {
+        "en": "Red wine gently simmered with orange, cinnamon and cloves: the smell of winter gatherings.",
+        "ru": "Красное вино, томлённое с апельсином, корицей и гвоздикой: запах зимних посиделок."
+      },
+      "glass": "irish-coffee",
+      "method": "heat",
+      "ingredients": [
+        {
+          "ingredient": "red-wine",
+          "amount": {
+            "unit": "ml",
+            "value": 150
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 2,
+            "noun": {
+              "en": "slices",
+              "ru": "кружка"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "honey",
+          "amount": {
+            "unit": "barspoon",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cinnamon-stick",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cloves",
+          "amount": {
+            "unit": "piece",
+            "value": 3,
+            "noun": {
+              "en": "buds",
+              "ru": "бутона"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "star-anise",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Add the wine, orange slices, honey and spices to a small pot.",
+          "ru": "Положите в небольшую кастрюлю вино, кружки апельсина, мёд и специи."
+        },
+        {
+          "en": "Warm over low heat for 10 minutes, without letting it boil.",
+          "ru": "Нагревайте на слабом огне 10 минут, не доводя до кипения."
+        },
+        {
+          "en": "Taste and add more honey if needed.",
+          "ru": "Попробуйте и при необходимости добавьте ещё мёда."
+        },
+        {
+          "en": "Strain into a heatproof mug and serve hot.",
+          "ru": "Процедите в жаропрочную кружку и подавайте горячим."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill"
+        ],
+        "flavors": [
+          "spicy",
+          "sweet",
+          "fruity"
+        ],
+        "dayparts": [
+          "evening",
+          "late"
+        ],
+        "weather": [
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 15,
+      "iba": false
+    },
+    {
+      "id": "lemon-fizz",
+      "name": {
+        "en": "Lemon Fizz",
+        "ru": "Лимонный физз"
+      },
+      "description": {
+        "en": "Fresh lemon and a little syrup lengthened with soda: crisp, tart and endlessly refreshing.",
+        "ru": "Свежий лимон и немного сиропа, долитые содовой: чёткий, кисловатый и бесконечно освежающий."
+      },
+      "glass": "collins",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a tall glass with ice.",
+          "ru": "Наполните высокий бокал льдом."
+        },
+        {
+          "en": "Add lemon juice and simple syrup.",
+          "ru": "Добавьте лимонный сок и сахарный сироп."
+        },
+        {
+          "en": "Top with soda water and stir gently.",
+          "ru": "Долейте содовой и аккуратно перемешайте."
+        },
+        {
+          "en": "Garnish with a lemon slice.",
+          "ru": "Украсьте долькой лимона."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "after-work",
+          "party"
+        ],
+        "flavors": [
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening",
+          "brunch"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": false
+    },
+    {
+      "id": "lemon-tonic",
+      "name": {
+        "en": "Lemon Tonic",
+        "ru": "Лимонный тоник"
+      },
+      "description": {
+        "en": "Tonic water, fresh lemon juice and a touch of syrup: bittersweet, sparkling and completely alcohol-free.",
+        "ru": "Тоник, свежий лимонный сок и капля сиропа: горько-сладкий, искристый и совсем без алкоголя."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "tonic-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 5
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Add the lemon juice and simple syrup.",
+          "ru": "Добавьте лимонный сок и сахарный сироп."
+        },
+        {
+          "en": "Top with chilled tonic water and stir once.",
+          "ru": "Долейте охлаждённый тоник и один раз перемешайте."
+        },
+        {
+          "en": "Add a lemon slice.",
+          "ru": "Добавьте дольку лимона."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "chill"
+        ],
+        "flavors": [
+          "bitter",
+          "fresh",
+          "sour"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening",
+          "brunch"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": false
+    },
+    {
+      "id": "virgin-mojito",
+      "name": {
+        "en": "Virgin Mojito",
+        "ru": "Безалкогольный мохито"
+      },
+      "description": {
+        "en": "All the mint and lime of a mojito, minus the rum. Bright, green and very cooling.",
+        "ru": "Вся мята и лайм мохито, только без рома. Яркий, зелёный и очень охлаждающий."
+      },
+      "glass": "highball",
+      "method": "muddle",
+      "ingredients": [
+        {
+          "ingredient": "mint",
+          "amount": {
+            "unit": "piece",
+            "value": 10,
+            "noun": {
+              "en": "leaves",
+              "ru": "листьев"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 25
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 120
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Gently muddle the mint with the syrup and lime juice in a highball glass.",
+          "ru": "Аккуратно разомните мяту с сиропом и соком лайма в хайболе."
+        },
+        {
+          "en": "Fill the glass with crushed ice.",
+          "ru": "Наполните бокал колотым льдом."
+        },
+        {
+          "en": "Top with soda water.",
+          "ru": "Долейте содовой."
+        },
+        {
+          "en": "Stir and garnish with a mint sprig.",
+          "ru": "Перемешайте и украсьте веточкой мяты."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill",
+          "brunch"
+        ],
+        "flavors": [
+          "fresh",
+          "sour",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "brunch",
+          "evening"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 4,
+      "iba": false
+    },
+    {
+      "id": "virgin-mary",
+      "name": {
+        "en": "Virgin Mary",
+        "ru": "Безалкогольная Мэри"
+      },
+      "description": {
+        "en": "Spiced tomato juice with lemon and a pepper kick: full-flavoured, savoury and no vodka needed.",
+        "ru": "Пряный томатный сок с лимоном и перчинкой: насыщенный, пикантный и без всякой водки."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "tomato-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 150
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "worcestershire-style-sauce",
+          "amount": {
+            "unit": "dash",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "hot-sauce",
+          "amount": {
+            "unit": "dash",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "celery-salt",
+          "amount": {
+            "unit": "dash",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "celery-stalk",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a tall glass with ice.",
+          "ru": "Наполните высокий бокал льдом."
+        },
+        {
+          "en": "Add tomato juice and lemon juice.",
+          "ru": "Добавьте томатный сок и лимонный сок."
+        },
+        {
+          "en": "Season with the sauces and celery salt.",
+          "ru": "Приправьте соусами и сельдерейной солью."
+        },
+        {
+          "en": "Stir well and add a celery stalk.",
+          "ru": "Хорошо перемешайте и добавьте стебель сельдерея."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "brunch",
+          "after-work"
+        ],
+        "flavors": [
+          "spicy",
+          "sour"
+        ],
+        "dayparts": [
+          "brunch",
+          "aperitif"
+        ],
+        "weather": [
+          "mild",
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": false
+    },
+    {
+      "id": "ginger-grenadine-fizz",
+      "name": {
+        "en": "Ginger Grenadine Fizz",
+        "ru": "Имбирный физз с гренадином"
+      },
+      "description": {
+        "en": "Ginger ale, a splash of grenadine and lime: a retro pink soda with a kid-friendly charm.",
+        "ru": "Имбирный эль, немного гренадина и лайм: ретро-газировка розового цвета, которая понравится и детям."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "ginger-ale",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 150
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "grenadine",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cocktail-cherry",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Add grenadine and lime juice.",
+          "ru": "Добавьте гренадин и сок лайма."
+        },
+        {
+          "en": "Top with ginger ale and stir gently.",
+          "ru": "Долейте имбирным элем и аккуратно перемешайте."
+        },
+        {
+          "en": "Finish with a cherry.",
+          "ru": "Украсьте вишней."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill"
+        ],
+        "flavors": [
+          "sweet",
+          "fruity",
+          "spicy"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": false
+    },
+    {
+      "id": "cucumber-cooler",
+      "name": {
+        "en": "Cucumber Cooler",
+        "ru": "Огуречный кулер"
+      },
+      "description": {
+        "en": "Muddled cucumber, lime and mint topped with soda: spa-day freshness in a glass.",
+        "ru": "Размятый огурец, лайм и мята, долитые содовой: спа-свежесть в бокале."
+      },
+      "glass": "collins",
+      "method": "muddle",
+      "ingredients": [
+        {
+          "ingredient": "cucumber",
+          "amount": {
+            "unit": "piece",
+            "value": 4,
+            "noun": {
+              "en": "slices",
+              "ru": "кружка"
+            }
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "mint",
+          "amount": {
+            "unit": "piece",
+            "value": 6,
+            "noun": {
+              "en": "leaves",
+              "ru": "листьев"
+            }
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "simple-syrup",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 100
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Muddle three cucumber slices with the mint and syrup in a glass.",
+          "ru": "Разомните три кружка огурца с мятой и сиропом в бокале."
+        },
+        {
+          "en": "Add the lime juice and fill the glass with ice.",
+          "ru": "Добавьте сок лайма и наполните бокал льдом."
+        },
+        {
+          "en": "Top with soda water and stir gently.",
+          "ru": "Долейте содовой и аккуратно перемешайте."
+        },
+        {
+          "en": "Float the last cucumber slice on top.",
+          "ru": "Положите сверху оставшийся кружок огурца."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill",
+          "brunch"
+        ],
+        "flavors": [
+          "fresh",
+          "herbal"
+        ],
+        "dayparts": [
+          "aperitif",
+          "brunch"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 4,
+      "iba": false
+    },
+    {
+      "id": "virgin-pina-colada",
+      "name": {
+        "en": "Virgin Piña Colada",
+        "ru": "Безалкогольная пина колада"
+      },
+      "description": {
+        "en": "Coconut cream and pineapple blended icy smooth: a holiday in a glass, minus the rum.",
+        "ru": "Кокосовые сливки и ананас, взбитые до ледяной гладкости: отпуск в бокале, только без рома."
+      },
+      "glass": "hurricane",
+      "method": "blend",
+      "ingredients": [
+        {
+          "ingredient": "coconut-cream",
+          "amount": {
+            "unit": "ml",
+            "value": 40
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "pineapple-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Add coconut cream, pineapple juice and lime juice to a blender.",
+          "ru": "Добавьте кокосовые сливки, ананасовый сок и сок лайма в блендер."
+        },
+        {
+          "en": "Add a cup of ice.",
+          "ru": "Положите стакан льда."
+        },
+        {
+          "en": "Blend until smooth and pour into a tall glass.",
+          "ru": "Взбейте до однородности и перелейте в высокий бокал."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill",
+          "brunch"
+        ],
+        "flavors": [
+          "creamy",
+          "sweet",
+          "fruity"
+        ],
+        "dayparts": [
+          "brunch",
+          "aperitif"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 5,
+      "iba": false
+    },
+    {
+      "id": "virgin-sunrise",
+      "name": {
+        "en": "Virgin Sunrise",
+        "ru": "Безалкогольный санрайз"
+      },
+      "description": {
+        "en": "Orange juice with grenadine sunk to the bottom for a pretty sunrise gradient.",
+        "ru": "Апельсиновый сок с гренадином на дне: красивый градиент, как на рассвете."
+      },
+      "glass": "highball",
+      "method": "layer",
+      "ingredients": [
+        {
+          "ingredient": "orange-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "grenadine",
+          "amount": {
+            "unit": "ml",
+            "value": 15
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "soda-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 30
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "orange",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Pour in the orange juice and top with soda if you like some fizz.",
+          "ru": "Влейте апельсиновый сок и при желании добавьте содовой."
+        },
+        {
+          "en": "Slowly pour the grenadine down the side of the glass.",
+          "ru": "Медленно влейте гренадин по стенке бокала."
+        },
+        {
+          "en": "Garnish with an orange slice.",
+          "ru": "Украсьте долькой апельсина."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "brunch",
+          "party"
+        ],
+        "flavors": [
+          "fruity",
+          "sweet"
+        ],
+        "dayparts": [
+          "brunch"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": false
+    },
+    {
+      "id": "grapefruit-cooler",
+      "name": {
+        "en": "Grapefruit Cooler",
+        "ru": "Грейпфрутовый кулер"
+      },
+      "description": {
+        "en": "Grapefruit soda, lime and a salted rim: zesty, tangy and pleasantly bitter.",
+        "ru": "Грейпфрутовая газировка, лайм и солёная кайма: цитрусовый, задорный и приятно горьковатый."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "grapefruit-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 50
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 10
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "grapefruit-soda",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 100
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "salt",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "pinch for the rim",
+              "ru": "щепотка для каймы"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Salt the rim of a highball glass if you like.",
+          "ru": "При желании посолите край хайбола."
+        },
+        {
+          "en": "Fill the glass with ice.",
+          "ru": "Наполните бокал льдом."
+        },
+        {
+          "en": "Add grapefruit juice and lime juice.",
+          "ru": "Добавьте грейпфрутовый сок и сок лайма."
+        },
+        {
+          "en": "Top with grapefruit soda and stir once.",
+          "ru": "Долейте грейпфрутовой газировкой и один раз перемешайте."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "party",
+          "chill"
+        ],
+        "flavors": [
+          "fruity",
+          "sour",
+          "fresh"
+        ],
+        "dayparts": [
+          "aperitif",
+          "brunch"
+        ],
+        "weather": [
+          "hot"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": false
+    },
+    {
+      "id": "ginger-lime-mule",
+      "name": {
+        "en": "Ginger Lime Mule",
+        "ru": "Имбирно-лаймовый мул"
+      },
+      "description": {
+        "en": "Ginger beer, lime and mint over ice: all the zing of a mule with no spirit in the mug.",
+        "ru": "Имбирное пиво, лайм и мята на льду: вся острота мула, но без крепкого алкоголя в кружке."
+      },
+      "glass": "copper-mug",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "ginger-beer",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 150
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "mint",
+          "amount": {
+            "unit": "piece",
+            "value": 5,
+            "noun": {
+              "en": "leaves",
+              "ru": "листьев"
+            }
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lime",
+          "amount": {
+            "unit": "piece",
+            "value": 1,
+            "noun": {
+              "en": "wedge",
+              "ru": "долька"
+            }
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a mug with ice.",
+          "ru": "Наполните кружку льдом."
+        },
+        {
+          "en": "Add the lime juice and lightly clap the mint between your hands before dropping it in.",
+          "ru": "Влейте сок лайма и, слегка прихлопнув мяту между ладонями, добавьте её."
+        },
+        {
+          "en": "Top with ginger beer.",
+          "ru": "Долейте имбирным пивом."
+        },
+        {
+          "en": "Stir briefly and add a lime wedge.",
+          "ru": "Коротко перемешайте и добавьте дольку лайма."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "after-work",
+          "party"
+        ],
+        "flavors": [
+          "spicy",
+          "fresh",
+          "sour"
+        ],
+        "dayparts": [
+          "aperitif",
+          "evening"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 2,
+      "iba": false
+    },
+    {
+      "id": "hot-honey-lemon",
+      "name": {
+        "en": "Hot Honey Lemon",
+        "ru": "Горячий мёд с лимоном"
+      },
+      "description": {
+        "en": "Hot water, honey, lemon and a cinnamon stick: a soothing, alcohol-free mug for grey days.",
+        "ru": "Горячая вода, мёд, лимон и палочка корицы: успокаивающая безалкогольная кружка для пасмурных дней."
+      },
+      "glass": "irish-coffee",
+      "method": "heat",
+      "ingredients": [
+        {
+          "ingredient": "water",
+          "amount": {
+            "unit": "ml",
+            "value": 180
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "honey",
+          "amount": {
+            "unit": "barspoon",
+            "value": 2
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon-juice",
+          "amount": {
+            "unit": "ml",
+            "value": 20
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "cinnamon-stick",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": false
+        },
+        {
+          "ingredient": "fresh-ginger",
+          "amount": {
+            "unit": "piece",
+            "value": 2,
+            "noun": {
+              "en": "slices",
+              "ru": "кружка"
+            }
+          },
+          "optional": true,
+          "garnish": false
+        }
+      ],
+      "steps": [
+        {
+          "en": "Heat the water with the ginger slices until steaming.",
+          "ru": "Нагрейте воду с кружками имбиря до пара."
+        },
+        {
+          "en": "Pour it into a heatproof mug over the honey and lemon juice.",
+          "ru": "Влейте её в жаропрочную кружку с мёдом и лимонным соком."
+        },
+        {
+          "en": "Stir until the honey dissolves and add the cinnamon stick.",
+          "ru": "Размешайте до растворения мёда и добавьте палочку корицы."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "chill"
+        ],
+        "flavors": [
+          "sweet",
+          "sour",
+          "spicy"
+        ],
+        "dayparts": [
+          "evening",
+          "late",
+          "brunch"
+        ],
+        "weather": [
+          "cold",
+          "rainy"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 5,
+      "iba": false
+    },
+    {
+      "id": "espresso-tonic",
+      "name": {
+        "en": "Espresso Tonic",
+        "ru": "Эспрессо-тоник"
+      },
+      "description": {
+        "en": "A shot of espresso poured over iced tonic: bitter, bright and surprisingly refreshing.",
+        "ru": "Шот эспрессо, налитый на тоник со льдом: горький, яркий и неожиданно освежающий."
+      },
+      "glass": "highball",
+      "method": "build",
+      "ingredients": [
+        {
+          "ingredient": "tonic-water",
+          "amount": {
+            "unit": "top",
+            "estimateMl": 120
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "espresso",
+          "amount": {
+            "unit": "ml",
+            "value": 30
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "ice",
+          "amount": {
+            "unit": "fill"
+          },
+          "optional": false,
+          "garnish": false
+        },
+        {
+          "ingredient": "lemon",
+          "amount": {
+            "unit": "piece",
+            "value": 1
+          },
+          "optional": true,
+          "garnish": true
+        }
+      ],
+      "steps": [
+        {
+          "en": "Fill a highball glass with ice.",
+          "ru": "Наполните хайбол льдом."
+        },
+        {
+          "en": "Pour in the tonic water.",
+          "ru": "Влейте тоник."
+        },
+        {
+          "en": "Slowly pour the espresso over the top.",
+          "ru": "Медленно налейте сверху эспрессо."
+        },
+        {
+          "en": "Add a lemon slice or twist.",
+          "ru": "Добавьте дольку или полоску цедры лимона."
+        }
+      ],
+      "tags": {
+        "occasions": [
+          "brunch",
+          "chill",
+          "after-work"
+        ],
+        "flavors": [
+          "bitter",
+          "fresh"
+        ],
+        "dayparts": [
+          "brunch",
+          "aperitif",
+          "late"
+        ],
+        "weather": [
+          "hot",
+          "mild"
+        ]
+      },
+      "difficulty": 1,
+      "timeMinutes": 3,
+      "iba": false
+    }
+  ]
+}

@@ -2,11 +2,13 @@ import '@/global.css';
 
 import * as Sentry from '@sentry/react-native';
 import { useFonts } from 'expo-font';
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { SQLiteProvider } from 'expo-sqlite';
 import { useEffect } from 'react';
 
-import AppTabs from '@/components/app-tabs';
+import { DATABASE_NAME, migrate } from '@/data/db';
+import { BarProvider } from '@/hooks/use-bar';
 import { useTheme } from '@/hooks/use-theme';
 import { fontAssets } from '@/lib/fonts';
 
@@ -42,7 +44,14 @@ function RootLayout() {
         },
       }}
     >
-      <AppTabs />
+      <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrate}>
+        <BarProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="recipe/[id]" />
+          </Stack>
+        </BarProvider>
+      </SQLiteProvider>
     </ThemeProvider>
   );
 }

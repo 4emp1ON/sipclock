@@ -1,21 +1,86 @@
 import { expect, test } from '@playwright/test';
 
-test('home shows the time heading', async ({ page }) => {
+test('root redirects by Accept-Language', async ({ browser }) => {
+  const ru = await browser.newContext({
+    locale: 'ru-RU',
+    extraHTTPHeaders: { 'accept-language': 'ru-RU,ru;q=0.9' },
+  });
+  const page = await ru.newPage();
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('19:00');
+  await expect(page).toHaveURL(/\/ru$/);
+  await ru.close();
+  const en = await browser.newPage();
+  await en.goto('/');
+  await expect(en).toHaveURL(/\/en$/);
+  await en.close();
 });
 
-test('recipe page has a Recipe JSON-LD', async ({ page }) => {
-  await page.goto('/recipes/gin-and-tonic');
+test('/en shows a pick with a reason line and Another idea keeps a valid pick', async ({
+  page,
+}) => {
+  await page.goto('/en');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^\d{2}:\d{2}$/);
+  const name = page.getByTestId('pick-name');
+  await expect(name).not.toBeEmpty();
+  await expect(page.getByTestId('reason-line')).toContainText('Why this one');
+  await expect(page.getByTestId('reason-line')).toContainText('.');
+  const before = await name.textContent();
+  await page.getByRole('button', { name: 'Another idea' }).click();
+  await expect(name).not.toBeEmpty();
+  const after = await name.textContent();
+  expect(after).toBeTruthy();
+  expect(after).not.toBe(before);
+  await expect(page.getByRole('link', { name: 'Open recipe' })).toHaveAttribute(
+    'href',
+    /^\/en\/recipes\/[a-z-]+$/,
+  );
+});
+
+test('/ru/recipes/negroni is Russian with a Recipe JSON-LD', async ({ page }) => {
+  await page.goto('/ru/recipes/negroni');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Негрони');
   const raw = await page.locator('script[type="application/ld+json"]').textContent();
   const ld = JSON.parse(raw ?? '{}');
   expect(ld['@type']).toBe('Recipe');
-  expect(ld.name).toBe('Gin & Tonic');
-  expect(ld.totalTime).toBe('PT2M');
+  expect(ld.name).toBe('Негрони');
+  expect(ld.inLanguage).toBe('ru');
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
+    'href',
+    /\/en\/recipes\/negroni$/,
+  );
+});
+
+test('recipe page unit toggle and servings scale amounts', async ({ page }) => {
+  await page.goto('/en/recipes/negroni');
+  await expect(page.getByText('30 ml').first()).toBeVisible();
+  await page.getByRole('button', { name: '+' }).click();
+  await expect(page.getByText('60 ml').first()).toBeVisible();
+  await page.getByRole('button', { name: 'oz', exact: true }).click();
+  await expect(page.getByText('2 oz').first()).toBeVisible();
 });
 
 test('unknown recipe returns 404', async ({ page }) => {
-  const res = await page.goto('/recipes/does-not-exist');
+  const res = await page.goto('/en/recipes/does-not-exist');
   expect(res?.status()).toBe(404);
   await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+});
+
+test('unknown localized path renders the localized 404', async ({ page }) => {
+  const res = await page.goto('/ru/nope');
+  expect(res?.status()).toBe(404);
+  await expect(page.getByRole('heading', { name: 'Страница не найдена' })).toBeVisible();
+});
+
+test('recipes index lists 50 cards and the alcohol-free filter reduces it', async ({ page }) => {
+  await page.goto('/en/recipes');
+  const cards = page.getByTestId('recipe-card');
+  await expect(cards).toHaveCount(50);
+  await page.getByRole('button', { name: 'Alcohol-free' }).click();
+  const n = await cards.count();
+  expect(n).toBeGreaterThan(0);
+  expect(n).toBeLessThan(50);
+  await page.getByRole('button', { name: 'Date' }).click();
+  expect(await cards.count()).toBeLessThanOrEqual(n);
 });

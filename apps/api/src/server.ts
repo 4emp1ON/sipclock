@@ -5,6 +5,8 @@ import { createDb } from './db/client.ts';
 import { parseEnv } from './env.ts';
 import { createLogger } from './lib/logger.ts';
 import { flushSentry, initSentry } from './lib/sentry.ts';
+import { createMemoryRateLimitStore } from './middleware/rate-limit.ts';
+import { createBundledCatalogService } from './services/catalog.ts';
 
 const env = parseEnv();
 const logger = createLogger(env.LOG_LEVEL);
@@ -12,7 +14,9 @@ const sentryEnabled = initSentry(env);
 
 const database = createDb(env.DATABASE_URL);
 const auth = createAuth(database.db, env);
-const app = createApp({ env, auth, ping: database.ping, logger });
+const rateLimitStore = createMemoryRateLimitStore();
+const catalog = createBundledCatalogService();
+const app = createApp({ env, auth, ping: database.ping, logger, catalog, rateLimitStore });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   logger.info('server listening', { port: info.port, env: env.NODE_ENV, sentry: sentryEnabled });
@@ -30,6 +34,7 @@ function shutdown(signal: string) {
   force.unref();
   server.close(async (err) => {
     try {
+      rateLimitStore.close();
       await database.close();
       await flushSentry();
     } finally {

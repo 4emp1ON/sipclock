@@ -1,4 +1,10 @@
-export function AbvBadge({ abv }: { abv: number }) {
+export function AbvBadge({
+  abv,
+  labels = { free: 'Free', alc: 'Alc.' },
+}: {
+  abv: number;
+  labels?: { free: string; alc: string };
+}) {
   const free = abv === 0;
   return (
     <span
@@ -7,7 +13,7 @@ export function AbvBadge({ abv }: { abv: number }) {
       }`}
     >
       <span>{free ? '0%' : `${abv}%`}</span>
-      <span>{free ? 'Free' : 'Alc.'}</span>
+      <span>{free ? labels.free : labels.alc}</span>
     </span>
   );
 }

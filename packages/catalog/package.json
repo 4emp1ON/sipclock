@@ -1,0 +1,26 @@
+{
+  "name": "@sipclock/catalog",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Curated Sipclock catalog: generic ingredients with substitutions and original recipe texts (EN/RU).",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bundle.json": "./generated/catalog.json",
+    "./manifest.json": "./generated/manifest.json"
+  },
+  "scripts": {
+    "build": "node src/build.ts",
+    "check": "node src/build.ts --check",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sipclock/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.2"
+  }
+}
