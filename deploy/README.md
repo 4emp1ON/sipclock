@@ -6,7 +6,8 @@
 | API + Postgres | Jino VPS, compose project `sipclock` | GitHub Actions → GHCR image → SSH forced command |
 | Edge router | Same VPS, compose project `edge` | Caddy on port 80, shared with SweetVilka |
 
-Public API base: `https://4db4f06b3824.vps.myjino.ru/sipclock` (docs at `/sipclock/docs`).
+Public API base: `https://4db4f06b3824.vps.myjino.ru/sipclock`. The API reference at `/sipclock/docs` is behind
+HTTP Basic (`API_DOCS_USERNAME` / `API_DOCS_PASSWORD` in `~/sipclock/.env`).
 
 ## Topology
 

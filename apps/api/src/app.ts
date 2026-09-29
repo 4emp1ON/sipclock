@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Scalar } from '@scalar/hono-api-reference';
+import { basicAuth } from 'hono/basic-auth';
 import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
 import { requestId } from 'hono/request-id';
@@ -85,15 +86,31 @@ export function createApp(deps: AppDeps) {
     createRecommendationsRouter({ recommendations: createRecommendationService(deps.catalog) }),
   );
 
-  app.doc31('/openapi.json', {
-    openapi: '3.1.0',
-    info: {
-      title: 'Sipclock API',
-      version: '0.0.0',
-      description: 'Cocktail recommender backend.',
-    },
-  });
-  app.get('/docs', Scalar({ url: '/openapi.json' }));
+  // API reference: behind HTTP Basic when credentials are configured, hidden in production otherwise.
+  const { API_DOCS_USERNAME: docsUser, API_DOCS_PASSWORD: docsPassword } = deps.env;
+  const docsProtected = docsUser !== undefined && docsPassword !== undefined;
+  if (docsProtected || deps.env.NODE_ENV !== 'production') {
+    if (docsProtected) {
+      const guard = basicAuth({
+        username: docsUser,
+        password: docsPassword,
+        realm: 'Sipclock API docs',
+      });
+      app.use('/docs', guard);
+      app.use('/openapi.json', guard);
+    }
+    app.doc31('/openapi.json', {
+      openapi: '3.1.0',
+      info: {
+        title: 'Sipclock API',
+        version: '0.0.0',
+        description: 'Cocktail recommender backend.',
+      },
+      ...(deps.env.PUBLIC_BASE_URL ? { servers: [{ url: deps.env.PUBLIC_BASE_URL }] } : {}),
+    });
+    // Relative, so the page also works behind a path prefix (/sipclock/docs → /sipclock/openapi.json).
+    app.get('/docs', Scalar({ url: 'openapi.json' }));
+  }
 
   return app;
 }

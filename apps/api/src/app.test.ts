@@ -3,16 +3,21 @@ import { createApp } from './app.ts';
 import { silentLogger } from './lib/logger.ts';
 import { createMemoryRateLimitStore } from './middleware/rate-limit.ts';
 import { createBundledCatalogService } from './services/catalog.ts';
+import type { AppDeps } from './types.ts';
 
 const catalog = createBundledCatalogService();
 
-function makeApp(ping: () => Promise<void> = async () => {}) {
+function makeApp(
+  ping: () => Promise<void> = async () => {},
+  envOverrides: Partial<AppDeps['env']> = {},
+) {
   return createApp({
     env: {
       CORS_ORIGINS: ['http://localhost:3000'],
       NODE_ENV: 'test',
       TRUST_PROXY_HOPS: 0,
       RATE_LIMIT_RECOMMEND_PER_MIN: 60,
+      ...envOverrides,
     },
     catalog,
     rateLimitStore: createMemoryRateLimitStore({ cleanupIntervalMs: 0 }),
@@ -123,5 +128,41 @@ describe('openapi', () => {
     const res = await makeApp().request('/docs');
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toContain('text/html');
+  });
+
+  describe('API docs access', () => {
+    const basic = (u: string, p: string) => `Basic ${Buffer.from(`${u}:${p}`).toString('base64')}`;
+    const creds = { API_DOCS_USERNAME: 'docs', API_DOCS_PASSWORD: 'a-long-docs-password' };
+
+    it('requires credentials when they are configured', async () => {
+      const app = makeApp(undefined, creds);
+      expect((await app.request('/docs')).status).toBe(401);
+      expect((await app.request('/openapi.json')).status).toBe(401);
+      const bad = await app.request('/openapi.json', {
+        headers: { authorization: basic('docs', 'wrong-password-123') },
+      });
+      expect(bad.status).toBe(401);
+      const ok = await app.request('/openapi.json', {
+        headers: { authorization: basic('docs', 'a-long-docs-password') },
+      });
+      expect(ok.status).toBe(200);
+    });
+
+    it('is not served in production without credentials', async () => {
+      const app = makeApp(undefined, { NODE_ENV: 'production' });
+      expect((await app.request('/docs')).status).toBe(404);
+      expect((await app.request('/openapi.json')).status).toBe(404);
+    });
+
+    it('points the docs page at a relative spec URL and advertises the public base URL', async () => {
+      const app = makeApp(undefined, { PUBLIC_BASE_URL: 'https://example.test/sipclock' });
+      const html = await (await app.request('/docs')).text();
+      expect(html).toContain('openapi.json');
+      expect(html).not.toContain('"/openapi.json"');
+      const spec = (await (await app.request('/openapi.json')).json()) as {
+        servers?: { url: string }[];
+      };
+      expect(spec.servers?.[0]?.url).toBe('https://example.test/sipclock');
+    });
   });
 });
