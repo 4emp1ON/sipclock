@@ -1,0 +1,33 @@
+# Edge router: owns port 80 on the VPS. Start it before the app stacks that join the `edge` network.
+name: edge
+
+services:
+  caddy:
+    image: caddy:2.11-alpine
+    restart: unless-stopped
+    ports:
+      - "${EDGE_PORT:-80}:80"
+    environment:
+      SIPCLOCK_HOST: ${SIPCLOCK_HOST:?set SIPCLOCK_HOST in edge/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [edge, sweetvilka]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "--header", "Host: ${SIPCLOCK_HOST}", "http://127.0.0.1/sipclock/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  edge:
+    name: edge
+  sweetvilka:
+    name: sweetvilka_sweetvilka
+    external: true
+
+volumes:
+  caddy-data:
+  caddy-config:

@@ -22,3 +22,4 @@ android/
 # Playwright
 test-results/
 playwright-report/
+.vercel

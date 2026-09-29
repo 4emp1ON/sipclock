@@ -43,12 +43,18 @@ export function createCatalogService(
   return { catalog, manifest, bundleJson, etag: `"${manifest.sha256}"` };
 }
 
-/** Production service backed by the generated files of `@sipclock/catalog`. */
-export function createBundledCatalogService(): CatalogService {
+/**
+ * Production service backed by the generated files of `@sipclock/catalog`. `dir` points at a copy of
+ * those files (the bundled server image ships them next to the code); otherwise they are resolved from
+ * the workspace package.
+ */
+export function createBundledCatalogService(dir?: string): CatalogService {
   const require = createRequire(import.meta.url);
-  const bundleJson = readFileSync(require.resolve('@sipclock/catalog/bundle.json'), 'utf8');
-  const manifest = JSON.parse(
-    readFileSync(require.resolve('@sipclock/catalog/manifest.json'), 'utf8'),
-  ) as CatalogManifest;
+  const file = (name: 'catalog' | 'manifest') =>
+    dir
+      ? `${dir}/${name}.json`
+      : require.resolve(`@sipclock/catalog/${name === 'catalog' ? 'bundle' : 'manifest'}.json`);
+  const bundleJson = readFileSync(file('catalog'), 'utf8');
+  const manifest = JSON.parse(readFileSync(file('manifest'), 'utf8')) as CatalogManifest;
   return createCatalogService(JSON.parse(bundleJson) as Catalog, { bundleJson, manifest });
 }

@@ -1,0 +1,63 @@
+# Sipclock production stack on the VPS: Postgres, a one-shot migration job and the API.
+# The API joins the shared `edge` network (created by deploy/edge) under the alias `sipclock-api`.
+name: sipclock
+
+x-image: &image ghcr.io/4emp1on/sipclock-api:${SIPCLOCK_TAG:-latest}
+x-database-url: &database-url postgres://sipclock:${POSTGRES_PASSWORD:?}@postgres:5432/sipclock
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sipclock
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: sipclock
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sipclock -d sipclock"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    mem_limit: 512m
+    networks: [internal]
+
+  migrate:
+    image: *image
+    command: ["node", "dist/migrate.js"]
+    environment:
+      DATABASE_URL: *database-url
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    networks: [internal]
+
+  api:
+    image: *image
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: "8787"
+      DATABASE_URL: *database-url
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    mem_limit: 384m
+    networks:
+      internal:
+      edge:
+        aliases: [sipclock-api]
+
+networks:
+  internal:
+  edge:
+    external: true
+
+volumes:
+  pg-data:

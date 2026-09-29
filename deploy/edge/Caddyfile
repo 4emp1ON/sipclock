@@ -1,0 +1,39 @@
+# Shared edge router on the Jino VPS. Jino's front nginx terminates TLS and forwards every domain of the
+# VPS to port 80; this Caddy routes by host and path so several projects can share that port.
+{
+	auto_https off
+	admin off
+	servers {
+		protocols h1
+	}
+}
+
+# Keep the forwarding headers exactly as Jino sent them. By default Caddy would append its own peer
+# (Jino's proxy) to X-Forwarded-For and reset X-Forwarded-Proto to http, and the apps behind it read
+# the client IP from the last X-Forwarded-For entry.
+(passthrough) {
+	header_up X-Forwarded-For {http.request.header.X-Forwarded-For}
+	header_up X-Forwarded-Proto {http.request.header.X-Forwarded-Proto}
+	header_up X-Forwarded-Host {http.request.header.X-Forwarded-Host}
+}
+
+:80 {
+	# Sipclock API, served under /sipclock on the VPS technical hostname until it gets its own domain.
+	@sipclock {
+		host {$SIPCLOCK_HOST}
+		path /sipclock /sipclock/*
+	}
+	handle @sipclock {
+		uri strip_prefix /sipclock
+		reverse_proxy sipclock-api:8787 {
+			import passthrough
+		}
+	}
+
+	# Everything else goes to SweetVilka, unchanged.
+	handle {
+		reverse_proxy sweetvilka-web-1:3000 {
+			import passthrough
+		}
+	}
+}

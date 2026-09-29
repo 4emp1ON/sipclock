@@ -15,7 +15,7 @@ const sentryEnabled = initSentry(env);
 const database = createDb(env.DATABASE_URL);
 const auth = createAuth(database.db, env);
 const rateLimitStore = createMemoryRateLimitStore();
-const catalog = createBundledCatalogService();
+const catalog = createBundledCatalogService(process.env.CATALOG_DIR);
 const app = createApp({ env, auth, ping: database.ping, logger, catalog, rateLimitStore });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
