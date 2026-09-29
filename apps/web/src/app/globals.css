@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@import "@sipclock/tokens/tokens.css";
+@import "@sipclock/tokens/theme.css";
+
+:root {
+  --font-display: var(--font-unbounded), "Arial Black", system-ui, sans-serif;
+  --font-text: var(--font-onest), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

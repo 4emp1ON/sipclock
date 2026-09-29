@@ -1,0 +1,25 @@
+{
+  "name": "@sipclock/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sipclock design tokens: generated CSS variables, Tailwind v4 theme and a typed TS object from the design-system tokens.json.",
+  "exports": {
+    ".": "./generated/tokens.ts",
+    "./tokens.css": "./generated/tokens.css",
+    "./theme.css": "./generated/theme.css",
+    "./uniwind.css": "./generated/uniwind.css",
+    "./source": "./src/tokens.json"
+  },
+  "scripts": {
+    "build": "node src/build.ts",
+    "check": "node src/build.ts --check",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.2"
+  }
+}
