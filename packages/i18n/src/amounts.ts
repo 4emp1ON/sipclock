@@ -1,4 +1,5 @@
 import type { Localized } from '@sipclock/domain';
+import { pluralCategory } from './intl.ts';
 import type { Locale } from './messages.ts';
 
 /** Structured amount as produced by the engine's unit conversion. */
@@ -9,7 +10,7 @@ export type DisplayAmount =
   | { unit: 'fill' };
 
 const plural = (locale: Locale, n: number, forms: Record<string, string>) =>
-  forms[new Intl.PluralRules(locale).select(n)] ?? forms.other ?? '';
+  forms[pluralCategory(locale, n)] ?? forms.other ?? '';
 
 /** 1.5 → "1½", 0.25 → "¼"; other values keep up to one decimal. */
 export function formatNumber(n: number, locale: Locale): string {

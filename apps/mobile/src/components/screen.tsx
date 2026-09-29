@@ -1,6 +1,10 @@
 import type { ReactNode } from 'react';
 import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
+import { withUniwind } from 'uniwind';
+
+// Uniwind styles React Native core components only; third-party ones need wrapping to accept className.
+const SafeAreaView = withUniwind(RNSafeAreaView);
 
 /** Themed full-screen container: safe-area aware (top; the tab bar handles the bottom), 20px side padding, scrollable. */
 export function Screen({ children }: { children: ReactNode }) {

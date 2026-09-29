@@ -54,3 +54,45 @@ describe('amounts', () => {
     expect(formatAmount({ unit: 'ml', value: 45 }, 'ru')).toBe('45 мл');
   });
 });
+
+describe('without Intl.ListFormat / Intl.PluralRules (Hermes on Android)', () => {
+  it('falls back to built-in list and plural rules', async () => {
+    const { ListFormat, PluralRules } = Intl;
+    // @ts-expect-error simulate a runtime without these constructors
+    delete Intl.ListFormat;
+    // @ts-expect-error simulate a runtime without these constructors
+    delete Intl.PluralRules;
+    try {
+      const { listFormat, pluralCategory } = await import('./intl.ts');
+      expect(listFormat(['gin', 'lemon'], 'en')).toBe('gin and lemon');
+      expect(listFormat(['gin', 'lemon', 'soda'], 'en')).toBe('gin, lemon, and soda');
+      expect(listFormat(['джин', 'лимон', 'содовая'], 'ru')).toBe('джин, лимон и содовая');
+      expect([1, 2, 5, 11, 21, 22, 25].map((n) => pluralCategory('ru', n))).toEqual([
+        'one',
+        'few',
+        'many',
+        'many',
+        'one',
+        'few',
+        'many',
+      ]);
+      expect(pluralCategory('en', 1)).toBe('one');
+      expect(formatAmount({ unit: 'parts', value: 5 }, 'ru')).toBe('5 частей');
+      expect(reasonText({ code: 'in-bar', ingredients: ['gin', 'tonic'] }, 'ru', name)).toBe(
+        'У вас есть джин и тоник',
+      );
+    } finally {
+      Object.assign(Intl, { ListFormat, PluralRules });
+    }
+  });
+
+  it('matches Intl where it exists', async () => {
+    const { listFormat, pluralCategory } = await import('./intl.ts');
+    for (const n of [0, 1, 2, 3, 4, 5, 11, 12, 14, 21, 22, 101, 111]) {
+      expect(pluralCategory('ru', n)).toBe(new Intl.PluralRules('ru').select(n));
+    }
+    expect(listFormat(['a', 'b', 'c'], 'en')).toBe(
+      new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(['a', 'b', 'c']),
+    );
+  });
+});

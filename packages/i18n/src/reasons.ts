@@ -1,12 +1,9 @@
 import type { Reason } from '@sipclock/domain';
+import { listFormat } from './intl.ts';
 import { daypartLabel, flavorLabel, type Locale, occasionLabel, seasonLabel } from './messages.ts';
 
 /** Resolves an ingredient id to its display name in the given locale. */
 export type IngredientName = (id: string, locale: Locale) => string;
-
-export function listFormat(items: string[], locale: Locale): string {
-  return new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(items);
-}
 
 /** One short clause per reason. Apps join the first two or three into the "why this one" line. */
 export function reasonText(reason: Reason, locale: Locale, name: IngredientName): string {

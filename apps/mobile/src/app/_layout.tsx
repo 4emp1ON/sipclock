@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { SQLiteProvider } from 'expo-sqlite';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { DATABASE_NAME, migrate } from '@/data/db';
@@ -44,6 +45,7 @@ function RootLayout() {
         },
       }}
     >
+      <StatusBar style={name === 'night' ? 'light' : 'dark'} />
       <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrate}>
         <BarProvider>
           <Stack screenOptions={{ headerShown: false }}>

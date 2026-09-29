@@ -1,8 +1,8 @@
 import type { IngredientKind } from '@sipclock/domain';
-import type { Locale } from '@sipclock/i18n';
+import { type Locale, pluralCategory } from '@sipclock/i18n';
 
 const pluralRu = (n: number, one: string, few: string, many: string) => {
-  const form = new Intl.PluralRules('ru').select(n);
+  const form = pluralCategory('ru', n);
   return form === 'one' ? one : form === 'few' ? few : many;
 };
 
@@ -15,7 +15,9 @@ const en = {
   emptyTitle: 'Nothing fits right now',
   emptyHint: 'Try another occasion or add more to your bar.',
   alcAbbr: 'Alc.',
+  freeAbbr: 'Free',
   abvLabel: (percent: number) => `${percent} percent alcohol`,
+  alcoholFreeLabel: 'Alcohol free',
   timeLabel: (time: string) => `Current time ${time}`,
   availReady: 'All in your bar',
   availSwap: (n: number) => `Ready · ${n} ${n === 1 ? 'swap' : 'swaps'}`,
@@ -71,7 +73,9 @@ const ru: Strings = {
   emptyTitle: 'Сейчас ничего не подходит',
   emptyHint: 'Выберите другой повод или пополните бар.',
   alcAbbr: 'Алк.',
+  freeAbbr: 'Без алк.',
   abvLabel: (percent) => `${percent} процентов алкоголя`,
+  alcoholFreeLabel: 'Без алкоголя',
   timeLabel: (time) => `Сейчас ${time}`,
   availReady: 'Всё есть в баре',
   availSwap: (n) => `Готово · ${n} ${pluralRu(n, 'замена', 'замены', 'замен')}`,
