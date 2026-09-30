@@ -8,8 +8,11 @@ must stay fully usable without an account and offline. The API runs on a shared 
 (`/sipclock`, see [0005](0005-deployment-topology.md)); the web runs on `sipclock.vercel.app`, another site.
 
 ## Decision
-- **Sign-in:** Better Auth with a 6-digit email code (email OTP plugin, sent through Resend). Password sign-in
-  stays on the server, but password sign-up is off: an unverified sign-up could claim someone else's address.
+- **Sign-in:** Better Auth with a 6-digit email code (email OTP plugin, sent through Resend) as the default, and
+  email + password as an option. A password account works only after the address is confirmed with a code (so
+  nobody can claim someone else's address); resets use a code too and revoke all sessions; breached passwords
+  are rejected. Passkeys come with an own domain: their relying-party ID is bound to the domain, so passkeys
+  created on `sipclock.vercel.app` would stop working after a move.
   Codes sent and sign-in attempts are limited per address in front of Better Auth, whose own limiter is off
   (it trusts spoofable headers). Apple and Google sign-in come later, when developer accounts exist.
   Account deletion is available in the apps (App Store requirement); user data rows cascade. A session older

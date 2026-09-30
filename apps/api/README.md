@@ -57,12 +57,22 @@ See [ADR 0006](../../docs/adr/0006-accounts-and-sync.md). Better Auth plugins:
   then `POST /api/auth/sign-in/email-otp` `{ email, otp }` (signs up on first use). 6 digits, valid 5 minutes,
   3 attempts. Sent through Resend when `RESEND_API_KEY` is set (delivery is not awaited; failures are
   logged). Without a key the code is logged at info level as `email otp (dev)` outside production; in
-  production nothing is sent and an error is logged. Email + password stays enabled.
+  production nothing is sent and an error is logged.
+- **Password**: `POST /api/auth/sign-up/email` `{ email, password, name }` answers the same for new and taken
+  addresses and emails a code; `POST /api/auth/email-otp/verify-email` `{ email, otp }` confirms the address and
+  signs in. `POST /api/auth/sign-in/email` answers 403 `EMAIL_NOT_VERIFIED` (and sends a fresh code) until then.
+  Reset or first password for code-only accounts: `POST /api/auth/email-otp/request-password-reset` `{ email }`,
+  then `POST /api/auth/email-otp/reset-password` `{ email, otp, password }` (revokes all sessions). 8–128
+  characters; breached passwords are rejected (`haveibeenpwned`, k-anonymity query to api.pwnedpasswords.com).
+- **Per-address limits** (in front of Better Auth, whose own limiter is off): 5 codes per 15 minutes on every route
+  that emails one, 10 code or password checks per hour (`EMAIL_SENDING_PATHS`, `CREDENTIAL_CHECK_PATHS` in
+  `src/auth.ts`).
 - **JWT** (`jwt`): `GET /api/auth/token` returns a 15-minute EdDSA token for PowerSync
   (`aud` = `POWERSYNC_AUDIENCE`, `iss` = `BETTER_AUTH_URL`, `sub` = user id, no personal data). Keys at
   `GET /api/auth/jwks`, stored in the `jwks` table, private keys encrypted with `BETTER_AUTH_SECRET`
   (changing the secret requires deleting the rows).
-- **Expo** (`@better-auth/expo`): accepts the `expo-origin` header from the app. Trusted origins are
+- **Native app origin** (`nativeAppOrigin()`, the part of `@better-auth/expo`'s server plugin email sign-in
+  needs): accepts the `expo-origin` header from the app. Trusted origins are
   `CORS_ORIGINS`, `sipclock://` and, outside production, `exp://`.
 - **Account deletion**: `POST /api/auth/delete-user` with a session younger than a day (or `password`);
   user data rows cascade.

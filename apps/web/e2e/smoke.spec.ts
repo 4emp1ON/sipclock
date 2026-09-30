@@ -96,6 +96,42 @@ test('sign-in page validates the email before asking for a code', async ({ page 
   await expect(page.getByRole('navigation', { name: 'Main' })).toBeVisible();
 });
 
+test('password mode renders the right fields and the show/hide toggle works', async ({ page }) => {
+  await page.goto('/en/sign-in');
+  await page.getByRole('button', { name: 'Use password' }).click();
+  await expect(page.getByLabel('Email')).toHaveAttribute('autocomplete', 'username');
+  const password = page.getByLabel('Password', { exact: true });
+  await expect(password).toHaveAttribute('type', 'password');
+  await expect(password).toHaveAttribute('autocomplete', 'current-password');
+  await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Forgot password?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Show password' }).click();
+  await expect(password).toHaveAttribute('type', 'text');
+  await page.getByRole('button', { name: 'Hide password' }).click();
+  await expect(password).toHaveAttribute('type', 'password');
+  await page.getByRole('button', { name: 'Use a code instead' }).click();
+  await expect(page.getByRole('button', { name: 'Send code' })).toBeVisible();
+});
+
+test('create account shows the hint and blocks a short password client-side', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', (r) => {
+    // The header's session check is expected; anything else would be a sign-up request.
+    if (r.url().includes('/api/auth/') && !r.url().endsWith('/get-session')) requests.push(r.url());
+  });
+  await page.goto('/en/sign-in');
+  await page.getByRole('button', { name: 'Use password' }).click();
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page.getByText('At least 8 characters')).toBeVisible();
+  const password = page.getByLabel('Password', { exact: true });
+  await expect(password).toHaveAttribute('autocomplete', 'new-password');
+  await page.getByLabel('Email').fill('user@example.com');
+  await password.fill('short');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page.locator('form [role="alert"]')).toHaveText('Use at least 8 characters.');
+  expect(requests).toEqual([]);
+});
+
 test('Russian sign-in page is localized', async ({ page }) => {
   await page.goto('/ru/sign-in');
   await expect(page.getByRole('heading', { level: 1, name: 'Вход' })).toBeVisible();

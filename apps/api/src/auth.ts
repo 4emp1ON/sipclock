@@ -1,6 +1,7 @@
 import { type BetterAuthPlugin, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { emailOTP } from 'better-auth/plugins/email-otp';
+import { haveIBeenPwned } from 'better-auth/plugins/haveibeenpwned';
 import { jwt } from 'better-auth/plugins/jwt';
 import type { Database } from './db/client.ts';
 import * as authSchema from './db/schema/auth.ts';
@@ -22,6 +23,26 @@ export const OTP_SEND_WINDOW_MS = 15 * 60_000;
 /** Sign-in attempts per address per hour; with 6 digits this keeps guessing hopeless. */
 export const OTP_SIGN_INS_PER_EMAIL = 10;
 export const OTP_SIGN_IN_WINDOW_MS = 60 * 60_000;
+
+/** Routes that email a code: counted against OTP_SENDS_PER_EMAIL. */
+export const EMAIL_SENDING_PATHS = [
+  '/api/auth/email-otp/send-verification-otp',
+  '/api/auth/email-otp/request-password-reset',
+  '/api/auth/forget-password/email-otp',
+  '/api/auth/sign-up/email',
+] as const;
+/** Routes that check a code or a password: counted against OTP_SIGN_INS_PER_EMAIL. */
+export const CREDENTIAL_CHECK_PATHS = [
+  '/api/auth/sign-in/email-otp',
+  '/api/auth/sign-in/email',
+  '/api/auth/email-otp/verify-email',
+  '/api/auth/email-otp/check-verification-otp',
+  '/api/auth/email-otp/reset-password',
+] as const;
+
+/** NIST SP 800-63B minimum; enough together with the breach check below. */
+export const MIN_PASSWORD_LENGTH = 8;
+export const MAX_PASSWORD_LENGTH = 128;
 
 export type AuthEnv = Pick<
   Env,
@@ -126,9 +147,21 @@ export function createAuth(db: Database, env: AuthEnv, logger: Logger) {
     secret: env.BETTER_AUTH_SECRET,
     trustedOrigins: trustedOrigins(env),
     database: drizzleAdapter(db, { provider: 'pg', schema: authSchema }),
-    // Password sign-in stays as a fallback for existing accounts, but new accounts start from an email
-    // code: an unverified password sign-up could otherwise claim someone else's address and plant data.
-    emailAndPassword: { enabled: true, disableSignUp: true },
+    // Password accounts work only once the address is confirmed with an emailed code, so nobody can
+    // claim someone else's address. Sign-up answers the same for new and taken addresses (no enumeration).
+    emailAndPassword: {
+      enabled: true,
+      requireEmailVerification: true,
+      minPasswordLength: MIN_PASSWORD_LENGTH,
+      maxPasswordLength: MAX_PASSWORD_LENGTH,
+      revokeSessionsOnPasswordReset: true,
+    },
+    emailVerification: {
+      sendOnSignUp: true,
+      // A password sign-in to an unconfirmed account sends a fresh code and answers EMAIL_NOT_VERIFIED.
+      sendOnSignIn: true,
+      autoSignInAfterVerification: true,
+    },
     user: { deleteUser: { enabled: true } },
     // Our own per-IP limiter guards /api/auth/* (see app.ts). Better Auth's limiter keys by
     // X-Forwarded-For, which clients can spoof, and would double-count behind our proxies.
@@ -141,8 +174,12 @@ export function createAuth(db: Database, env: AuthEnv, logger: Logger) {
         disableSignUp: false,
         // A resend within the expiry repeats the live code instead of minting another one to guess.
         resendStrategy: 'reuse',
+        // Email verification is a 6-digit code (POST /email-otp/verify-email), not a link.
+        overrideDefaultEmailVerification: true,
         sendVerificationOTP: createOtpSender(env, logger),
       }),
+      // Rejects passwords found in known breaches (k-anonymity range query; only a hash prefix leaves).
+      haveIBeenPwned(),
       // Short-lived tokens for the PowerSync service (GET /api/auth/token, keys at /api/auth/jwks).
       jwt({
         jwt: {

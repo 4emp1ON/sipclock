@@ -32,6 +32,38 @@ export interface Ui {
     verifyFailed: string;
     tooMany: string;
     guestNote: string;
+    passwordRequired: string;
+    passwordShort: string;
+    passwordLong: string;
+    passwordCompromised: string;
+    invalidCredentials: string;
+    otpInvalid: string;
+    otpExpired: string;
+    otpTooManyAttempts: string;
+    signInFailed: string;
+    signUpFailed: string;
+    resetFailed: string;
+    usePassword: string;
+    useCode: string;
+    forgotPassword: string;
+    createAccount: string;
+    creatingAccount: string;
+    haveAccount: string;
+    backToSignIn: string;
+    passwordLabel: string;
+    newPasswordLabel: string;
+    passwordHint: string;
+    showPassword: string;
+    hidePassword: string;
+    signInButton: string;
+    signingIn: string;
+    confirmTitle: string;
+    confirmFirst: string;
+    confirm: string;
+    resetTitle: string;
+    resetLead: string;
+    setPassword: string;
+    settingPassword: string;
   };
   account: {
     title: string;
@@ -51,6 +83,8 @@ export interface Ui {
     reauthPrompt: string;
     reauthConfirm: string;
     reauthInvalid: string;
+    setPassword: string;
+    setPasswordLead: string;
   };
   sync: { failed: string; loadFailed: string; mergeFailed: string; dismiss: string };
   today: {
@@ -139,6 +173,38 @@ const en: Ui = {
     verifyFailed: 'That code is wrong or expired.',
     tooMany: 'Too many attempts. Wait a minute and try again.',
     guestNote: 'You can use Sipclock without an account. Your bar then stays on this device.',
+    passwordRequired: 'Enter your password.',
+    passwordShort: 'Use at least 8 characters.',
+    passwordLong: 'Use at most 128 characters.',
+    passwordCompromised: 'This password appeared in a data breach. Choose another one.',
+    invalidCredentials: 'Email or password is wrong.',
+    otpInvalid: 'That code is wrong.',
+    otpExpired: 'That code has expired. Request a new one.',
+    otpTooManyAttempts: 'Too many wrong tries. Request a new code.',
+    signInFailed: 'Could not sign in. Try again.',
+    signUpFailed: 'Could not create the account. Try again.',
+    resetFailed: 'Could not set the password. Try again.',
+    usePassword: 'Use password',
+    useCode: 'Use a code instead',
+    forgotPassword: 'Forgot password?',
+    createAccount: 'Create account',
+    creatingAccount: 'Creating',
+    haveAccount: 'Sign in with password',
+    backToSignIn: 'Back to sign in',
+    passwordLabel: 'Password',
+    newPasswordLabel: 'New password',
+    passwordHint: 'At least 8 characters',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
+    signInButton: 'Sign in',
+    signingIn: 'Signing in',
+    confirmTitle: 'Confirm your email',
+    confirmFirst: 'Confirm your email first. We sent you a code.',
+    confirm: 'Confirm',
+    resetTitle: 'Set a new password',
+    resetLead: 'Enter your email and we will send a code to set a new password.',
+    setPassword: 'Set password',
+    settingPassword: 'Saving',
   },
   account: {
     title: 'Account',
@@ -158,6 +224,9 @@ const en: Ui = {
     reauthPrompt: 'To confirm, enter the code we just sent to your email.',
     reauthConfirm: 'Confirm and delete',
     reauthInvalid: 'That code did not work. Check it and try again.',
+    setPassword: 'Set or change password',
+    setPasswordLead:
+      'We will email you a code, then you choose a new password. Other devices are signed out.',
   },
   sync: {
     failed: 'Could not save your last change. It was undone.',
@@ -265,6 +334,38 @@ const ru: Ui = {
     verifyFailed: 'Код неверный или устарел.',
     tooMany: 'Слишком много попыток. Подождите минуту.',
     guestNote: 'Sipclock работает и без аккаунта. Тогда бар хранится только на этом устройстве.',
+    passwordRequired: 'Введите пароль.',
+    passwordShort: 'Нужно не меньше 8 символов.',
+    passwordLong: 'Не больше 128 символов.',
+    passwordCompromised: 'Этот пароль попал в утечку данных. Выберите другой.',
+    invalidCredentials: 'Почта или пароль неверны.',
+    otpInvalid: 'Код неверный.',
+    otpExpired: 'Код устарел. Запросите новый.',
+    otpTooManyAttempts: 'Слишком много ошибок. Запросите новый код.',
+    signInFailed: 'Не удалось войти. Попробуйте ещё раз.',
+    signUpFailed: 'Не удалось создать аккаунт. Попробуйте ещё раз.',
+    resetFailed: 'Не удалось задать пароль. Попробуйте ещё раз.',
+    usePassword: 'Войти с паролем',
+    useCode: 'Войти по коду',
+    forgotPassword: 'Забыли пароль?',
+    createAccount: 'Создать аккаунт',
+    creatingAccount: 'Создаём',
+    haveAccount: 'Войти с паролем',
+    backToSignIn: 'Назад ко входу',
+    passwordLabel: 'Пароль',
+    newPasswordLabel: 'Новый пароль',
+    passwordHint: 'Не меньше 8 символов',
+    showPassword: 'Показать пароль',
+    hidePassword: 'Скрыть пароль',
+    signInButton: 'Войти',
+    signingIn: 'Входим',
+    confirmTitle: 'Подтвердите почту',
+    confirmFirst: 'Сначала подтвердите почту. Мы отправили вам код.',
+    confirm: 'Подтвердить',
+    resetTitle: 'Задайте новый пароль',
+    resetLead: 'Введите почту, и мы пришлём код для нового пароля.',
+    setPassword: 'Задать пароль',
+    settingPassword: 'Сохраняем',
   },
   account: {
     title: 'Аккаунт',
@@ -284,6 +385,9 @@ const ru: Ui = {
     reauthPrompt: 'Для подтверждения введите код, который мы только что отправили на почту.',
     reauthConfirm: 'Подтвердить и удалить',
     reauthInvalid: 'Код не подошёл. Проверьте его и попробуйте снова.',
+    setPassword: 'Задать или сменить пароль',
+    setPasswordLead:
+      'Мы пришлём код на почту, затем вы выберете новый пароль. На других устройствах придётся войти заново.',
   },
   sync: {
     failed: 'Не удалось сохранить последнее изменение. Оно отменено.',

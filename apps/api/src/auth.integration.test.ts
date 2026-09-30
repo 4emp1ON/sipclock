@@ -1,5 +1,5 @@
 import { createPublicKey, randomUUID, verify } from 'node:crypto';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createApp } from './app.ts';
 import { createAuth, toAuthHandler } from './auth.ts';
@@ -43,6 +43,19 @@ describe.skipIf(!process.env.DATABASE_URL)('Better Auth (integration)', () => {
     logger,
   });
   const email = `otp-${randomUUID()}@example.test`;
+  const pwEmail = `pw-${randomUUID()}@example.test`;
+  // Random, so it is not in any breach list (the check queries api.pwnedpasswords.com).
+  const password = `Sip-${randomUUID()}`;
+  const newPassword = `Sip-${randomUUID()}`;
+  const lastCode = (to: string, type: string) =>
+    logs.findLast((l) => l.msg === 'email otp (dev)' && l.email === to && l.type === type)?.otp as
+      | string
+      | undefined;
+  const cookieOf = (res: Response) =>
+    res.headers
+      .getSetCookie()
+      .map((c) => c.split(';')[0])
+      .join('; ');
 
   // Signing keys are encrypted with BETTER_AUTH_SECRET, and Better Auth signs with the newest key. Keys
   // left by a server using another secret would make signing fail, and ours would break that server,
@@ -53,7 +66,7 @@ describe.skipIf(!process.env.DATABASE_URL)('Better Auth (integration)', () => {
 
   afterAll(async () => {
     await handle.db.delete(jwks);
-    await handle.db.delete(user).where(eq(user.email, email));
+    await handle.db.delete(user).where(inArray(user.email, [email, pwEmail]));
     await handle.close();
   });
 
@@ -159,5 +172,84 @@ describe.skipIf(!process.env.DATABASE_URL)('Better Auth (integration)', () => {
         .where(eq(barItem.userId, row?.id ?? '')),
     ).toEqual([]);
     expect((await app.request('/v1/me/data', { headers: { cookie } })).status).toBe(401);
+  });
+
+  describe('password accounts', () => {
+    it('signs up only after the address is confirmed with a code', async () => {
+      const weak = await post('/api/auth/sign-up/email', {
+        email: pwEmail,
+        password: 'short',
+        name: '',
+      });
+      expect(weak.status).toBe(400);
+
+      const signUp = await post('/api/auth/sign-up/email', { email: pwEmail, password, name: '' });
+      expect(signUp.status).toBe(200);
+      expect(cookieOf(signUp)).not.toContain('session_token');
+      const code = lastCode(pwEmail, 'email-verification');
+      expect(code).toMatch(/^\d{6}$/);
+
+      // Unconfirmed: the password alone does not sign in.
+      const early = await post('/api/auth/sign-in/email', { email: pwEmail, password });
+      expect(early.status).toBe(403);
+      expect(await early.json()).toMatchObject({ code: 'EMAIL_NOT_VERIFIED' });
+
+      const verify = await post('/api/auth/email-otp/verify-email', { email: pwEmail, otp: code });
+      expect(verify.status).toBe(200);
+      expect(cookieOf(verify)).toContain('session_token');
+
+      const signIn = await post('/api/auth/sign-in/email', { email: pwEmail, password });
+      expect(signIn.status).toBe(200);
+      expect(cookieOf(signIn)).toContain('session_token');
+    });
+
+    it('answers a sign-up for a taken address like a new one', async () => {
+      const again = await post('/api/auth/sign-up/email', {
+        email: pwEmail,
+        password: newPassword,
+        name: '',
+      });
+      expect(again.status).toBe(200);
+      const wrong = await post('/api/auth/sign-in/email', {
+        email: pwEmail,
+        password: newPassword,
+      });
+      expect(wrong.status).toBe(401);
+    });
+
+    it('rejects breached passwords', async () => {
+      const res = await post('/api/auth/sign-up/email', {
+        email: `pwned-${randomUUID()}@example.test`,
+        password: 'password12345',
+        name: '',
+      });
+      expect(res.status).toBe(400);
+      expect(await res.json()).toMatchObject({ code: 'PASSWORD_COMPROMISED' });
+    });
+
+    it('resets the password with a code and signs other sessions out', async () => {
+      const before = cookieOf(await post('/api/auth/sign-in/email', { email: pwEmail, password }));
+      expect(before).toContain('session_token');
+
+      const request = await post('/api/auth/email-otp/request-password-reset', { email: pwEmail });
+      expect(request.status).toBe(200);
+      const code = lastCode(pwEmail, 'forget-password');
+      const reset = await post('/api/auth/email-otp/reset-password', {
+        email: pwEmail,
+        otp: code,
+        password: newPassword,
+      });
+      expect(reset.status).toBe(200);
+
+      expect((await app.request('/v1/me/data', { headers: { cookie: before } })).status).toBe(401);
+      expect((await post('/api/auth/sign-in/email', { email: pwEmail, password })).status).toBe(
+        401,
+      );
+      const fresh = await post('/api/auth/sign-in/email', {
+        email: pwEmail,
+        password: newPassword,
+      });
+      expect(fresh.status).toBe(200);
+    });
   });
 });

@@ -2,32 +2,56 @@
 
 import type { Route } from 'next';
 import { useRouter } from 'next/navigation';
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import { getUi, type Locale } from '@/i18n/ui';
 import { authClient } from '@/lib/auth-client';
+import {
+  type AuthErrorKey,
+  authErrorKey,
+  isEmailNotVerified,
+  validatePassword,
+} from '@/lib/auth-errors';
 import { safeNextPath } from '@/lib/next-path';
+import { CodeField, EmailField, linkButton, PasswordField, primaryButton } from './auth-fields';
 
 const RESEND_COOLDOWN_S = 30;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const inputClass =
-  'mt-2 block min-h-12 w-full rounded-md border border-line bg-surface px-4 text-base text-ink placeholder:text-ink-muted';
-const primaryButton =
-  'inline-flex min-h-12 items-center justify-center rounded-pill bg-primary px-6 font-semibold text-on-primary hover:bg-[var(--primary-pressed)] disabled:opacity-60';
-const linkButton =
-  'inline-flex min-h-11 items-center text-sm font-semibold underline disabled:no-underline disabled:opacity-60';
+/**
+ * code-email -> code-verify: passwordless (default).
+ * password / signup / forgot: email + password forms.
+ * confirm-email: 6-digit code after sign-up or an unverified sign-in.
+ * reset: code + new password.
+ */
+export type View =
+  | 'code-email'
+  | 'code-verify'
+  | 'password'
+  | 'signup'
+  | 'confirm-email'
+  | 'forgot'
+  | 'reset';
 
-type ErrorKey = 'invalidEmail' | 'invalidCode' | 'sendFailed' | 'verifyFailed' | 'tooMany';
+interface Props {
+  locale: Locale;
+  /** Signed-in "set password" flow: email is fixed, a reset code is sent on mount. */
+  resetFor?: string;
+  /** Called after a successful reset-and-sign-in instead of redirecting. */
+  onDone?: () => void;
+}
 
-export function SignInForm({ locale }: { locale: Locale }) {
+export function SignInForm({ locale, resetFor, onDone }: Props) {
   const ui = getUi(locale);
   const router = useRouter();
-  const [step, setStep] = useState<'email' | 'code'>('email');
-  const [email, setEmail] = useState('');
+  const [view, setView] = useState<View>(resetFor ? 'reset' : 'code-email');
+  const [email, setEmail] = useState(resetFor ?? '');
+  const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<ErrorKey | null>(null);
+  const [error, setError] = useState<AuthErrorKey | null>(null);
+  const [notVerified, setNotVerified] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+  const started = useRef(false);
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -35,62 +59,162 @@ export function SignInForm({ locale }: { locale: Locale }) {
     return () => clearTimeout(t);
   }, [cooldown]);
 
-  const sendCode = async (address: string): Promise<boolean> => {
+  const go = (v: View) => {
+    setView(v);
+    setError(null);
+    setNotVerified(false);
+    setCode('');
+    setPassword('');
+  };
+
+  const finish = () => {
+    if (onDone) {
+      onDone();
+      return;
+    }
+    const next = safeNextPath(new URLSearchParams(window.location.search).get('next'), locale);
+    router.replace(next as Route);
+  };
+
+  // Runs `call`, mapping a returned or thrown failure to an error key. True on success.
+  const attempt = async (
+    call: () => Promise<{ error: { code?: string; status?: number } | null }>,
+    fallback: AuthErrorKey,
+    onError?: (err: { code?: string; status?: number }) => boolean,
+  ): Promise<boolean> => {
     setBusy(true);
     setError(null);
     try {
-      const { error: err } = await authClient.emailOtp.sendVerificationOtp({
-        email: address,
-        type: 'sign-in',
-      });
+      const { error: err } = await call();
       if (err) {
-        setError(err.status === 429 ? 'tooMany' : 'sendFailed');
+        if (!onError?.(err)) setError(authErrorKey(err, fallback));
         return false;
       }
-      setCooldown(RESEND_COOLDOWN_S);
       return true;
     } catch {
-      setError('sendFailed');
+      setError(fallback);
       return false;
     } finally {
       setBusy(false);
     }
   };
 
-  const onEmail = async (e: FormEvent) => {
-    e.preventDefault();
+  const sendFor = (v: View, address: string) => {
+    if (v === 'confirm-email') {
+      return authClient.emailOtp.sendVerificationOtp({
+        email: address,
+        type: 'email-verification',
+      });
+    }
+    if (v === 'reset' || v === 'forgot')
+      return authClient.emailOtp.requestPasswordReset({ email: address });
+    return authClient.emailOtp.sendVerificationOtp({ email: address, type: 'sign-in' });
+  };
+
+  const sendCode = async (v: View, address: string): Promise<boolean> => {
+    const ok = await attempt(() => sendFor(v, address), 'sendFailed');
+    if (ok) setCooldown(RESEND_COOLDOWN_S);
+    return ok;
+  };
+
+  // Account page: send the reset code once on mount.
+  useEffect(() => {
+    if (!resetFor || started.current) return;
+    started.current = true;
+    void sendCode('reset', resetFor);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: one-shot on mount
+  }, [resetFor, sendCode]);
+
+  const checkEmail = (): string | null => {
     const address = email.trim();
     if (!EMAIL_RE.test(address)) {
       setError('invalidEmail');
-      return;
+      return null;
     }
     setEmail(address);
-    if (await sendCode(address)) {
-      setCode('');
-      setStep('code');
-    }
+    return address;
   };
 
-  const onCode = async (e: FormEvent) => {
-    e.preventDefault();
+  const checkCode = (): boolean => {
     if (!/^\d{6}$/.test(code)) {
       setError('invalidCode');
-      return;
+      return false;
     }
-    setBusy(true);
-    setError(null);
-    try {
-      const { error: err } = await authClient.signIn.emailOtp({ email, otp: code });
-      if (err) {
-        setError(err.status === 429 ? 'tooMany' : 'verifyFailed');
-        return;
+    return true;
+  };
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (view === 'code-email') {
+      const address = checkEmail();
+      if (address && (await sendCode('code-email', address))) {
+        go('code-verify');
+        setCooldown(RESEND_COOLDOWN_S);
       }
-      const next = safeNextPath(new URLSearchParams(window.location.search).get('next'), locale);
-      router.replace(next as Route);
-    } catch {
-      setError('verifyFailed');
-    } finally {
-      setBusy(false);
+    } else if (view === 'code-verify') {
+      if (!checkCode()) return;
+      const ok = await attempt(
+        () => authClient.signIn.emailOtp({ email, otp: code }),
+        'verifyFailed',
+      );
+      if (ok) finish();
+    } else if (view === 'password') {
+      const address = checkEmail();
+      if (!address) return;
+      const invalid = validatePassword(password, 'existing');
+      if (invalid) return setError(invalid);
+      const ok = await attempt(
+        () => authClient.signIn.email({ email: address, password }),
+        'signInFailed',
+        (err) => {
+          if (!isEmailNotVerified(err)) return false;
+          // The server has just emailed a fresh code.
+          go('confirm-email');
+          setNotVerified(true);
+          setCooldown(RESEND_COOLDOWN_S);
+          return true;
+        },
+      );
+      if (ok) finish();
+    } else if (view === 'signup') {
+      const address = checkEmail();
+      if (!address) return;
+      const invalid = validatePassword(password, 'new');
+      if (invalid) return setError(invalid);
+      const ok = await attempt(
+        () => authClient.signUp.email({ email: address, password, name: '' }),
+        'signUpFailed',
+      );
+      if (ok) {
+        go('confirm-email');
+        setCooldown(RESEND_COOLDOWN_S);
+      }
+    } else if (view === 'confirm-email') {
+      if (!checkCode()) return;
+      const ok = await attempt(
+        () => authClient.emailOtp.verifyEmail({ email, otp: code }),
+        'verifyFailed',
+      );
+      if (ok) finish();
+    } else if (view === 'forgot') {
+      const address = checkEmail();
+      if (address && (await sendCode('forgot', address))) {
+        go('reset');
+        setCooldown(RESEND_COOLDOWN_S);
+      }
+    } else if (view === 'reset') {
+      if (!checkCode()) return;
+      const invalid = validatePassword(password, 'new');
+      if (invalid) return setError(invalid);
+      const reset = await attempt(
+        () => authClient.emailOtp.resetPassword({ email, otp: code, password }),
+        'resetFailed',
+      );
+      if (!reset) return;
+      // Sessions were revoked; sign in with the new password.
+      const ok = await attempt(() => authClient.signIn.email({ email, password }), 'signInFailed');
+      if (ok) finish();
+      else if (!resetFor) setView('password');
     }
   };
 
@@ -100,80 +224,185 @@ export function SignInForm({ locale }: { locale: Locale }) {
       {errorText}
     </p>
   );
+  const link = (label: string, to: View) => (
+    <button type="button" onClick={() => go(to)} className={linkButton}>
+      {label}
+    </button>
+  );
+  const emailField = (autoComplete: 'email' | 'username') => (
+    <EmailField
+      value={email}
+      onChange={setEmail}
+      invalid={error === 'invalidEmail'}
+      autoComplete={autoComplete}
+      label={ui.auth.emailLabel}
+    />
+  );
+  const passwordInvalid =
+    error === 'passwordRequired' ||
+    error === 'passwordShort' ||
+    error === 'passwordLong' ||
+    error === 'passwordCompromised' ||
+    error === 'invalidCredentials';
+  const codeInvalid =
+    error === 'invalidCode' ||
+    error === 'verifyFailed' ||
+    error === 'otpInvalid' ||
+    error === 'otpExpired' ||
+    error === 'otpTooManyAttempts';
+  const submit = (idle: string, pending: string) => (
+    <button type="submit" disabled={busy} className={`${primaryButton} mt-5`}>
+      {busy ? pending : idle}
+    </button>
+  );
+  const links = (...items: ReactNode[]) => (
+    <div className="mt-4 flex flex-wrap gap-x-5">{items}</div>
+  );
+  const resend = (
+    <button
+      key="resend"
+      type="button"
+      disabled={busy || cooldown > 0}
+      onClick={() => void sendCode(view, email)}
+      className={linkButton}
+    >
+      {cooldown > 0 ? ui.auth.resendIn(cooldown) : ui.auth.resend}
+    </button>
+  );
 
-  if (step === 'email') {
-    return (
-      <form onSubmit={onEmail} noValidate className="mt-8 max-w-sm">
-        <label htmlFor="email" className="text-sm font-semibold">
-          {ui.auth.emailLabel}
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          autoCapitalize="none"
-          spellCheck={false}
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          aria-invalid={error === 'invalidEmail'}
-          className={inputClass}
-        />
-        {errorNode}
-        <button type="submit" disabled={busy} className={`${primaryButton} mt-5`}>
-          {busy ? ui.auth.sendingCode : ui.auth.sendCode}
-        </button>
-        <p className="mt-6 text-sm text-ink-muted">{ui.auth.guestNote}</p>
-      </form>
-    );
+  let body: ReactNode;
+  switch (view) {
+    case 'code-email':
+      body = (
+        <>
+          {emailField('email')}
+          {errorNode}
+          {submit(ui.auth.sendCode, ui.auth.sendingCode)}
+          {links(link(ui.auth.usePassword, 'password'))}
+          <p className="mt-2 text-sm text-ink-muted">{ui.auth.guestNote}</p>
+        </>
+      );
+      break;
+    case 'code-verify':
+      body = (
+        <>
+          <p className="text-sm text-ink-muted">{ui.auth.codeSent(email)}</p>
+          <CodeField
+            label={ui.auth.codeLabel}
+            value={code}
+            onChange={setCode}
+            invalid={codeInvalid}
+          />
+          {errorNode}
+          {submit(ui.auth.verify, ui.auth.verifying)}
+          {links(resend, link(ui.auth.changeEmail, 'code-email'))}
+        </>
+      );
+      break;
+    case 'password':
+      body = (
+        <>
+          {emailField('username')}
+          <PasswordField
+            ui={ui.auth}
+            label={ui.auth.passwordLabel}
+            value={password}
+            onChange={setPassword}
+            autoComplete="current-password"
+            invalid={passwordInvalid}
+          />
+          {errorNode}
+          {submit(ui.auth.signInButton, ui.auth.signingIn)}
+          {links(
+            link(ui.auth.forgotPassword, 'forgot'),
+            link(ui.auth.createAccount, 'signup'),
+            link(ui.auth.useCode, 'code-email'),
+          )}
+        </>
+      );
+      break;
+    case 'signup':
+      body = (
+        <>
+          {emailField('username')}
+          <PasswordField
+            ui={ui.auth}
+            label={ui.auth.passwordLabel}
+            value={password}
+            onChange={setPassword}
+            autoComplete="new-password"
+            invalid={passwordInvalid}
+            hint={ui.auth.passwordHint}
+          />
+          {errorNode}
+          {submit(ui.auth.createAccount, ui.auth.creatingAccount)}
+          {links(link(ui.auth.haveAccount, 'password'), link(ui.auth.useCode, 'code-email'))}
+        </>
+      );
+      break;
+    case 'confirm-email':
+      body = (
+        <>
+          <h2 className="font-display text-xl font-semibold">{ui.auth.confirmTitle}</h2>
+          <p className="mt-2 text-sm text-ink-muted">
+            {notVerified ? ui.auth.confirmFirst : ui.auth.codeSent(email)}
+          </p>
+          <CodeField
+            label={ui.auth.codeLabel}
+            value={code}
+            onChange={setCode}
+            invalid={codeInvalid}
+          />
+          {errorNode}
+          {submit(ui.auth.confirm, ui.auth.verifying)}
+          {links(resend, link(ui.auth.changeEmail, 'password'))}
+        </>
+      );
+      break;
+    case 'forgot':
+      body = (
+        <>
+          <h2 className="font-display text-xl font-semibold">{ui.auth.resetTitle}</h2>
+          <p className="mt-2 text-sm text-ink-muted">{ui.auth.resetLead}</p>
+          <div className="mt-5">{emailField('username')}</div>
+          {errorNode}
+          {submit(ui.auth.sendCode, ui.auth.sendingCode)}
+          {links(link(ui.auth.backToSignIn, 'password'))}
+        </>
+      );
+      break;
+    case 'reset':
+      body = (
+        <>
+          <h2 className="font-display text-xl font-semibold">{ui.auth.resetTitle}</h2>
+          <p className="mt-2 text-sm text-ink-muted">{ui.auth.codeSent(email)}</p>
+          <CodeField
+            label={ui.auth.codeLabel}
+            value={code}
+            onChange={setCode}
+            invalid={codeInvalid}
+          />
+          <PasswordField
+            ui={ui.auth}
+            id="new-password"
+            label={ui.auth.newPasswordLabel}
+            value={password}
+            onChange={setPassword}
+            autoComplete="new-password"
+            invalid={passwordInvalid}
+            hint={ui.auth.passwordHint}
+          />
+          {errorNode}
+          {submit(ui.auth.setPassword, ui.auth.settingPassword)}
+          {links(resend, !resetFor && link(ui.auth.changeEmail, 'forgot'))}
+        </>
+      );
+      break;
   }
 
   return (
-    <form onSubmit={onCode} noValidate className="mt-8 max-w-sm">
-      <p className="text-sm text-ink-muted">{ui.auth.codeSent(email)}</p>
-      <label htmlFor="code" className="mt-5 block text-sm font-semibold">
-        {ui.auth.codeLabel}
-      </label>
-      <input
-        id="code"
-        name="code"
-        type="text"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        pattern="[0-9]*"
-        maxLength={6}
-        required
-        value={code}
-        onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-        aria-invalid={error === 'invalidCode' || error === 'verifyFailed'}
-        className={`${inputClass} tabular tracking-[0.4em]`}
-      />
-      {errorNode}
-      <button type="submit" disabled={busy} className={`${primaryButton} mt-5`}>
-        {busy ? ui.auth.verifying : ui.auth.verify}
-      </button>
-      <div className="mt-4 flex flex-wrap gap-x-5">
-        <button
-          type="button"
-          disabled={busy || cooldown > 0}
-          onClick={() => void sendCode(email)}
-          className={linkButton}
-        >
-          {cooldown > 0 ? ui.auth.resendIn(cooldown) : ui.auth.resend}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setStep('email');
-            setError(null);
-          }}
-          className={linkButton}
-        >
-          {ui.auth.changeEmail}
-        </button>
-      </div>
+    <form onSubmit={onSubmit} noValidate className={resetFor ? 'mt-4 max-w-sm' : 'mt-8 max-w-sm'}>
+      {body}
     </form>
   );
 }

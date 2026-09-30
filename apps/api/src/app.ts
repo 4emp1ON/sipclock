@@ -6,6 +6,8 @@ import { cors } from 'hono/cors';
 import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
 import {
+  CREDENTIAL_CHECK_PATHS,
+  EMAIL_SENDING_PATHS,
   OTP_SEND_WINDOW_MS,
   OTP_SENDS_PER_EMAIL,
   OTP_SIGN_IN_WINDOW_MS,
@@ -89,11 +91,10 @@ export function createApp(deps: AppDeps) {
   // Per-address limits in front of Better Auth: codes minted and guesses made against one address.
   const perEmail = (name: string, limit: number, windowMs: number) =>
     emailLimit({ store: deps.rateLimitStore, name, limit, windowMs });
-  app.use(
-    '/api/auth/email-otp/send-verification-otp',
-    perEmail('otp-send', OTP_SENDS_PER_EMAIL, OTP_SEND_WINDOW_MS),
-  );
-  for (const path of ['/api/auth/sign-in/email-otp', '/api/auth/sign-in/email']) {
+  for (const path of EMAIL_SENDING_PATHS) {
+    app.use(path, perEmail('otp-send', OTP_SENDS_PER_EMAIL, OTP_SEND_WINDOW_MS));
+  }
+  for (const path of CREDENTIAL_CHECK_PATHS) {
     app.use(path, perEmail('sign-in', OTP_SIGN_INS_PER_EMAIL, OTP_SIGN_IN_WINDOW_MS));
   }
 

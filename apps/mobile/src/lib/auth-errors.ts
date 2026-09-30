@@ -23,8 +23,23 @@ export function authErrorMessage(error: AuthErrorLike | unknown, s: Strings): st
       return s.errTooManyAttempts;
     case 'INVALID_EMAIL':
       return s.errInvalidEmail;
+    case 'INVALID_EMAIL_OR_PASSWORD':
+    case 'INVALID_PASSWORD':
+      return s.errInvalidCredentials;
+    case 'EMAIL_NOT_VERIFIED':
+      return s.errEmailNotVerified;
+    case 'PASSWORD_TOO_SHORT':
+      return s.errPasswordShort;
+    case 'PASSWORD_TOO_LONG':
+      return s.errPasswordLong;
+    case 'PASSWORD_COMPROMISED':
+      return s.errPasswordCompromised;
     case 'SESSION_EXPIRED':
       return s.errReauth;
   }
   return s.errGeneric;
 }
+
+/** Better Auth answers 403 EMAIL_NOT_VERIFIED when a correct password belongs to an unconfirmed address. */
+export const isEmailNotVerified = (error: AuthErrorLike | unknown) =>
+  (error as AuthErrorLike | null | undefined)?.code === 'EMAIL_NOT_VERIFIED';

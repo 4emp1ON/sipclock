@@ -4,6 +4,7 @@ import type { Route } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { SignInForm } from '@/components/sign-in-form';
 import { getUi, type Locale } from '@/i18n/ui';
 import { authClient } from '@/lib/auth-client';
 import { recipeName } from '@/lib/catalog';
@@ -23,6 +24,7 @@ export function AccountView({ locale }: { locale: Locale }) {
   // Deleting needs a session younger than a day; an older one re-confirms with an email code first.
   const [reauth, setReauth] = useState(false);
   const [code, setCode] = useState('');
+  const [settingPassword, setSettingPassword] = useState(false);
 
   if (isPending) return <p className="mt-8 text-ink-muted">…</p>;
   if (!data) {
@@ -127,7 +129,28 @@ export function AccountView({ locale }: { locale: Locale }) {
         </ul>
       )}
 
-      <div className="mt-10 flex flex-wrap gap-3">
+      <div className="mt-10">
+        <button
+          type="button"
+          onClick={() => setSettingPassword((v) => !v)}
+          aria-expanded={settingPassword}
+          className={secondaryButton}
+        >
+          {ui.account.setPassword}
+        </button>
+        {settingPassword && (
+          <div className="mt-4">
+            <p className="text-sm text-ink-muted">{ui.account.setPasswordLead}</p>
+            <SignInForm
+              locale={locale}
+              resetFor={data.user.email}
+              onDone={() => setSettingPassword(false)}
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
           onClick={signOut}

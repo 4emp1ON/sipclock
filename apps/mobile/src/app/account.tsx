@@ -177,6 +177,14 @@ export default function AccountScreen() {
             </Text>
           ) : null}
           <Button
+            label={s.setOrChangePassword}
+            variant="secondary"
+            disabled={busy !== null}
+            onPress={() =>
+              router.push({ pathname: '/sign-in', params: { mode: 'reset', email: user.email } })
+            }
+          />
+          <Button
             label={s.signOut}
             variant="secondary"
             loading={busy === 'sign-out'}
