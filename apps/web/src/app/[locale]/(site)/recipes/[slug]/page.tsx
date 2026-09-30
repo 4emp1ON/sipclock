@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { AbvBadge } from '@/components/abv-badge';
 import { IngredientList } from '@/components/ingredient-list';
+import { RecipeActions } from '@/components/recipe-actions';
 import { getUi, isLocale, LOCALES } from '@/i18n/ui';
 import {
   catalog,
@@ -81,6 +82,7 @@ export default async function RecipePage({ params }: PageProps<'/[locale]/recipe
           <span>{ui.recipes.difficulty[recipe.difficulty]}</span>
         </div>
         <p className="mt-6 text-lg">{recipe.description[locale]}</p>
+        <RecipeActions recipeId={recipe.id} locale={locale} />
 
         <h2 className="mt-10 font-display text-xl font-semibold">{ui.recipes.ingredients}</h2>
         <IngredientList

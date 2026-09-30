@@ -18,6 +18,24 @@
 }
 
 :80 {
+	# PowerSync service (mobile sync). More specific than @sipclock, so it must stay first. The sync endpoint is a
+	# long-lived streaming response: no buffering, no read timeout.
+	@sipclock_powersync {
+		host {$SIPCLOCK_HOST}
+		path /sipclock/powersync /sipclock/powersync/*
+	}
+	handle @sipclock_powersync {
+		uri strip_prefix /sipclock/powersync
+		reverse_proxy sipclock-powersync:8080 {
+			import passthrough
+			flush_interval -1
+			transport http {
+				read_timeout 0
+				response_header_timeout 0
+			}
+		}
+	}
+
 	# Sipclock API, served under /sipclock on the VPS technical hostname until it gets its own domain.
 	@sipclock {
 		host {$SIPCLOCK_HOST}

@@ -9,6 +9,8 @@ services:
   postgres:
     image: pgvector/pgvector:pg17
     restart: unless-stopped
+    # PowerSync replicates through logical decoding. The slot cap stops an abandoned slot from filling the disk.
+    command: ["postgres", "-c", "wal_level=logical", "-c", "max_slot_wal_keep_size=2GB"]
     environment:
       POSTGRES_USER: sipclock
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
@@ -53,6 +55,37 @@ services:
       internal:
       edge:
         aliases: [sipclock-api]
+
+  # Sync service for the mobile app. Public through the edge router at /sipclock/powersync (alias `sipclock-powersync`).
+  # Needs the role and storage database from powersync-setup.sql, and the API migration (tables + publication).
+  powersync:
+    image: journeyapps/powersync-service:${POWERSYNC_TAG:-1.26.1}
+    command: ["start", "-r", "unified"]
+    restart: unless-stopped
+    environment:
+      POWERSYNC_CONFIG_PATH: /config/service.yaml
+      NODE_OPTIONS: --max-old-space-size-percentage=80
+      PS_PG_URI: postgresql://powersync_role:${POWERSYNC_DB_PASSWORD:?}@postgres:5432/sipclock
+      PS_STORAGE_URI: postgresql://powersync_role:${POWERSYNC_DB_PASSWORD:?}@postgres:5432/powersync_storage
+      PS_JWKS_URI: http://api:8787/api/auth/jwks
+    volumes:
+      - ./powersync:/config:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8080/probes/liveness').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    mem_limit: 768m
+    networks:
+      internal:
+      edge:
+        aliases: [sipclock-powersync]
 
 networks:
   internal:

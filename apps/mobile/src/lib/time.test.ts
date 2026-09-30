@@ -1,4 +1,4 @@
-import { formatDayLabel, formatTime } from './time';
+import { formatDayLabel, formatDayTime, formatTime } from './time';
 
 // Local-time constructor: formatting is done in the runtime's time zone.
 const at = (h: number, m: number) => new Date(2026, 8, 11, h, m);
@@ -27,5 +27,11 @@ describe('formatTime', () => {
 describe('formatDayLabel', () => {
   it('gives a short weekday, month and day', () => {
     expect(formatDayLabel(at(19, 0), 'en-US')).toBe('Fri, Sep 11');
+  });
+});
+
+describe('formatDayTime', () => {
+  it('joins the day and the time', () => {
+    expect(formatDayTime(at(19, 5), 'en-US')).toBe('Fri, Sep 11 · 7:05 PM');
   });
 });

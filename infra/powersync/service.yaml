@@ -1,0 +1,40 @@
+# PowerSync service config, shared by local dev (docker-compose.yml) and production (deploy/sipclock/compose.yaml).
+# The service only substitutes environment variables whose names start with PS_.
+# Docs: https://docs.powersync.com/configuration/powersync-service/self-hosted-instances
+_type: self-hosted
+
+telemetry:
+  disable_telemetry_sharing: true
+
+replication:
+  connections:
+    - type: postgresql
+      uri: !env PS_PG_URI
+      # Plain connection on the private compose network.
+      sslmode: disable
+
+# Bucket storage lives in its own database on the same Postgres server.
+storage:
+  type: postgresql
+  uri: !env PS_STORAGE_URI
+  sslmode: disable
+
+port: 8080
+
+sync_config:
+  path: sync-config.yaml
+
+# Short-lived JWTs issued by Better Auth's JWT plugin (EdDSA), verified against its JWKS.
+client_auth:
+  jwks_uri: !env PS_JWKS_URI
+  # Must match the API's POWERSYNC_AUDIENCE.
+  audience: ["sipclock-powersync"]
+
+healthcheck:
+  probes:
+    use_http: true
+
+system:
+  logging:
+    level: info
+    format: text

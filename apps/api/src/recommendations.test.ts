@@ -3,6 +3,7 @@ import { createApp } from './app.ts';
 import { silentLogger } from './lib/logger.ts';
 import { createMemoryRateLimitStore } from './middleware/rate-limit.ts';
 import { createBundledCatalogService } from './services/catalog.ts';
+import { fakeAuth, unusedUserData } from './testing.ts';
 
 const catalog = createBundledCatalogService();
 
@@ -16,7 +17,8 @@ function makeApp(perMin = 60) {
     },
     catalog,
     rateLimitStore: createMemoryRateLimitStore({ cleanupIntervalMs: 0 }),
-    auth: { handler: async () => new Response('ok') },
+    auth: fakeAuth('ok'),
+    userData: unusedUserData,
     ping: async () => {},
     logger: silentLogger,
   });

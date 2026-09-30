@@ -12,7 +12,47 @@ export function isLocale(value: string): value is Locale {
 export interface Ui {
   siteTitle: string;
   siteDescription: string;
-  nav: { today: string; recipes: string; language: string };
+  nav: { today: string; recipes: string; language: string; signIn: string; account: string };
+  auth: {
+    title: string;
+    lead: string;
+    emailLabel: string;
+    sendCode: string;
+    sendingCode: string;
+    codeLabel: string;
+    codeSent: (email: string) => string;
+    verify: string;
+    verifying: string;
+    resend: string;
+    resendIn: (seconds: number) => string;
+    changeEmail: string;
+    invalidEmail: string;
+    invalidCode: string;
+    sendFailed: string;
+    verifyFailed: string;
+    tooMany: string;
+    guestNote: string;
+  };
+  account: {
+    title: string;
+    signedOut: string;
+    signIn: string;
+    email: string;
+    history: string;
+    historyEmpty: string;
+    loadFailed: string;
+    signOut: string;
+    deleteAccount: string;
+    deleteWarning: string;
+    deleteConfirm: string;
+    deleteCancel: string;
+    deleting: string;
+    deleteFailed: string;
+    reauthPrompt: string;
+    reauthConfirm: string;
+    reauthInvalid: string;
+  };
+  sync: { failed: string; loadFailed: string; mergeFailed: string; dismiss: string };
   today: {
     now: string;
     lead: string;
@@ -25,6 +65,7 @@ export interface Ui {
     noPick: string;
     myBar: string;
     myBarHint: string;
+    myBarHintSynced: string;
     barCount: (n: number) => string;
     clearBar: string;
     availReady: string;
@@ -55,6 +96,12 @@ export interface Ui {
     optional: string;
     garnish: string;
     abvLabel: string;
+    save: string;
+    saved: string;
+    madeIt: string;
+    madeLogged: string;
+    signInToLog: string;
+    signInLink: string;
   };
   abv: { free: string; alc: string };
   notFound: { title: string; body: string; back: string };
@@ -66,7 +113,58 @@ const en: Ui = {
   siteTitle: 'Sipclock - what to make right now',
   siteDescription:
     'Sipclock picks a cocktail for this date and hour, based on your home bar, the occasion and the weather.',
-  nav: { today: 'Today', recipes: 'Recipes', language: 'Language' },
+  nav: {
+    today: 'Today',
+    recipes: 'Recipes',
+    language: 'Language',
+    signIn: 'Sign in',
+    account: 'Account',
+  },
+  auth: {
+    title: 'Sign in',
+    lead: 'Enter your email and we will send a 6-digit code. Your bar, favorites and history then follow you across devices.',
+    emailLabel: 'Email',
+    sendCode: 'Send code',
+    sendingCode: 'Sending',
+    codeLabel: '6-digit code',
+    codeSent: (email) => `We sent a code to ${email}.`,
+    verify: 'Sign in',
+    verifying: 'Checking',
+    resend: 'Resend code',
+    resendIn: (n) => `Resend in ${n} s`,
+    changeEmail: 'Use another email',
+    invalidEmail: 'Enter a valid email address.',
+    invalidCode: 'Enter the 6-digit code.',
+    sendFailed: 'Could not send the code. Try again.',
+    verifyFailed: 'That code is wrong or expired.',
+    tooMany: 'Too many attempts. Wait a minute and try again.',
+    guestNote: 'You can use Sipclock without an account. Your bar then stays on this device.',
+  },
+  account: {
+    title: 'Account',
+    signedOut: 'You are not signed in.',
+    signIn: 'Sign in',
+    email: 'Email',
+    history: 'Recently made',
+    historyEmpty: 'Nothing logged yet. Tap "I made it" on a recipe.',
+    loadFailed: 'Could not load your data.',
+    signOut: 'Sign out',
+    deleteAccount: 'Delete account',
+    deleteWarning: 'This permanently deletes your account, bar, favorites and history.',
+    deleteConfirm: 'Delete forever',
+    deleteCancel: 'Cancel',
+    deleting: 'Deleting',
+    deleteFailed: 'Could not delete the account. Try again.',
+    reauthPrompt: 'To confirm, enter the code we just sent to your email.',
+    reauthConfirm: 'Confirm and delete',
+    reauthInvalid: 'That code did not work. Check it and try again.',
+  },
+  sync: {
+    failed: 'Could not save your last change. It was undone.',
+    loadFailed: 'Could not load your saved data.',
+    mergeFailed: 'Could not move this device’s bar to your account yet.',
+    dismiss: 'Dismiss',
+  },
   today: {
     now: 'Now',
     lead: 'What to make right now, based on the hour, your home bar and the occasion.',
@@ -79,6 +177,7 @@ const en: Ui = {
     noPick: 'Nothing fits these filters. Try a different occasion or add ingredients to your bar.',
     myBar: 'My bar',
     myBarHint: 'Tick what you have at home. Saved on this device only.',
+    myBarHintSynced: 'Tick what you have at home. Synced to your account.',
     barCount: (n) => (n === 0 ? 'Not set' : `${n} selected`),
     clearBar: 'Clear bar',
     availReady: 'All in your bar',
@@ -110,6 +209,12 @@ const en: Ui = {
     optional: 'optional',
     garnish: 'garnish',
     abvLabel: 'Estimated ABV',
+    save: 'Save',
+    saved: 'Saved',
+    madeIt: 'I made it',
+    madeLogged: 'Logged',
+    signInToLog: 'Sign in to keep a history of what you make.',
+    signInLink: 'Sign in',
   },
   abv: { free: 'Free', alc: 'Alc.' },
   notFound: {
@@ -134,7 +239,58 @@ const ru: Ui = {
   siteTitle: 'Sipclock - что приготовить прямо сейчас',
   siteDescription:
     'Sipclock подбирает коктейль под дату и час с учётом вашего домашнего бара и повода.',
-  nav: { today: 'Сегодня', recipes: 'Рецепты', language: 'Язык' },
+  nav: {
+    today: 'Сегодня',
+    recipes: 'Рецепты',
+    language: 'Язык',
+    signIn: 'Войти',
+    account: 'Аккаунт',
+  },
+  auth: {
+    title: 'Вход',
+    lead: 'Введите почту, и мы пришлём 6-значный код. Бар, избранное и история будут на всех ваших устройствах.',
+    emailLabel: 'Почта',
+    sendCode: 'Получить код',
+    sendingCode: 'Отправляем',
+    codeLabel: '6-значный код',
+    codeSent: (email) => `Мы отправили код на ${email}.`,
+    verify: 'Войти',
+    verifying: 'Проверяем',
+    resend: 'Отправить ещё раз',
+    resendIn: (n) => `Ещё раз через ${n} с`,
+    changeEmail: 'Другая почта',
+    invalidEmail: 'Введите корректный адрес почты.',
+    invalidCode: 'Введите 6-значный код.',
+    sendFailed: 'Не удалось отправить код. Попробуйте ещё раз.',
+    verifyFailed: 'Код неверный или устарел.',
+    tooMany: 'Слишком много попыток. Подождите минуту.',
+    guestNote: 'Sipclock работает и без аккаунта. Тогда бар хранится только на этом устройстве.',
+  },
+  account: {
+    title: 'Аккаунт',
+    signedOut: 'Вы не вошли.',
+    signIn: 'Войти',
+    email: 'Почта',
+    history: 'Недавно приготовлено',
+    historyEmpty: 'Пока пусто. Нажмите «Я приготовил» в рецепте.',
+    loadFailed: 'Не удалось загрузить ваши данные.',
+    signOut: 'Выйти',
+    deleteAccount: 'Удалить аккаунт',
+    deleteWarning: 'Аккаунт, бар, избранное и история будут удалены безвозвратно.',
+    deleteConfirm: 'Удалить навсегда',
+    deleteCancel: 'Отмена',
+    deleting: 'Удаляем',
+    deleteFailed: 'Не удалось удалить аккаунт. Попробуйте ещё раз.',
+    reauthPrompt: 'Для подтверждения введите код, который мы только что отправили на почту.',
+    reauthConfirm: 'Подтвердить и удалить',
+    reauthInvalid: 'Код не подошёл. Проверьте его и попробуйте снова.',
+  },
+  sync: {
+    failed: 'Не удалось сохранить последнее изменение. Оно отменено.',
+    loadFailed: 'Не удалось загрузить сохранённые данные.',
+    mergeFailed: 'Пока не удалось перенести бар с этого устройства в аккаунт.',
+    dismiss: 'Закрыть',
+  },
   today: {
     now: 'Сейчас',
     lead: 'Что приготовить прямо сейчас: по времени суток, вашему бару и поводу.',
@@ -147,6 +303,7 @@ const ru: Ui = {
     noPick: 'Под эти фильтры ничего не подходит. Смените повод или добавьте ингредиенты в бар.',
     myBar: 'Мой бар',
     myBarHint: 'Отметьте, что есть дома. Хранится только на этом устройстве.',
+    myBarHintSynced: 'Отметьте, что есть дома. Синхронизируется с аккаунтом.',
     barCount: (n) => (n === 0 ? 'Не задан' : `Выбрано: ${n}`),
     clearBar: 'Очистить бар',
     availReady: 'Всё есть в баре',
@@ -178,6 +335,12 @@ const ru: Ui = {
     optional: 'по желанию',
     garnish: 'украшение',
     abvLabel: 'Ориентировочная крепость',
+    save: 'Сохранить',
+    saved: 'Сохранено',
+    madeIt: 'Я приготовил',
+    madeLogged: 'Записано',
+    signInToLog: 'Войдите, чтобы вести историю приготовленного.',
+    signInLink: 'Войти',
   },
   abv: { free: 'Без алк.', alc: 'Алк.' },
   notFound: {

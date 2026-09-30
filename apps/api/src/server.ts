@@ -1,22 +1,32 @@
 import { serve } from '@hono/node-server';
 import { createApp } from './app.ts';
-import { createAuth } from './auth.ts';
+import { createAuth, toAuthHandler } from './auth.ts';
 import { createDb } from './db/client.ts';
 import { parseEnv } from './env.ts';
 import { createLogger } from './lib/logger.ts';
 import { flushSentry, initSentry } from './lib/sentry.ts';
 import { createMemoryRateLimitStore } from './middleware/rate-limit.ts';
 import { createBundledCatalogService } from './services/catalog.ts';
+import { createUserDataService } from './services/user-data.ts';
 
 const env = parseEnv();
 const logger = createLogger(env.LOG_LEVEL);
 const sentryEnabled = initSentry(env);
 
 const database = createDb(env.DATABASE_URL);
-const auth = createAuth(database.db, env);
 const rateLimitStore = createMemoryRateLimitStore();
+const auth = toAuthHandler(createAuth(database.db, env, logger));
 const catalog = createBundledCatalogService(process.env.CATALOG_DIR);
-const app = createApp({ env, auth, ping: database.ping, logger, catalog, rateLimitStore });
+const userData = createUserDataService(database.db, catalog);
+const app = createApp({
+  env,
+  auth,
+  ping: database.ping,
+  logger,
+  catalog,
+  userData,
+  rateLimitStore,
+});
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   logger.info('server listening', { port: info.port, env: env.NODE_ENV, sentry: sentryEnabled });

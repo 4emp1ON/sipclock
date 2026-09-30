@@ -1,82 +1,99 @@
-import type { Db } from './db';
+import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
 
-type Param = string | number;
+import type { Db, DbExecutor } from './db';
 
-/** In-memory stand-in for the SQL used by the repositories. Recognizes exactly those statements. */
+const SYNCED: Record<string, string[]> = {
+  bar_item: ['in_bar', 'updated_at'],
+  favorite: ['is_favorite', 'updated_at'],
+  drink_log: ['recipe_id', 'made_at'],
+};
+
+/**
+ * In-memory SQLite (node:sqlite) standing in for PowerSync's views. Synced tables get triggers that record
+ * PUT/PATCH/DELETE entries in `crud`, roughly like PowerSync's upload queue, so tests can assert what a write
+ * would upload.
+ */
 export function createFakeDb() {
-  const bar = new Map<string, number>();
-  const kv = new Map<string, string>();
-  let userVersion = 0;
-  const executed: string[] = [];
-  let failNextRun = false;
+  const sqlite = new DatabaseSync(':memory:');
+  sqlite.exec(`
+    CREATE TABLE crud (seq INTEGER PRIMARY KEY AUTOINCREMENT, op TEXT, tbl TEXT, row_id TEXT, data TEXT);
+    CREATE TABLE kv (id TEXT PRIMARY KEY NOT NULL, value TEXT);
+  `);
+  for (const [table, cols] of Object.entries(SYNCED)) {
+    const json = (prefix: string) => cols.map((c) => `'${c}', ${prefix}.${c}`).join(', ');
+    sqlite.exec(`
+      CREATE TABLE ${table} (id TEXT PRIMARY KEY NOT NULL, ${cols.join(', ')});
+      CREATE TRIGGER ${table}_put AFTER INSERT ON ${table} BEGIN
+        INSERT INTO crud (op, tbl, row_id, data) VALUES ('PUT', '${table}', NEW.id, json_object(${json('NEW')}));
+      END;
+      CREATE TRIGGER ${table}_patch AFTER UPDATE ON ${table} BEGIN
+        INSERT INTO crud (op, tbl, row_id, data) VALUES ('PATCH', '${table}', NEW.id, json_object(${json('NEW')}));
+      END;
+      CREATE TRIGGER ${table}_delete AFTER DELETE ON ${table} BEGIN
+        INSERT INTO crud (op, tbl, row_id, data) VALUES ('DELETE', '${table}', OLD.id, NULL);
+      END;
+    `);
+  }
 
-  const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
+  let failNext = false;
+  const params = (p?: unknown[]) => (p ?? []) as SQLInputValue[];
 
-  const db: Db = {
-    async execAsync(source) {
-      executed.push(norm(source));
-      const m = /^PRAGMA user_version = (\d+)$/.exec(norm(source));
-      if (m) userVersion = Number(m[1]);
-      // CREATE TABLE statements are no-ops: the maps always exist.
-    },
-    async runAsync(source, params: Param[]) {
-      if (failNextRun) {
-        failNextRun = false;
+  const exec: DbExecutor = {
+    async execute(sql, p) {
+      if (failNext) {
+        failNext = false;
         throw new Error('boom');
       }
-      const sql = norm(source);
-      if (sql.startsWith('INSERT OR IGNORE INTO bar_item')) {
-        const [id, at] = params as [string, number];
-        if (!bar.has(id)) bar.set(id, at);
-      } else if (sql === 'DELETE FROM bar_item') {
-        bar.clear();
-      } else if (sql === 'DELETE FROM bar_item WHERE ingredient_id = ?') {
-        bar.delete(params[0] as string);
-      } else if (sql.startsWith('INSERT INTO kv')) {
-        kv.set(params[0] as string, params[1] as string);
-      } else {
-        throw new Error(`fake db: unsupported run: ${sql}`);
-      }
-      return {};
+      return sqlite.prepare(sql).run(...params(p));
     },
-    async getAllAsync<T>(source: string) {
-      const sql = norm(source);
-      if (sql.startsWith('SELECT ingredient_id FROM bar_item')) {
-        return [...bar.entries()]
-          .sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]))
-          .map(([ingredient_id]) => ({ ingredient_id })) as T[];
-      }
-      throw new Error(`fake db: unsupported all: ${sql}`);
+    async getAll<T>(sql: string, p?: unknown[]) {
+      return sqlite.prepare(sql).all(...params(p)) as T[];
     },
-    async getFirstAsync<T>(source: string, params: Param[]) {
-      const sql = norm(source);
-      if (sql === 'PRAGMA user_version') return { user_version: userVersion } as T;
-      if (sql === 'SELECT value FROM kv WHERE key = ?') {
-        const v = kv.get(params[0] as string);
-        return (v === undefined ? null : { value: v }) as T | null;
-      }
-      throw new Error(`fake db: unsupported first: ${sql}`);
+    async getOptional<T>(sql: string, p?: unknown[]) {
+      return (sqlite.prepare(sql).get(...params(p)) ?? null) as T | null;
     },
-    async withTransactionAsync(task) {
-      const snapshot = new Map(bar);
-      try {
-        await task();
-      } catch (e) {
-        bar.clear();
-        for (const [k, v] of snapshot) bar.set(k, v);
-        throw e;
-      }
+  };
+
+  let lock: Promise<unknown> = Promise.resolve();
+  const db: Db = {
+    ...exec,
+    writeTransaction<T>(fn: (tx: DbExecutor) => Promise<T>): Promise<T> {
+      const run = lock.then(async () => {
+        sqlite.exec('BEGIN');
+        try {
+          const result = await fn(exec);
+          sqlite.exec('COMMIT');
+          return result;
+        } catch (e) {
+          sqlite.exec('ROLLBACK');
+          throw e;
+        }
+      });
+      lock = run.catch(() => undefined);
+      return run;
     },
   };
 
   return {
     db,
-    executed,
-    get userVersion() {
-      return userVersion;
+    /** Upload-queue entries recorded so far, oldest first. */
+    crud(): { op: string; table: string; id: string; data: Record<string, unknown> | null }[] {
+      return (
+        sqlite.prepare('SELECT op, tbl, row_id, data FROM crud ORDER BY seq').all() as {
+          op: string;
+          tbl: string;
+          row_id: string;
+          data: string | null;
+        }[]
+      ).map((r) => ({
+        op: r.op,
+        table: r.tbl,
+        id: r.row_id,
+        data: r.data ? JSON.parse(r.data) : null,
+      }));
     },
-    failNextRun() {
-      failNextRun = true;
+    failNextWrite() {
+      failNext = true;
     },
   };
 }

@@ -1,22 +1,42 @@
 import type { ReactNode } from 'react';
-import { ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 
 // Uniwind styles React Native core components only; third-party ones need wrapping to accept className.
 const SafeAreaView = withUniwind(RNSafeAreaView);
 
+export interface ScreenProps {
+  children: ReactNode;
+  /** For forms: keeps inputs above the keyboard and lets taps reach buttons while it is open. */
+  form?: boolean;
+}
+
 /** Themed full-screen container: safe-area aware (top; the tab bar handles the bottom), 20px side padding, scrollable. */
-export function Screen({ children }: { children: ReactNode }) {
+export function Screen({ children, form = false }: ScreenProps) {
+  const scroll = (
+    <ScrollView
+      className="flex-1"
+      contentContainerClassName="gap-6 px-5 pt-4 pb-8"
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps={form ? 'handled' : undefined}
+      keyboardDismissMode={form ? 'interactive' : undefined}
+    >
+      {children}
+    </ScrollView>
+  );
   return (
     <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="gap-6 px-5 pt-4 pb-8"
-        showsVerticalScrollIndicator={false}
-      >
-        {children}
-      </ScrollView>
+      {form ? (
+        <KeyboardAvoidingView
+          className="flex-1"
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          {scroll}
+        </KeyboardAvoidingView>
+      ) : (
+        scroll
+      )}
     </SafeAreaView>
   );
 }

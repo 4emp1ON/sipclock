@@ -4,14 +4,19 @@ import type { Env } from './env.ts';
 import type { Logger } from './lib/logger.ts';
 import type { RateLimitStore } from './middleware/rate-limit.ts';
 import type { CatalogService } from './services/catalog.ts';
+import type { UserDataService } from './services/user-data.ts';
 
 export interface AppDeps {
   env: Pick<
     Env,
     'CORS_ORIGINS' | 'NODE_ENV' | 'TRUST_PROXY_HOPS' | 'RATE_LIMIT_RECOMMEND_PER_MIN'
   > &
-    Partial<Pick<Env, 'PUBLIC_BASE_URL' | 'API_DOCS_USERNAME' | 'API_DOCS_PASSWORD'>>;
+    Partial<
+      Pick<Env, 'PUBLIC_BASE_URL' | 'API_DOCS_USERNAME' | 'API_DOCS_PASSWORD' | 'EDGE_PROXY_SECRET'>
+    >;
   catalog: CatalogService;
+  /** Signed-in user's bar, favorites and history (`/v1/me/*`). */
+  userData: UserDataService;
   rateLimitStore: RateLimitStore;
   auth: AuthHandler;
   /** Database liveness probe used by /ready. */
@@ -20,5 +25,9 @@ export interface AppDeps {
 }
 
 export interface AppEnv extends HonoEnv {
-  Variables: { requestId: string };
+  Variables: {
+    requestId: string;
+    /** Signed-in user; set by `requireSession` on `/v1/me/*` only. */
+    userId: string;
+  };
 }

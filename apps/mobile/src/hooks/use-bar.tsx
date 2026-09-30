@@ -1,17 +1,7 @@
-import { useSQLiteContext } from 'expo-sqlite';
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { usePowerSync, useQuery } from '@powersync/react-native';
+import { createContext, type ReactNode, useCallback, useContext, useMemo } from 'react';
 
-import { addToBar, listBar, removeFromBar, replaceBar } from '@/data/bar';
-import { createWriteQueue } from '@/data/write-queue';
+import { LIST_BAR_SQL, replaceBar, toggleBar } from '@/data/bar';
 
 export interface BarApi {
   /** Ingredient ids in the bar; `null` until the first load finishes. */
@@ -24,64 +14,30 @@ export interface BarApi {
 
 const BarContext = createContext<BarApi | null>(null);
 
-/** Owns the bar state for the whole app: optimistic updates, writes serialized, reload on failure. */
+const warn = (e: unknown) => console.warn('[bar] write failed', e);
+
+/**
+ * Owns the bar for the whole app: one watched query over the local database, which re-emits after every
+ * local write (a few ms) and after sync brings changes from other devices.
+ */
 export function BarProvider({ children }: { children: ReactNode }) {
-  const db = useSQLiteContext();
-  const [ids, setIds] = useState<readonly string[] | null>(null);
-  const current = useRef<readonly string[] | null>(null);
+  const db = usePowerSync();
+  const { data, isLoading } = useQuery<{ id: string }>(LIST_BAR_SQL);
 
-  const apply = useCallback((next: readonly string[]) => {
-    current.current = next;
-    setIds(next);
-  }, []);
-
-  // One queue per database; after a failed write it reloads the stored truth once it has drained.
-  const queue = useMemo(() => {
-    const q = createWriteQueue(async () => {
-      const stored = await listBar(db);
-      // A write queued while we were reading will resync again if needed; don't clobber it.
-      if (q.pending() === 0) apply(stored);
-    });
-    return q;
-  }, [db, apply]);
-
-  useEffect(() => {
-    // Nothing can be written before the first load (toggle/replaceAll wait for it).
-    listBar(db)
-      .then(apply)
-      .catch(() => apply([]));
-  }, [db, apply]);
-
-  const enqueue = useCallback(
-    (write: () => Promise<void>) => {
-      void queue.enqueue(write);
-    },
-    [queue],
-  );
+  const ids = useMemo(() => (isLoading ? null : data.map((r) => r.id)), [data, isLoading]);
 
   const toggle = useCallback(
     (id: string) => {
-      const before = current.current;
-      if (before === null) return; // still loading
-      if (before.includes(id)) {
-        apply(before.filter((x) => x !== id));
-        enqueue(() => removeFromBar(db, id));
-      } else {
-        apply([...before, id]);
-        enqueue(() => addToBar(db, id));
-      }
+      toggleBar(db, id).catch(warn);
     },
-    [db, apply, enqueue],
+    [db],
   );
 
   const replaceAll = useCallback(
     (next: readonly string[]) => {
-      if (current.current === null) return; // still loading
-      const unique = [...new Set(next)];
-      apply(unique);
-      enqueue(() => replaceBar(db, unique));
+      replaceBar(db, next).catch(warn);
     },
-    [db, apply, enqueue],
+    [db],
   );
 
   const value = useMemo<BarApi>(() => {

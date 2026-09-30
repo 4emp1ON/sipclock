@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getUi, type Locale } from '@/i18n/ui';
+import { AccountLink } from './account-link';
 import { LocaleSwitcher } from './locale-switcher';
 import { Logo } from './logo';
 
@@ -23,6 +24,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             {ui.nav.recipes}
           </Link>
         </nav>
+        <AccountLink locale={locale} />
         <LocaleSwitcher locale={locale} label={ui.nav.language} />
       </div>
     </header>

@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { describe, expect, it } from 'vitest';
 import { createMemoryRateLimitStore, rateLimit } from './rate-limit.ts';
 
-function setup(opts: { limit?: number; trustedProxyHops?: number } = {}) {
+function setup(opts: { limit?: number; trustedProxyHops?: number; edgeProxySecret?: string } = {}) {
   let t = 1_000_000;
   const now = () => t;
   const store = createMemoryRateLimitStore({ now, cleanupIntervalMs: 0 });
@@ -16,6 +16,7 @@ function setup(opts: { limit?: number; trustedProxyHops?: number } = {}) {
       windowMs: 60_000,
       now,
       trustedProxyHops: opts.trustedProxyHops ?? 0,
+      edgeProxySecret: opts.edgeProxySecret,
     }) as never,
   );
   app.get('/', (c) => c.text('ok'));
@@ -105,6 +106,37 @@ describe('rateLimit middleware', () => {
     expect(
       (await untrusted.app.request('/', { headers: { 'x-forwarded-for': '2.2.2.2' } })).status,
     ).toBe(429);
+  });
+
+  describe('edge proxy client IP', () => {
+    const secret = 's'.repeat(40);
+    const via = (ip: string, proxySecret = secret) => ({
+      headers: { 'x-sipclock-proxy-secret': proxySecret, 'x-sipclock-client-ip': ip },
+    });
+
+    it('keys by X-Sipclock-Client-Ip when the proxy secret matches', async () => {
+      const { app } = setup({ limit: 1, edgeProxySecret: secret });
+      expect((await app.request('/', via('203.0.113.1'))).status).toBe(200);
+      // Another client behind the same proxy has its own budget.
+      expect((await app.request('/', via('203.0.113.2'))).status).toBe(200);
+      expect((await app.request('/', via('203.0.113.1'))).status).toBe(429);
+    });
+
+    it('ignores X-Sipclock-Client-Ip with a wrong or missing secret', async () => {
+      const { app } = setup({ limit: 1, edgeProxySecret: secret });
+      await app.request('/', via('203.0.113.1', 'wrong'));
+      // Rotating the claimed IP does not help: everything falls back to the socket address.
+      expect((await app.request('/', via('203.0.113.2', 'wrong'))).status).toBe(429);
+      expect(
+        (await app.request('/', { headers: { 'x-sipclock-client-ip': '203.0.113.3' } })).status,
+      ).toBe(429);
+    });
+
+    it('ignores the headers entirely when no secret is configured', async () => {
+      const { app } = setup({ limit: 1 });
+      await app.request('/', via('203.0.113.1'));
+      expect((await app.request('/', via('203.0.113.2'))).status).toBe(429);
+    });
   });
 
   it('caps the number of tracked keys', async () => {

@@ -4,11 +4,10 @@ import * as Sentry from '@sentry/react-native';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { SQLiteProvider } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
-import { DATABASE_NAME, migrate } from '@/data/db';
+import { DatabaseProvider } from '@/hooks/use-account';
 import { BarProvider } from '@/hooks/use-bar';
 import { useTheme } from '@/hooks/use-theme';
 import { fontAssets } from '@/lib/fonts';
@@ -46,14 +45,16 @@ function RootLayout() {
       }}
     >
       <StatusBar style={name === 'night' ? 'light' : 'dark'} />
-      <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrate}>
+      <DatabaseProvider>
         <BarProvider>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="recipe/[id]" />
+            <Stack.Screen name="account" />
+            <Stack.Screen name="sign-in" options={{ presentation: 'modal' }} />
           </Stack>
         </BarProvider>
-      </SQLiteProvider>
+      </DatabaseProvider>
     </ThemeProvider>
   );
 }

@@ -84,3 +84,60 @@ test('recipes index lists 50 cards and the alcohol-free filter reduces it', asyn
   await page.getByRole('button', { name: 'Date' }).click();
   expect(await cards.count()).toBeLessThanOrEqual(n);
 });
+
+test('sign-in page validates the email before asking for a code', async ({ page }) => {
+  await page.goto('/en/sign-in');
+  await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await page.getByLabel('Email').fill('not-an-email');
+  await page.getByRole('button', { name: 'Send code' }).click();
+  await expect(page.locator('form [role="alert"]')).toHaveText('Enter a valid email address.');
+  // The header offers the same page to guests; the session request may fail without an API.
+  await expect(page.getByRole('navigation', { name: 'Main' })).toBeVisible();
+});
+
+test('Russian sign-in page is localized', async ({ page }) => {
+  await page.goto('/ru/sign-in');
+  await expect(page.getByRole('heading', { level: 1, name: 'Вход' })).toBeVisible();
+  await page.getByRole('button', { name: 'Получить код' }).click();
+  await expect(page.locator('form [role="alert"]')).toHaveText('Введите корректный адрес почты.');
+});
+
+test('guests can save a recipe; it persists in localStorage across reloads', async ({ page }) => {
+  await page.goto('/en/recipes/negroni');
+  const save = page.getByRole('button', { name: 'Save', exact: true });
+  await expect(save).toHaveAttribute('aria-pressed', 'false');
+  await save.click();
+  await expect(page.getByRole('button', { name: 'Saved' })).toHaveAttribute('aria-pressed', 'true');
+  expect(await page.evaluate(() => localStorage.getItem('sipclock.favorites'))).toBe('["negroni"]');
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Saved' })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Saved' }).click();
+  await expect(page.getByRole('button', { name: 'Save', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
+});
+
+test('guests are asked to sign in when logging a drink', async ({ page }) => {
+  await page.goto('/en/recipes/negroni');
+  await page.getByRole('button', { name: 'I made it' }).click();
+  const link = page.getByRole('link', { name: 'Sign in' }).last();
+  await expect(link).toHaveAttribute('href', /\/en\/sign-in\?next=%2Fen%2Frecipes%2Fnegroni$/);
+  expect(await page.evaluate(() => localStorage.getItem('sipclock.history'))).toBeNull();
+});
+
+test('guest bar on Today is stored in localStorage', async ({ page }) => {
+  await page.goto('/en');
+  await page.getByText('My bar').click();
+  await page.getByRole('button', { name: 'Gin', exact: true }).click();
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem('sipclock.bar')))
+    .toContain('gin');
+});
+
+test('the API proxy refuses paths it does not map', async ({ request }) => {
+  const res = await request.get('/api/health');
+  expect(res.status()).toBe(404);
+  expect(res.headers()['content-type']).toContain('application/problem+json');
+});

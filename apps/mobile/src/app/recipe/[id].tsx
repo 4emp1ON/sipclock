@@ -8,15 +8,18 @@ import {
   type UnitSystem,
 } from '@sipclock/engine';
 import { formatAmount, glassLabel, methodLabel } from '@sipclock/i18n';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useMemo, useState } from 'react';
+import { AccessibilityInfo, Pressable, View } from 'react-native';
 
 import { AbvBadge } from '@/components/abv-badge';
+import { BackButton } from '@/components/back-button';
+import { Button } from '@/components/button';
 import { Chip } from '@/components/chip';
 import { Screen } from '@/components/screen';
 import { Text } from '@/components/text';
 import { useBar } from '@/hooks/use-bar';
+import { useFavorite, useLogDrink } from '@/hooks/use-user-data';
 import { currentLocale, ingredientName } from '@/lib/locale';
 import { catalogIndex } from '@/lib/makeable';
 import { strings } from '@/lib/strings';
@@ -24,20 +27,6 @@ import { strings } from '@/lib/strings';
 const UNITS: UnitSystem[] = ['ml', 'oz', 'parts'];
 const MIN_SERVINGS = 1;
 const MAX_SERVINGS = 12;
-
-function BackButton({ label }: { label: string }) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-      className="h-12 self-start justify-center pr-4"
-    >
-      <Text variant="label" tone="primary">
-        {`‹ ${label}`}
-      </Text>
-    </Pressable>
-  );
-}
 
 function StepperButton({
   label,
@@ -73,6 +62,29 @@ export default function RecipeScreen() {
 
   const [servings, setServings] = useState(1);
   const [unit, setUnit] = useState<UnitSystem>('ml');
+  const favorite = useFavorite(recipe?.id);
+  const logDrink = useLogDrink();
+  const [logged, setLogged] = useState<'idle' | 'saving' | 'done'>('idle');
+
+  useEffect(() => {
+    if (logged !== 'done') return;
+    const timer = setTimeout(() => setLogged('idle'), 3000);
+    return () => clearTimeout(timer);
+  }, [logged]);
+
+  const madeIt = () => {
+    if (!recipe || logged === 'saving') return;
+    setLogged('saving');
+    logDrink(recipe.id)
+      .then(() => {
+        setLogged('done');
+        AccessibilityInfo.announceForAccessibility(s.madeItDone);
+      })
+      .catch((e) => {
+        console.warn('[history] save failed', e);
+        setLogged('idle');
+      });
+  };
 
   const detail = useMemo(() => {
     if (!recipe || !bar.ids || bar.ids.length === 0) return null;
@@ -97,7 +109,15 @@ export default function RecipeScreen() {
 
   return (
     <Screen>
-      <BackButton label={s.back} />
+      <View className="flex-row items-center justify-between gap-3">
+        <BackButton label={s.back} />
+        <Chip
+          label={favorite.saved ? s.saved : s.save}
+          selected={favorite.saved}
+          accessibilityLabel={favorite.saved ? s.unsaveLabel : s.saveLabel}
+          onPress={favorite.toggle}
+        />
+      </View>
 
       <View className="gap-3">
         <Text variant="screen-title" accessibilityRole="header">
@@ -191,6 +211,17 @@ export default function RecipeScreen() {
             <Text className="flex-1">{step[locale]}</Text>
           </View>
         ))}
+      </View>
+
+      <View className="gap-2">
+        <Button label={s.madeIt} loading={logged === 'saving'} onPress={madeIt} />
+        <View className="min-h-5 items-center">
+          {logged === 'done' ? (
+            <Text variant="body-sm" tone="muted">
+              {s.madeItDone}
+            </Text>
+          ) : null}
+        </View>
       </View>
     </Screen>
   );

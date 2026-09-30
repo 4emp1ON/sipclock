@@ -19,8 +19,8 @@ import {
   RECENT_LIMIT,
   type TodayState,
 } from '@/lib/today';
+import { useUserData } from '@/lib/use-user-data';
 
-const BAR_KEY = 'sipclock.bar';
 const OCCASIONS: Occasion[] = ['after-work', 'date', 'party', 'chill', 'brunch'];
 const KIND_ORDER = [
   'spirit',
@@ -77,28 +77,9 @@ const PILL_TONE = {
   missing: 'border border-danger bg-surface text-danger',
 } as const;
 
-function readBar(): string[] {
-  try {
-    const raw = localStorage.getItem(BAR_KEY);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(parsed)) return [];
-    const known = new Set(catalog.ingredients.map((i) => i.id));
-    return parsed.filter((x): x is string => typeof x === 'string' && known.has(x));
-  } catch {
-    return [];
-  }
-}
-
-function writeBar(bar: readonly string[]) {
-  try {
-    localStorage.setItem(BAR_KEY, JSON.stringify(bar));
-  } catch {
-    // Storage may be blocked; the bar then lasts for this visit only.
-  }
-}
-
 export function Today({ locale }: { locale: Locale }) {
   const ui = getUi(locale);
+  const userData = useUserData();
   // Deterministic first render (fixed moment and seed, empty bar) so server and client HTML match.
   const [state, setState] = useState<TodayState>({
     moment: INITIAL_MOMENT,
@@ -113,12 +94,11 @@ export function Today({ locale }: { locale: Locale }) {
     setState((s) => ({
       ...s,
       moment: momentFromDate(new Date()),
-      bar: readBar(),
       seed: Math.floor(Math.random() * 2 ** 31),
     }));
   }, []);
 
-  const rec = recommend(buildInput(state), catalog);
+  const rec = recommend(buildInput({ ...state, bar: userData.bar }), catalog);
   const pickRecipe = rec.pick ? recipesById.get(rec.pick.recipeId) : undefined;
   const pill = rec.pick ? availabilityPill(rec.pick.availability, ui, locale) : null;
   const m = state.moment;
@@ -128,15 +108,8 @@ export function Today({ locale }: { locale: Locale }) {
     day: 'numeric',
   }).format(new Date(m.year, m.month - 1, m.day));
 
-  const toggleIngredient = (id: string) => {
-    const bar = state.bar.includes(id) ? state.bar.filter((x) => x !== id) : [...state.bar, id];
-    writeBar(bar);
-    setState({ ...state, bar });
-  };
-  const clearBar = () => {
-    writeBar([]);
-    setState({ ...state, bar: [] });
-  };
+  const toggleIngredient = userData.toggleBar;
+  const clearBar = userData.clearBar;
   const anotherIdea = () => {
     setState({
       ...state,
@@ -197,12 +170,14 @@ export function Today({ locale }: { locale: Locale }) {
           <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-3 px-4 font-semibold">
             <span>{ui.today.myBar}</span>
             <span className="tabular text-sm font-normal text-ink-muted">
-              {ui.today.barCount(state.bar.length)}
+              {ui.today.barCount(userData.bar.length)}
             </span>
           </summary>
           <div className="px-4 pb-4">
-            <p className="text-sm text-ink-muted">{ui.today.myBarHint}</p>
-            {state.bar.length > 0 && (
+            <p className="text-sm text-ink-muted">
+              {userData.mode === 'signed-in' ? ui.today.myBarHintSynced : ui.today.myBarHint}
+            </p>
+            {userData.bar.length > 0 && (
               <button
                 type="button"
                 onClick={clearBar}
@@ -219,9 +194,9 @@ export function Today({ locale }: { locale: Locale }) {
                     <button
                       key={i.id}
                       type="button"
-                      aria-pressed={state.bar.includes(i.id)}
+                      aria-pressed={userData.bar.includes(i.id)}
                       onClick={() => toggleIngredient(i.id)}
-                      className={chip(state.bar.includes(i.id))}
+                      className={chip(userData.bar.includes(i.id))}
                     >
                       {i.name[locale]}
                     </button>

@@ -5,11 +5,20 @@ import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
 import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
+import {
+  OTP_SEND_WINDOW_MS,
+  OTP_SENDS_PER_EMAIL,
+  OTP_SIGN_IN_WINDOW_MS,
+  OTP_SIGN_INS_PER_EMAIL,
+} from './auth.ts';
 import { problemResponse, titleFor } from './lib/errors.ts';
+import { emailLimit } from './middleware/email-limit.ts';
 import { errorHandler, notFoundHandler, validationHook } from './middleware/error-handling.ts';
 import { rateLimit } from './middleware/rate-limit.ts';
 import { requestLogger } from './middleware/request-logger.ts';
+import { requireSession } from './middleware/session.ts';
 import { createCatalogRouter } from './routes/catalog.ts';
+import { createMeRouter } from './routes/me.ts';
 import { createRecommendationsRouter } from './routes/recommendations.ts';
 import { createSystemRouter } from './routes/system.ts';
 import { createHealthService } from './services/health.ts';
@@ -18,8 +27,12 @@ import { createRecommendationService } from './services/recommendations.ts';
 import type { AppDeps, AppEnv } from './types.ts';
 
 export const AUTH_RATE_LIMIT_PER_MIN = 20;
+/** Requests per client IP per minute across `/v1/me/*`. */
+export const ME_RATE_LIMIT_PER_MIN = 120;
 /** Upper bound for JSON request bodies. */
 export const MAX_JSON_BODY_BYTES = 16 * 1024;
+/** Upper bound for POST /v1/me/changes (500 ops of ~150 bytes, with headroom). */
+export const MAX_CHANGES_BODY_BYTES = 256 * 1024;
 
 export function createApp(deps: AppDeps) {
   const app = new OpenAPIHono<AppEnv>({ defaultHook: validationHook });
@@ -32,7 +45,7 @@ export function createApp(deps: AppDeps) {
       origin: deps.env.CORS_ORIGINS,
       credentials: true,
       exposeHeaders: ['X-Request-Id'],
-      allowHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],
+      allowHeaders: ['Content-Type', 'Authorization', 'X-Request-Id', 'Idempotency-Key'],
     }),
   );
 
@@ -45,29 +58,44 @@ export function createApp(deps: AppDeps) {
       name,
       limit,
       trustedProxyHops: deps.env.TRUST_PROXY_HOPS,
+      edgeProxySecret: deps.env.EDGE_PROXY_SECRET,
       ...(method === undefined ? {} : { skip: (c) => c.req.method !== method }),
+    });
+
+  const jsonBodyLimit = (maxSize: number) =>
+    bodyLimit({
+      maxSize,
+      onError: (c) =>
+        problemResponse({
+          type: 'about:blank',
+          title: titleFor(413),
+          status: 413,
+          detail: `Request body exceeds ${maxSize} bytes`,
+          instance: c.req.path,
+          requestId: c.get('requestId') ?? '',
+        }),
     });
 
   app.use(
     '/v1/recommendations',
     limiter('recommend', deps.env.RATE_LIMIT_RECOMMEND_PER_MIN, 'POST'),
     // Reject oversized bodies before they are buffered and parsed; a valid input is well under 4 KB.
-    bodyLimit({
-      maxSize: MAX_JSON_BODY_BYTES,
-      onError: (c) =>
-        problemResponse({
-          type: 'about:blank',
-          title: titleFor(413),
-          status: 413,
-          detail: `Request body exceeds ${MAX_JSON_BODY_BYTES} bytes`,
-          instance: c.req.path,
-          requestId: c.get('requestId') ?? '',
-        }),
-    }),
+    jsonBodyLimit(MAX_JSON_BODY_BYTES),
   );
   app.use('/api/auth/*', bodyLimit({ maxSize: MAX_JSON_BODY_BYTES }));
   // Only credential-submitting POSTs (sign-in, sign-up, reset); session reads stay unthrottled.
   app.use('/api/auth/*', limiter('auth', AUTH_RATE_LIMIT_PER_MIN, 'POST'));
+
+  // Per-address limits in front of Better Auth: codes minted and guesses made against one address.
+  const perEmail = (name: string, limit: number, windowMs: number) =>
+    emailLimit({ store: deps.rateLimitStore, name, limit, windowMs });
+  app.use(
+    '/api/auth/email-otp/send-verification-otp',
+    perEmail('otp-send', OTP_SENDS_PER_EMAIL, OTP_SEND_WINDOW_MS),
+  );
+  for (const path of ['/api/auth/sign-in/email-otp', '/api/auth/sign-in/email']) {
+    app.use(path, perEmail('sign-in', OTP_SIGN_INS_PER_EMAIL, OTP_SIGN_IN_WINDOW_MS));
+  }
 
   // Better Auth owns everything under /api/auth/*.
   app.on(['GET', 'POST'], '/api/auth/*', (c) => deps.auth.handler(c.req.raw));
@@ -81,6 +109,11 @@ export function createApp(deps: AppDeps) {
   );
 
   app.route('/', createCatalogRouter({ catalog: deps.catalog }));
+
+  // Signed-in user's data. Limit by IP before the session lookup, so floods never reach the database.
+  app.use('/v1/me/*', limiter('me', ME_RATE_LIMIT_PER_MIN), requireSession(deps.auth));
+  app.use('/v1/me/changes', jsonBodyLimit(MAX_CHANGES_BODY_BYTES));
+  app.route('/', createMeRouter({ userData: deps.userData }));
   app.route(
     '/',
     createRecommendationsRouter({ recommendations: createRecommendationService(deps.catalog) }),

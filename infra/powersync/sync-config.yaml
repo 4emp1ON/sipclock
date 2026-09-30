@@ -1,0 +1,16 @@
+# Sync Streams: every stream is auto-subscribed and scoped to the signed-in user.
+# The client-side row id must be called `id`. Tombstones (in_bar / is_favorite = false) are synced on purpose,
+# so a stale device cannot resurrect a removed row.
+config:
+  edition: 3
+
+streams:
+  bar:
+    auto_subscribe: true
+    query: SELECT ingredient_id AS id, in_bar, updated_at FROM bar_item WHERE user_id = auth.user_id()
+  favorites:
+    auto_subscribe: true
+    query: SELECT recipe_id AS id, is_favorite, updated_at FROM favorite WHERE user_id = auth.user_id()
+  history:
+    auto_subscribe: true
+    query: SELECT id, recipe_id, made_at FROM drink_log WHERE user_id = auth.user_id()

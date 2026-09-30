@@ -1,3 +1,4 @@
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { getConnInfo } from '@hono/node-server/conninfo';
 import type { Context, MiddlewareHandler } from 'hono';
 import { problemResponse, titleFor } from '../lib/errors.ts';
@@ -89,10 +90,39 @@ export interface ClientIpOptions {
    * the right; everything to its left is client-controlled and never trusted.
    */
   trustedProxyHops: number;
+  /**
+   * Shared secret of the web app's server-side proxy (`EDGE_PROXY_SECRET`). When the request carries it
+   * in {@link PROXY_SECRET_HEADER}, {@link CLIENT_IP_HEADER} names the client; otherwise that header is
+   * ignored.
+   */
+  edgeProxySecret?: string | undefined;
 }
 
-/** Best-effort client address: trusted proxy hop, else the socket address, else a shared fallback. */
-export function clientIp(c: Context, { trustedProxyHops }: ClientIpOptions): string {
+export const PROXY_SECRET_HEADER = 'x-sipclock-proxy-secret';
+export const CLIENT_IP_HEADER = 'x-sipclock-client-ip';
+
+const digest = (value: string) => createHash('sha256').update(value).digest();
+
+/** Constant-time string comparison (hashing first makes the length difference irrelevant too). */
+export function secretsMatch(given: string, expected: string): boolean {
+  return timingSafeEqual(digest(given), digest(expected));
+}
+
+/**
+ * Best-effort client address: the address forwarded by the authenticated edge proxy, else the trusted
+ * proxy hop, else the socket address, else a shared fallback.
+ */
+export function clientIp(
+  c: Context,
+  { trustedProxyHops, edgeProxySecret }: ClientIpOptions,
+): string {
+  if (edgeProxySecret) {
+    const given = c.req.header(PROXY_SECRET_HEADER);
+    const forwarded = c.req.header(CLIENT_IP_HEADER)?.trim();
+    if (given && forwarded && forwarded.length <= 64 && secretsMatch(given, edgeProxySecret)) {
+      return forwarded;
+    }
+  }
   if (trustedProxyHops > 0) {
     const hops = (c.req.header('x-forwarded-for') ?? '')
       .split(',')
@@ -119,6 +149,8 @@ export interface RateLimitOptions {
   windowMs?: number;
   /** See {@link ClientIpOptions.trustedProxyHops}. Default 0. */
   trustedProxyHops?: number;
+  /** See {@link ClientIpOptions.edgeProxySecret}. */
+  edgeProxySecret?: string | undefined;
   /** Clock; must match the store's clock. */
   now?: () => number;
   /** Requests for which this returns false are not counted. */
@@ -132,7 +164,10 @@ export function rateLimit(options: RateLimitOptions): MiddlewareHandler<AppEnv> 
   const now = options.now ?? Date.now;
   return async (c, next) => {
     if (options.skip?.(c)) return next();
-    const ip = clientIp(c, { trustedProxyHops: options.trustedProxyHops ?? 0 });
+    const ip = clientIp(c, {
+      trustedProxyHops: options.trustedProxyHops ?? 0,
+      edgeProxySecret: options.edgeProxySecret,
+    });
     const { count, resetAt } = await store.hit(`${name}:${ip}`, windowMs);
     const resetSeconds = Math.max(0, Math.ceil((resetAt - now()) / 1000));
     const headers: Record<string, string> = {

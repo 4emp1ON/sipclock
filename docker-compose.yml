@@ -1,6 +1,8 @@
 services:
   postgres:
     image: pgvector/pgvector:pg17
+    # PowerSync replicates through logical decoding.
+    command: ["postgres", "-c", "wal_level=logical"]
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-sipclock}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sipclock}
@@ -15,6 +17,32 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  # Sync service for the mobile app, http://localhost:8080. Needs the API on the host (`pnpm --filter @sipclock/api dev`,
+  # port 8787) for the JWKS, and the API migration (tables + `powersync` publication) before it can replicate.
+  # It logs replication errors until then. Config: infra/powersync.
+  powersync:
+    image: journeyapps/powersync-service:1.26.1
+    command: ["start", "-r", "unified"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POWERSYNC_CONFIG_PATH: /config/service.yaml
+      PS_PG_URI: postgresql://powersync_role:powersync@postgres:5432/${POSTGRES_DB:-sipclock}
+      PS_STORAGE_URI: postgresql://powersync_role:powersync@postgres:5432/powersync_storage
+      PS_JWKS_URI: ${PS_JWKS_URI:-http://host.docker.internal:8787/api/auth/jwks}
+    volumes:
+      - ./infra/powersync:/config:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8080/probes/liveness').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
 
   api:
     profiles: ["full"]

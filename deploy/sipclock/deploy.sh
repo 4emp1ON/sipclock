@@ -19,4 +19,16 @@ fi
 docker compose pull --quiet migrate api
 docker compose up -d --wait api
 docker image prune -f --filter "label=org.opencontainers.image.source=https://github.com/4emp1ON/sipclock" >/dev/null
-echo "deployed $tag"
+
+# Smoke test through the edge router on this host: GitHub's runners cannot always reach Jino on 443,
+# so the check that gates the deploy runs here. Host comes from PUBLIC_BASE_URL (https://<host>/sipclock).
+host=$(sed -n 's|^PUBLIC_BASE_URL=https\{0,1\}://\([^/]*\).*|\1|p' .env)
+for i in 1 2 3 4 5 6; do
+  if curl -fsS --max-time 5 -H "Host: $host" http://127.0.0.1/sipclock/ready >/dev/null; then
+    echo "deployed $tag"
+    exit 0
+  fi
+  sleep 5
+done
+echo "smoke test failed: /sipclock/ready via the edge router" >&2
+exit 1

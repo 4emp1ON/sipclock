@@ -26,3 +26,8 @@ export function formatDayLabel(date: Date, locale?: string): string {
     ),
   );
 }
+
+/** "Fri, Sep 11 · 19:05": day and time for history entries. */
+export function formatDayTime(date: Date, locale?: string): string {
+  return `${formatDayLabel(date, locale)} · ${formatTime(date, locale)}`;
+}

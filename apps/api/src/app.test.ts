@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { createApp } from './app.ts';
+import { OTP_SENDS_PER_EMAIL, OTP_SIGN_INS_PER_EMAIL } from './auth.ts';
 import { silentLogger } from './lib/logger.ts';
 import { createMemoryRateLimitStore } from './middleware/rate-limit.ts';
 import { createBundledCatalogService } from './services/catalog.ts';
+import { fakeAuth, unusedUserData } from './testing.ts';
 import type { AppDeps } from './types.ts';
 
 const catalog = createBundledCatalogService();
@@ -21,7 +23,8 @@ function makeApp(
     },
     catalog,
     rateLimitStore: createMemoryRateLimitStore({ cleanupIntervalMs: 0 }),
-    auth: { handler: async () => new Response('auth-ok') },
+    auth: fakeAuth('auth-ok'),
+    userData: unusedUserData,
     ping,
     logger: silentLogger,
   });
@@ -164,5 +167,36 @@ describe('openapi', () => {
       };
       expect(spec.servers?.[0]?.url).toBe('https://example.test/sipclock');
     });
+  });
+});
+
+describe('email sign-in limits', () => {
+  const post = (app: ReturnType<typeof makeApp>, path: string, email: string) =>
+    app.request(path, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, type: 'sign-in', otp: '000000' }),
+    });
+
+  it('caps codes sent to one address before they reach Better Auth, across letter case', async () => {
+    const app = makeApp();
+    const path = '/api/auth/email-otp/send-verification-otp';
+    for (let i = 0; i < OTP_SENDS_PER_EMAIL; i++) {
+      expect((await post(app, path, 'a@example.test')).status).toBe(200);
+    }
+    const blocked = await post(app, path, ' A@Example.TEST ');
+    expect(blocked.status).toBe(429);
+    expect(blocked.headers.get('retry-after')).toMatch(/^\d+$/);
+    expect(await blocked.text()).not.toBe('auth-ok');
+    expect((await post(app, path, 'b@example.test')).status).toBe(200);
+  });
+
+  it('caps sign-in attempts per address', async () => {
+    const app = makeApp();
+    const path = '/api/auth/sign-in/email-otp';
+    for (let i = 0; i < OTP_SIGN_INS_PER_EMAIL; i++) {
+      expect((await post(app, path, 'a@example.test')).status).toBe(200);
+    }
+    expect((await post(app, path, 'a@example.test')).status).toBe(429);
   });
 });
