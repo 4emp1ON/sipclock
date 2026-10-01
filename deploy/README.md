@@ -2,7 +2,7 @@
 
 | Part | Where | How |
 |---|---|---|
-| Web (`apps/web`) | Vercel, project `sipclock` → https://sipclock.vercel.app | `vercel deploy --prod` (Git integration pending) |
+| Web (`apps/web`) | Vercel, project `sipclock` → https://sipclock.champ1ons.space (CNAME in Jino DNS; `sipclock.vercel.app` 308-redirects to it) | Vercel Git integration: every push to `main` |
 | API + Postgres | Jino VPS, compose project `sipclock` | GitHub Actions → GHCR image → SSH forced command |
 | Edge router | Same VPS, compose project `edge` | Caddy on port 80, shared with SweetVilka |
 
