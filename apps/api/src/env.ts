@@ -78,7 +78,7 @@ export const envSchema = z
     /** Path to a country MaxMind-format database (DB-IP Lite). Unset: country unknown → Yandex. */
     GEOIP_DB_PATH: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
     /** AI requests per user per UTC day on the free plan. */
-    AI_FREE_DAILY_REQUESTS: z.coerce.number().int().min(0).max(10_000).default(50),
+    AI_FREE_DAILY_REQUESTS: z.coerce.number().int().min(0).max(10_000).default(15),
     /** Monthly spend caps; past them a provider is not called (Anthropic falls back to Yandex). */
     AI_BUDGET_YANDEX_RUB: z.coerce.number().min(0).default(1000),
     AI_BUDGET_ANTHROPIC_USD: z.coerce.number().min(0).default(10),

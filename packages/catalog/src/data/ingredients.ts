@@ -13,7 +13,7 @@ const spirits: IngredientInput[] = [
   ing('whisky', 'spirit', 40, 'Whisky', 'Виски'),
   ing('bourbon', 'spirit', 45, 'Bourbon', 'Бурбон', {
     parent: 'whisky',
-    subs: [['rye-whiskey', 'Drier and spicier', 'Суше и пряннее']],
+    subs: [['rye-whiskey', 'Drier and spicier', 'Суше и прянее']],
   }),
   ing('rye-whiskey', 'spirit', 45, 'Rye whiskey', 'Ржаной виски', {
     parent: 'whisky',

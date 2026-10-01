@@ -7,11 +7,15 @@ import { createMemoryAiStore } from '../ai/store.ts';
 import { silentLogger } from '../lib/logger.ts';
 import { createBundledCatalogService } from './catalog.ts';
 import {
+  buildPrompt,
   catalogSuggestions,
   createSubstitutesService,
   MAX_CANDIDATES,
+  MAX_RANKED,
+  personalize,
+  type RankedPick,
   type SubstituteCandidate,
-  sanitizeSuggestions,
+  sanitizePicks,
   substituteCandidates,
 } from './substitutes.ts';
 
@@ -19,136 +23,155 @@ const catalog = createBundledCatalogService();
 const index = createIndex(catalog.catalog);
 
 describe('substituteCandidates', () => {
-  it('lists curated substitutes first, then bar ingredients of the same kind, with inBar computed', () => {
-    const out = substituteCandidates(index, 'gin', new Set(['vodka', 'tequila']), 'en');
-    expect(out[0]).toEqual({
-      id: 'vodka',
-      inBar: true,
-      curated: true,
-      note: 'Less botanical, still works',
-    });
-    expect(out.slice(1)).toEqual([{ id: 'tequila', inBar: true, curated: false, note: undefined }]);
+  it('lists curated substitutes first and ignores the bar', () => {
+    const out = substituteCandidates(index, 'gin', 'en');
+    expect(out[0]).toEqual({ id: 'vodka', curated: true, note: 'Less botanical, still works' });
+    expect(out.map((c) => c.id)).not.toContain('tequila');
   });
 
   it('uses the locale for curated notes', () => {
-    expect(substituteCandidates(index, 'gin', new Set(), 'ru')[0]?.note).toBe(
-      'Меньше трав, но подойдёт',
-    );
+    expect(substituteCandidates(index, 'gin', 'ru')[0]?.note).toBe('Меньше трав, но подойдёт');
   });
 
   it('excludes the ingredient itself, its ancestors and descendants, and has no duplicates', () => {
     // bourbon -> parent whisky; rye-whiskey is both curated and a sibling.
-    const out = substituteCandidates(
-      index,
-      'bourbon',
-      new Set(['bourbon', 'whisky', 'vodka']),
-      'en',
-    );
+    const out = substituteCandidates(index, 'bourbon', 'en');
     const ids = out.map((c) => c.id);
     expect(ids).not.toContain('bourbon');
     expect(ids).not.toContain('whisky');
     expect(new Set(ids).size).toBe(ids.length);
     expect(out[0]).toMatchObject({ id: 'rye-whiskey', curated: true });
-    expect(ids).toEqual(expect.arrayContaining(['scotch-whisky', 'irish-whiskey', 'vodka']));
-    // The generic parent in the bar covers its children.
-    expect(out.find((c) => c.id === 'scotch-whisky')?.inBar).toBe(true);
+    expect(ids).toEqual(expect.arrayContaining(['scotch-whisky', 'irish-whiskey']));
 
     // gin has a descendant, which must not be offered as its substitute.
-    const gin = substituteCandidates(index, 'gin', new Set(['london-dry-gin']), 'en');
-    expect(gin.map((c) => c.id)).not.toContain('london-dry-gin');
+    expect(substituteCandidates(index, 'gin', 'en').map((c) => c.id)).not.toContain(
+      'london-dry-gin',
+    );
   });
 
   it('returns only catalog ingredients and respects the cap', () => {
-    const bar = new Set([...index.ingredients.keys()]);
-    const out = substituteCandidates(index, 'gin', bar, 'en');
-    expect(out.length).toBeLessThanOrEqual(MAX_CANDIDATES);
-    for (const c of out) expect(index.ingredients.has(c.id)).toBe(true);
-    expect(substituteCandidates(index, 'not-an-ingredient', bar, 'en')).toEqual([]);
+    for (const id of index.ingredients.keys()) {
+      const out = substituteCandidates(index, id, 'en');
+      expect(out.length).toBeLessThanOrEqual(MAX_CANDIDATES);
+      for (const c of out) expect(index.ingredients.has(c.id)).toBe(true);
+    }
+    expect(substituteCandidates(index, 'not-an-ingredient', 'en')).toEqual([]);
+  });
+});
+
+describe('buildPrompt', () => {
+  it('is compact: ids instead of names, no garnish or staples, editors picks marked', () => {
+    const recipe = index.recipes.get('negroni');
+    if (!recipe) throw new Error('negroni missing');
+    const prompt = buildPrompt(
+      recipe,
+      'gin',
+      substituteCandidates(index, 'gin', 'en'),
+      index,
+      'en',
+    );
+    expect(prompt).toContain('Missing: gin');
+    expect(prompt).toContain('vodka* (Less botanical, still works)');
+    expect(prompt).not.toMatch(/\bice\b|orange/);
+    expect(prompt.length).toBeLessThan(300);
+  });
+});
+
+describe('personalize', () => {
+  const pick = (ingredientId: string, fit: 'close' | 'workable'): RankedPick => ({
+    ingredientId,
+    fit,
+  });
+
+  it('puts close matches first, then what is at home, then the ranking order; caps at 3', () => {
+    const picks = [
+      pick('irish-whiskey', 'workable'),
+      pick('rye-whiskey', 'close'),
+      pick('scotch-whisky', 'workable'),
+      pick('vodka', 'workable'),
+    ];
+    const out = personalize(picks, new Set(['vodka']), index);
+    expect(out.map((s) => [s.ingredientId, s.inBar])).toEqual([
+      ['rye-whiskey', false],
+      ['vodka', true],
+      ['irish-whiskey', false],
+    ]);
+  });
+
+  it('counts the bar through the hierarchy (a generic parent covers its children)', () => {
+    const out = personalize([pick('scotch-whisky', 'close')], new Set(['whisky']), index);
+    expect(out[0]?.inBar).toBe(true);
   });
 });
 
 describe('catalogSuggestions', () => {
-  const c = (id: string, inBar: boolean, curated: boolean, note?: string): SubstituteCandidate => ({
-    id,
-    inBar,
-    curated,
-    note,
-  });
+  const candidates: SubstituteCandidate[] = [
+    { id: 'rye-whiskey', curated: true, note: 'Drier' },
+    { id: 'scotch-whisky', curated: false, note: undefined },
+    { id: 'irish-whiskey', curated: false, note: undefined },
+  ];
 
-  it('drops uncurated candidates not in the bar, ranks bar first then curated, caps at 3', () => {
-    const out = catalogSuggestions([
-      c('a', false, false),
-      c('b', false, true, 'note b'),
-      c('c', true, false),
-      c('d', true, true),
-      c('e', true, false),
+  it('keeps curated candidates and related ones the user has, close before workable', () => {
+    expect(catalogSuggestions(candidates, new Set(['irish-whiskey']), index)).toEqual([
+      { ingredientId: 'rye-whiskey', inBar: false, fit: 'close', note: 'Drier' },
+      { ingredientId: 'irish-whiskey', inBar: true, fit: 'workable' },
     ]);
-    expect(out.map((s) => s.ingredientId)).toEqual(['d', 'c', 'e']);
-    expect(out[0]).toEqual({ ingredientId: 'd', inBar: true, fit: 'close' });
-    expect(out[1]).toEqual({ ingredientId: 'c', inBar: true, fit: 'workable' });
-    expect(catalogSuggestions([c('b', false, true, 'note b')])).toEqual([
-      { ingredientId: 'b', inBar: false, fit: 'close', note: 'note b' },
+    expect(catalogSuggestions(candidates, new Set(), index).map((s) => s.ingredientId)).toEqual([
+      'rye-whiskey',
     ]);
   });
 });
 
-describe('sanitizeSuggestions', () => {
-  const candidates: SubstituteCandidate[] = [
-    { id: 'a', inBar: true, curated: true, note: 'Curated A' },
-    { id: 'b', inBar: false, curated: false, note: undefined },
-    { id: 'c', inBar: false, curated: false, note: undefined },
-    { id: 'd', inBar: true, curated: false, note: undefined },
-  ];
+describe('sanitizePicks', () => {
+  const candidates: SubstituteCandidate[] = 'abcdefgh'
+    .split('')
+    .map((id) => ({ id, curated: id === 'a', note: id === 'a' ? 'Curated A' : undefined }));
   const raw = (ingredientId: string, note: string, fit: 'close' | 'workable' = 'close') => ({
     ingredientId,
     fit,
     note,
   });
 
-  it('drops unknown and duplicate ids and caps at 3', () => {
-    const out = sanitizeSuggestions(
+  it('drops unknown and duplicate ids and caps the ranking', () => {
+    const out = sanitizePicks(
       [
         raw('zzz', 'Fine note'),
         raw('a', 'Fine note'),
         raw('a', 'Again'),
-        raw('b', 'Fine note'),
-        raw('c', 'Fine note'),
-        raw('d', 'Fine note'),
+        ...'bcdefgh'.split('').map((id) => raw(id, 'Fine note')),
       ],
       candidates,
       'en',
     );
-    expect(out.map((s) => s.ingredientId)).toEqual(['a', 'b', 'c']);
-    expect(out[0]).toEqual({ ingredientId: 'a', inBar: true, fit: 'close', note: 'Fine note' });
+    expect(out).toHaveLength(MAX_RANKED);
+    expect(out.map((s) => s.ingredientId)).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+    expect(out[0]).toEqual({ ingredientId: 'a', fit: 'close', note: 'Fine note' });
   });
 
   it('keeps the model fit and cleans the note', () => {
-    const [s] = sanitizeSuggestions(
+    const [s] = sanitizePicks(
       [raw('b', 'Sweeter, see https://x.test now', 'workable')],
       candidates,
       'en',
     );
-    expect(s).toEqual({
-      ingredientId: 'b',
-      inBar: false,
-      fit: 'workable',
-      note: 'Sweeter, see now',
-    });
+    expect(s).toEqual({ ingredientId: 'b', fit: 'workable', note: 'Sweeter, see now' });
   });
 
   it('replaces a branded or wrong-language note with the curated note, or drops it', () => {
-    const out = sanitizeSuggestions(
+    const out = sanitizePicks(
       [raw('a', 'Use Aperol here'), raw('b', 'Use Aperol here'), raw('d', 'Меньше трав')],
       candidates,
       'en',
     );
-    expect(out[0]).toEqual({ ingredientId: 'a', inBar: true, fit: 'close', note: 'Curated A' });
-    expect(out[1]).toEqual({ ingredientId: 'b', inBar: false, fit: 'close' });
-    expect(out[2]).toEqual({ ingredientId: 'd', inBar: true, fit: 'close' });
+    expect(out).toEqual([
+      { ingredientId: 'a', fit: 'close', note: 'Curated A' },
+      { ingredientId: 'b', fit: 'close' },
+      { ingredientId: 'd', fit: 'close' },
+    ]);
   });
 
   it('treats an empty note as unusable', () => {
-    expect(sanitizeSuggestions([raw('a', '  ')], candidates, 'en')[0]?.note).toBe('Curated A');
+    expect(sanitizePicks([raw('a', '  ')], candidates, 'en')[0]?.note).toBe('Curated A');
   });
 });
 
@@ -236,15 +259,19 @@ describe('createSubstitutesService', () => {
     expect(model.doGenerateCalls).toHaveLength(1);
   });
 
-  it('a different bar overlap is a different cache entry', async () => {
+  it('shares one cached ranking across bars and fits it to each bar', async () => {
     const model = modelReturning({
       suggestions: [{ ingredientId: 'vodka', fit: 'close', note: 'Works' }],
       canSkip: false,
     });
     const { service } = setupService(model);
     await service.suggest(query, caller);
-    await service.suggest({ ...query, bar: ['vodka', 'tequila'] }, caller);
-    expect(model.doGenerateCalls).toHaveLength(2);
+    const other = await service.suggest({ ...query, bar: [] }, { ...caller, userId: 'u2' });
+    expect(model.doGenerateCalls).toHaveLength(1);
+    expect(other).toMatchObject({
+      remaining: null,
+      result: { source: 'ai', suggestions: [{ ingredientId: 'vodka', inBar: false }] },
+    });
   });
 
   it('falls back to the catalog when the model fails', async () => {
