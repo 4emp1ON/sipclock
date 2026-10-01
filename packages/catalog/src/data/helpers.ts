@@ -27,15 +27,28 @@ export function ing(
   abv: number,
   en: string,
   ru: string,
-  opts: { parent?: string; from?: string; subs?: readonly Sub[]; staple?: boolean } = {},
+  opts: {
+    parent?: string;
+    from?: string;
+    subs?: readonly Sub[];
+    /** Swaps that change the drink's character: suggested, never counted as makeable. */
+    loose?: readonly Sub[];
+    staple?: boolean;
+  } = {},
 ): IngredientInput {
   const out: IngredientInput = { id, name: L(en, ru), kind, abv };
   if (opts.parent) out.parent = opts.parent;
   if (opts.from) out.madeFrom = opts.from;
-  if (opts.subs) {
-    out.substitutes = opts.subs.map(([sid, sen, sru]) =>
-      sen && sru ? { id: sid, note: L(sen, sru) } : { id: sid },
-    );
+  const sub = ([sid, sen, sru]: Sub, loose: boolean) => ({
+    id: sid,
+    ...(sen && sru ? { note: L(sen, sru) } : {}),
+    ...(loose ? { loose: true as const } : {}),
+  });
+  if (opts.subs || opts.loose) {
+    out.substitutes = [
+      ...(opts.subs ?? []).map((s) => sub(s, false)),
+      ...(opts.loose ?? []).map((s) => sub(s, true)),
+    ];
   }
   if (opts.staple) out.staple = true;
   return out;

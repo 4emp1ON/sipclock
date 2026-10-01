@@ -14,6 +14,8 @@ export interface SubstituteCandidate {
   id: string;
   /** Hand-curated in the catalog (with an optional note), as opposed to a related ingredient. */
   curated: boolean;
+  /** Curated, but changes the drink's character (never a close fit without the model's say). */
+  loose: boolean;
   note: string | undefined;
 }
 
@@ -82,20 +84,20 @@ export function substituteCandidates(
   const own = new Set([ingredientId, ...ancestors, ...(index.descendants.get(ingredientId) ?? [])]);
   const seen = new Set<string>();
   const out: SubstituteCandidate[] = [];
-  const add = (id: string, curated: boolean, note: string | undefined) => {
+  const add = (id: string, curated: boolean, loose: boolean, note: string | undefined) => {
     if (own.has(id) || seen.has(id) || !index.ingredients.has(id)) return;
     seen.add(id);
-    out.push({ id, curated, note });
+    out.push({ id, curated, loose, note });
   };
 
   for (const source of [ingredientId, ...ancestors]) {
     for (const sub of index.ingredients.get(source)?.substitutes ?? []) {
-      add(sub.id, true, sub.note?.[locale]);
+      add(sub.id, true, sub.loose === true, sub.note?.[locale]);
     }
   }
   const parent = ancestors[0];
   if (parent !== undefined) {
-    for (const id of index.descendants.get(parent) ?? []) add(id, false, undefined);
+    for (const id of index.descendants.get(parent) ?? []) add(id, false, false, undefined);
   }
   return out.slice(0, MAX_CANDIDATES);
 }
@@ -132,7 +134,7 @@ export function catalogSuggestions(
     .map(
       (c): RankedPick => ({
         ingredientId: c.id,
-        fit: c.curated ? 'close' : 'workable',
+        fit: c.curated && !c.loose ? 'close' : 'workable',
         ...(c.note ? { note: c.note } : {}),
       }),
     );

@@ -32,7 +32,19 @@ export const ingredient = z.object({
   /** Alcohol by volume, percent. */
   abv: z.number().min(0).max(100),
   /** Acceptable replacements when this ingredient is missing, best first. */
-  substitutes: z.array(z.object({ id: slug, note: localized.optional() })).default([]),
+  substitutes: z
+    .array(
+      z.object({
+        id: slug,
+        note: localized.optional(),
+        /**
+         * Changes the drink's character: offered by "Find a swap", but a drink that needs it is not
+         * counted as makeable (tonic for soda water is fine, soda water in a Gin & Tonic is not).
+         */
+        loose: z.literal(true).optional(),
+      }),
+    )
+    .default([]),
   /**
    * Can be prepared at home from this ingredient: `lemon-juice` ← `lemon`, `simple-syrup` ← `sugar`.
    * Having the source in the bar covers the need (it is not a substitution).

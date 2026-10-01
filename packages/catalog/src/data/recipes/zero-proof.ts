@@ -989,8 +989,8 @@ export const zeroProof = [
     ingredients: [
       ml('apple-juice', 250),
       pc('cinnamon-stick', 1),
-      pc('cloves', 3),
-      pc('star-anise', 1),
+      pc('cloves', 3, undefined, { optional: true }),
+      pc('star-anise', 1, undefined, { optional: true }),
       pc('orange', 1, { en: 'strip of peel', ru: 'полоска цедры' }),
     ],
     steps: [

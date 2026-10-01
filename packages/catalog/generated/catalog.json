@@ -86,7 +86,16 @@
       "kind": "spirit",
       "parent": "rum",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "vodka",
+          "note": {
+            "en": "Cleaner, no cane sweetness",
+            "ru": "Чище, без тростниковой сладости"
+          },
+          "loose": true
+        }
+      ],
       "staple": false
     },
     {
@@ -98,7 +107,16 @@
       "kind": "spirit",
       "parent": "rum",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "bourbon",
+          "note": {
+            "en": "Drier, more oak",
+            "ru": "Суше, больше дуба"
+          },
+          "loose": true
+        }
+      ],
       "staple": false
     },
     {
@@ -503,7 +521,8 @@
           "note": {
             "en": "Add sugar syrup; lower in alcohol",
             "ru": "Добавьте сахарный сироп; напиток станет слабее"
-          }
+          },
+          "loose": true
         }
       ],
       "staple": false
@@ -534,6 +553,14 @@
             "en": "Fruitier and sweeter",
             "ru": "Фруктовее и слаще"
           }
+        },
+        {
+          "id": "orange-liqueur",
+          "note": {
+            "en": "Orange instead of cherry",
+            "ru": "Апельсин вместо вишни"
+          },
+          "loose": true
         }
       ],
       "staple": false
@@ -595,7 +622,16 @@
       },
       "kind": "liqueur",
       "abv": 24,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "orgeat",
+          "note": {
+            "en": "Alcohol-free and sweeter: use less",
+            "ru": "Без алкоголя и слаще: возьмите меньше"
+          },
+          "loose": true
+        }
+      ],
       "staple": false
     },
     {
@@ -991,6 +1027,14 @@
             "en": "More bitter",
             "ru": "Горче"
           }
+        },
+        {
+          "id": "ruby-port",
+          "note": {
+            "en": "Fruitier, no bitterness",
+            "ru": "Фруктовее, без горчинки"
+          },
+          "loose": true
         }
       ],
       "staple": false
@@ -1311,7 +1355,16 @@
       },
       "kind": "mixer",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "soda-water",
+          "note": {
+            "en": "No bitterness: add a little syrup",
+            "ru": "Без горчинки: добавьте немного сиропа"
+          },
+          "loose": true
+        }
+      ],
       "staple": false
     },
     {
@@ -1567,7 +1620,16 @@
       },
       "kind": "juice",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "orange-juice",
+          "note": {
+            "en": "Less tropical",
+            "ru": "Менее тропический вкус"
+          },
+          "loose": true
+        }
+      ],
       "madeFrom": "pineapple",
       "staple": false
     },
@@ -1721,7 +1783,16 @@
       },
       "kind": "fresh",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "basil",
+          "note": {
+            "en": "Peppery, less cooling",
+            "ru": "С перечной нотой, без холодка"
+          },
+          "loose": true
+        }
+      ],
       "staple": false
     },
     {
@@ -2340,7 +2411,15 @@
       },
       "kind": "pantry",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "espresso",
+          "note": {
+            "en": "Top up with hot water",
+            "ru": "Долейте горячей водой"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -19352,7 +19431,7 @@
               "ru": "бутона"
             }
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -19689,7 +19768,7 @@
               "ru": "щепотка"
             }
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -19812,7 +19891,7 @@
             "unit": "piece",
             "value": 3
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -19821,7 +19900,7 @@
             "unit": "piece",
             "value": 1
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -19834,7 +19913,7 @@
               "ru": "щепотка тёртого"
             }
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         }
       ],
@@ -20265,7 +20344,7 @@
             "unit": "piece",
             "value": 2
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -20300,7 +20379,7 @@
               "ru": "очищенный"
             }
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -20309,7 +20388,7 @@
             "unit": "barspoon",
             "value": 2
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         }
       ],
@@ -23947,7 +24026,7 @@
             "unit": "piece",
             "value": 3
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {
@@ -23956,7 +24035,7 @@
             "unit": "piece",
             "value": 1
           },
-          "optional": false,
+          "optional": true,
           "garnish": false
         },
         {

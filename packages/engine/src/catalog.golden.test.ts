@@ -2,6 +2,7 @@
 import { catalog } from '@sipclock/catalog';
 import { describe, expect, it } from 'vitest';
 import { estimateAbv } from './abv.ts';
+import { availability } from './availability.ts';
 import { createIndex } from './graph.ts';
 import { input, moment } from './helpers.test-util.ts';
 import { recommend } from './recommend.ts';
@@ -106,6 +107,11 @@ describe('real catalog: recommendations', () => {
       catalog,
     );
     expect(recipe(rec.pick?.recipeId ?? '').tags.dayparts).toContain('brunch');
+  });
+
+  it('never counts a loose swap as makeable (soda water is no Gin & Tonic)', () => {
+    const gt = availability(recipe('gin-and-tonic'), ['gin', 'soda-water', 'lime'], index);
+    expect(gt).toMatchObject({ status: 'missing', missing: ['tonic-water'] });
   });
 
   it('offers an alcohol-free alternative next to an alcoholic pick', () => {

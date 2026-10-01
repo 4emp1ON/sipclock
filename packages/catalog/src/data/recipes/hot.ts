@@ -97,7 +97,7 @@ export const hot = [
       pc('orange', 2, { en: 'slices', ru: 'кружка' }),
       bsp('honey', 2),
       pc('cinnamon-stick', 1),
-      pc('cloves', 3, { en: 'buds', ru: 'бутона' }),
+      pc('cloves', 3, { en: 'buds', ru: 'бутона' }, { optional: true }),
       pc('star-anise', 1, undefined, { optional: true }),
     ],
     steps: [
@@ -224,7 +224,7 @@ export const hot = [
       bsp('cocoa-powder', 6),
       bsp('sugar', 4.5),
       ml('milk', 235),
-      pc('salt', 1, { en: 'pinch', ru: 'щепотка' }),
+      pc('salt', 1, { en: 'pinch', ru: 'щепотка' }, { optional: true }),
       ml('dark-rum', 45),
     ],
     steps: [
@@ -265,9 +265,9 @@ export const hot = [
       dash('aromatic-bitters', 1),
       dash('orange-bitters', 1),
       pc('cinnamon-stick', 2),
-      pc('cloves', 3),
-      pc('star-anise', 1),
-      pc('nutmeg', 1, { en: 'pinch grated', ru: 'щепотка тёртого' }),
+      pc('cloves', 3, undefined, { optional: true }),
+      pc('star-anise', 1, undefined, { optional: true }),
+      pc('nutmeg', 1, { en: 'pinch grated', ru: 'щепотка тёртого' }, { optional: true }),
     ],
     steps: [
       [
@@ -436,11 +436,11 @@ export const hot = [
       ml('vodka', 15),
       bsp('sugar', 4),
       pc('cinnamon-stick', 1),
-      pc('cloves', 2),
+      pc('cloves', 2, undefined, { optional: true }),
       pc('cardamom-pods', 1),
       pc('orange', 1, { en: 'strip of zest', ru: 'полоска цедры' }),
-      pc('almonds', 8, { en: 'blanched', ru: 'очищенный' }),
-      bsp('raisins', 2),
+      pc('almonds', 8, { en: 'blanched', ru: 'очищенный' }, { optional: true }),
+      bsp('raisins', 2, { optional: true }),
     ],
     steps: [
       [

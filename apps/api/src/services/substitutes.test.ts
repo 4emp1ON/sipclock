@@ -25,7 +25,12 @@ const index = createIndex(catalog.catalog);
 describe('substituteCandidates', () => {
   it('lists curated substitutes first and ignores the bar', () => {
     const out = substituteCandidates(index, 'gin', 'en');
-    expect(out[0]).toEqual({ id: 'vodka', curated: true, note: 'Less botanical, still works' });
+    expect(out[0]).toEqual({
+      id: 'vodka',
+      curated: true,
+      loose: false,
+      note: 'Less botanical, still works',
+    });
     expect(out.map((c) => c.id)).not.toContain('tequila');
   });
 
@@ -106,9 +111,9 @@ describe('personalize', () => {
 
 describe('catalogSuggestions', () => {
   const candidates: SubstituteCandidate[] = [
-    { id: 'rye-whiskey', curated: true, note: 'Drier' },
-    { id: 'scotch-whisky', curated: false, note: undefined },
-    { id: 'irish-whiskey', curated: false, note: undefined },
+    { id: 'rye-whiskey', curated: true, loose: false, note: 'Drier' },
+    { id: 'scotch-whisky', curated: false, loose: false, note: undefined },
+    { id: 'irish-whiskey', curated: false, loose: false, note: undefined },
   ];
 
   it('keeps curated candidates and related ones the user has, close before workable', () => {
@@ -120,12 +125,27 @@ describe('catalogSuggestions', () => {
       'rye-whiskey',
     ]);
   });
+
+  it('offers loose curated swaps as workable, never close', () => {
+    const loose: SubstituteCandidate = {
+      id: 'soda-water',
+      curated: true,
+      loose: true,
+      note: 'No bite',
+    };
+    expect(catalogSuggestions([loose], new Set(), index)).toEqual([
+      { ingredientId: 'soda-water', inBar: false, fit: 'workable', note: 'No bite' },
+    ]);
+  });
 });
 
 describe('sanitizePicks', () => {
-  const candidates: SubstituteCandidate[] = 'abcdefgh'
-    .split('')
-    .map((id) => ({ id, curated: id === 'a', note: id === 'a' ? 'Curated A' : undefined }));
+  const candidates: SubstituteCandidate[] = 'abcdefgh'.split('').map((id) => ({
+    id,
+    curated: id === 'a',
+    loose: false,
+    note: id === 'a' ? 'Curated A' : undefined,
+  }));
   const raw = (ingredientId: string, note: string, fit: 'close' | 'workable' = 'close') => ({
     ingredientId,
     fit,

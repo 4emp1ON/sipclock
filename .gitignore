@@ -26,3 +26,6 @@ playwright-report/
 
 # Claude Code per-machine settings
 .claude/settings.local.json
+
+# Serena MCP per-machine state
+.serena/

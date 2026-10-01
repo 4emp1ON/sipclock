@@ -54,7 +54,8 @@ export function analyzeAvailability(
       continue;
     }
     const subs = index.ingredients.get(ingredient)?.substitutes ?? [];
-    const use = subs.find((s) => barHas(set, s.id, index));
+    // Loose swaps change the drink too much to call it makeable; "Find a swap" still offers them.
+    const use = subs.find((s) => !s.loose && barHas(set, s.id, index));
     if (use) detail.swaps.push({ need: ingredient, use: use.id });
     else detail.missing.push(ingredient);
   }
