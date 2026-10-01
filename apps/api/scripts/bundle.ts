@@ -4,7 +4,11 @@
 import { build } from 'esbuild';
 
 await build({
-  entryPoints: { server: 'src/server.ts', migrate: 'src/migrate.ts' },
+  entryPoints: {
+    server: 'src/server.ts',
+    migrate: 'src/migrate.ts',
+    'ai-smoke': 'scripts/ai-smoke.ts',
+  },
   outdir: 'dist',
   bundle: true,
   platform: 'node',

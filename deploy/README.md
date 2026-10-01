@@ -61,7 +61,12 @@ cd ~/sipclock && docker compose ps
 docker compose logs -f api
 SIPCLOCK_TAG=sha-<commit> docker compose up -d --wait api   # roll back to a previous image
 ./backup.sh                                     # dump to ~/backups/sipclock (cron: 45 3 * * *)
+docker compose exec api node dist/ai-smoke.js   # live AI check: real providers, no DB writes, ~1 RUB
 ```
+
+AI settings live in `~/sipclock/.env` (`YANDEX_*`, `ANTHROPIC_*`, budgets; see `apps/api/.env.example` and
+ADR 0007). Enter keys with `read -rsp` so they never reach the terminal history, then
+`docker compose up -d --force-recreate --no-deps api`; the startup log line shows `"ai":true`.
 
 ## Edge cutover and rollback
 
