@@ -4,6 +4,7 @@ import {
   buildUpstreamHeaders,
   clientIp,
   mapProxyPath,
+  proxyTimeoutMs,
   rewriteSetCookie,
 } from './api-proxy';
 
@@ -14,11 +15,14 @@ describe('mapProxyPath', () => {
     expect(mapProxyPath('/api/me/data')).toBe('/v1/me/data');
     expect(mapProxyPath('/api/me/changes')).toBe('/v1/me/changes');
     expect(mapProxyPath('/api/me')).toBe('/v1/me');
+    expect(mapProxyPath('/api/ai/substitutes')).toBe('/v1/ai/substitutes');
+    expect(mapProxyPath('/api/ai')).toBe('/v1/ai');
   });
   it('rejects everything else', () => {
     expect(mapProxyPath('/api/health')).toBeNull();
     expect(mapProxyPath('/api/authx/foo')).toBeNull();
     expect(mapProxyPath('/api/meow')).toBeNull();
+    expect(mapProxyPath('/api/aix/foo')).toBeNull();
     expect(mapProxyPath('/api')).toBeNull();
     expect(mapProxyPath('/v1/me/data')).toBeNull();
     // Open redirect in the expo plugin; the web never needs it.
@@ -29,6 +33,14 @@ describe('mapProxyPath', () => {
     expect(mapProxyPath('/api/me/%2e%2e/admin')).toBeNull();
     expect(mapProxyPath('/api/me/a%2Fb')).toBeNull();
     expect(mapProxyPath('/api/me/a\\b')).toBeNull();
+  });
+});
+
+describe('proxyTimeoutMs', () => {
+  it('gives AI paths 30 s and everything else 15 s', () => {
+    expect(proxyTimeoutMs('/api/ai/substitutes')).toBe(30_000);
+    expect(proxyTimeoutMs('/api/me/data')).toBe(15_000);
+    expect(proxyTimeoutMs('/api/auth/get-session')).toBe(15_000);
   });
 });
 
@@ -49,6 +61,7 @@ describe('buildUpstreamHeaders', () => {
     cookie: 'a=1',
     'content-type': 'application/json',
     accept: 'application/json',
+    'accept-language': 'ru-RU,ru;q=0.9',
     origin: 'https://sipclock.vercel.app',
     'user-agent': 'UA',
     'idempotency-key': 'k1',
@@ -65,6 +78,7 @@ describe('buildUpstreamHeaders', () => {
     expect([...out.keys()].sort()).toEqual(
       [
         'accept',
+        'accept-language',
         'content-type',
         'cookie',
         'idempotency-key',
@@ -111,6 +125,10 @@ describe('response headers', () => {
       'session=abc; Path=/; HttpOnly',
       'other=1; Path=/; Expires=Wed, 21 Oct 2026 07:28:00 GMT',
     ]);
+  });
+  it('passes the AI quota header to the browser', () => {
+    const out = buildDownstreamHeaders(new Headers({ 'x-ai-quota-remaining': '7' }));
+    expect(out.get('x-ai-quota-remaining')).toBe('7');
   });
   it('strips Domain from cookies only', () => {
     expect(rewriteSetCookie('a=b; domain=x.com; Secure')).toBe('a=b; Secure');

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { AbvBadge } from '@/components/abv-badge';
 import { IngredientList } from '@/components/ingredient-list';
 import { RecipeActions } from '@/components/recipe-actions';
+import { SwapFinder } from '@/components/swap-finder';
 import { getUi, isLocale, LOCALES } from '@/i18n/ui';
 import {
   catalog,
@@ -104,6 +105,11 @@ export default async function RecipePage({ params }: PageProps<'/[locale]/recipe
             optional: ui.recipes.optional,
             garnish: ui.recipes.garnish,
           }}
+        />
+        <SwapFinder
+          recipeId={recipe.id}
+          locale={locale}
+          ingredientIds={recipe.ingredients.filter((i) => !i.garnish).map((i) => i.ingredient)}
         />
 
         <h2 className="mt-10 font-display text-xl font-semibold">{ui.recipes.steps}</h2>

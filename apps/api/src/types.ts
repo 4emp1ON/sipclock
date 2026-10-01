@@ -1,4 +1,6 @@
 import type { Env as HonoEnv } from 'hono';
+import type { AiGateway } from './ai/gateway.ts';
+import type { CountryLookup } from './ai/region.ts';
 import type { AuthHandler } from './auth.ts';
 import type { Env } from './env.ts';
 import type { Logger } from './lib/logger.ts';
@@ -19,6 +21,8 @@ export interface AppDeps {
   userData: UserDataService;
   rateLimitStore: RateLimitStore;
   auth: AuthHandler;
+  /** AI gateway (`/v1/ai/*`); the routes are not mounted without it. */
+  ai?: { gateway: AiGateway; countryOf: CountryLookup };
   /** Database liveness probe used by /ready. */
   ping: () => Promise<void>;
   logger: Logger;
@@ -27,7 +31,7 @@ export interface AppDeps {
 export interface AppEnv extends HonoEnv {
   Variables: {
     requestId: string;
-    /** Signed-in user; set by `requireSession` on `/v1/me/*` only. */
+    /** Signed-in user; set by `requireSession` on `/v1/me/*` and `/v1/ai/*`. */
     userId: string;
   };
 }

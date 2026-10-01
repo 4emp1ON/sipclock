@@ -17,6 +17,7 @@ import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/button';
 import { Chip } from '@/components/chip';
 import { Screen } from '@/components/screen';
+import { SwapFinder } from '@/components/swap-finder';
 import { Text } from '@/components/text';
 import { useBar } from '@/hooks/use-bar';
 import { useFavorite, useLogDrink } from '@/hooks/use-user-data';
@@ -198,6 +199,8 @@ export default function RecipeScreen() {
           );
         })}
       </View>
+
+      <SwapFinder recipe={recipe} barIds={bar.ids ?? []} />
 
       <View className="gap-3">
         <Text variant="section-title" accessibilityRole="header">

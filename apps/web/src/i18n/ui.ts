@@ -137,6 +137,22 @@ export interface Ui {
     signInToLog: string;
     signInLink: string;
   };
+  swap: {
+    button: string;
+    signInCaption: string;
+    signInLink: string;
+    pickLabel: string;
+    loading: string;
+    inBar: string;
+    close: string;
+    workable: string;
+    canSkip: string;
+    none: string;
+    ai: string;
+    limit: string;
+    failed: string;
+    retry: string;
+  };
   abv: { free: string; alc: string };
   notFound: { title: string; body: string; back: string };
   footer: { warning: string; adult: string };
@@ -284,6 +300,22 @@ const en: Ui = {
     madeLogged: 'Logged',
     signInToLog: 'Sign in to keep a history of what you make.',
     signInLink: 'Sign in',
+  },
+  swap: {
+    button: 'Find a swap',
+    signInCaption: 'Sign in to get swaps for missing ingredients.',
+    signInLink: 'Sign in',
+    pickLabel: 'Which ingredient are you missing?',
+    loading: 'Looking for swaps',
+    inBar: 'In your bar',
+    close: 'Close match',
+    workable: 'Different but good',
+    canSkip: 'You can also leave it out.',
+    none: 'No good swap in our catalog.',
+    ai: 'AI suggestion',
+    limit: "Daily AI limit reached. Showing editors' picks.",
+    failed: "Couldn't load swaps.",
+    retry: 'Try again',
   },
   abv: { free: 'Free', alc: 'Alc.' },
   notFound: {
@@ -445,6 +477,22 @@ const ru: Ui = {
     madeLogged: 'Записано',
     signInToLog: 'Войдите, чтобы вести историю приготовленного.',
     signInLink: 'Войти',
+  },
+  swap: {
+    button: 'Подобрать замену',
+    signInCaption: 'Войдите, чтобы подбирать замену недостающим ингредиентам.',
+    signInLink: 'Войти',
+    pickLabel: 'Какого ингредиента не хватает?',
+    loading: 'Подбираем замену',
+    inBar: 'Есть в баре',
+    close: 'Близкая замена',
+    workable: 'Другой вкус, но подойдёт',
+    canSkip: 'Можно обойтись и без него.',
+    none: 'В каталоге нет подходящей замены.',
+    ai: 'Подсказка ИИ',
+    limit: 'Дневной лимит ИИ исчерпан. Показываем подборку редакции.',
+    failed: 'Не удалось загрузить замены.',
+    retry: 'Повторить',
   },
   abv: { free: 'Без алк.', alc: 'Алк.' },
   notFound: {

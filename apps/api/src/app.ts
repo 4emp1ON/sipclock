@@ -5,6 +5,7 @@ import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
 import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
+import { primaryLanguage } from './ai/region.ts';
 import {
   CREDENTIAL_CHECK_PATHS,
   EMAIL_SENDING_PATHS,
@@ -16,9 +17,10 @@ import {
 import { problemResponse, titleFor } from './lib/errors.ts';
 import { emailLimit } from './middleware/email-limit.ts';
 import { errorHandler, notFoundHandler, validationHook } from './middleware/error-handling.ts';
-import { rateLimit } from './middleware/rate-limit.ts';
+import { clientIp, rateLimit } from './middleware/rate-limit.ts';
 import { requestLogger } from './middleware/request-logger.ts';
 import { requireSession } from './middleware/session.ts';
+import { createAiRouter } from './routes/ai.ts';
 import { createCatalogRouter } from './routes/catalog.ts';
 import { createMeRouter } from './routes/me.ts';
 import { createRecommendationsRouter } from './routes/recommendations.ts';
@@ -26,6 +28,7 @@ import { createSystemRouter } from './routes/system.ts';
 import { createHealthService } from './services/health.ts';
 import { createMetaService } from './services/meta.ts';
 import { createRecommendationService } from './services/recommendations.ts';
+import { createSubstitutesService } from './services/substitutes.ts';
 import type { AppDeps, AppEnv } from './types.ts';
 
 export const AUTH_RATE_LIMIT_PER_MIN = 20;
@@ -35,6 +38,11 @@ export const ME_RATE_LIMIT_PER_MIN = 120;
 export const MAX_JSON_BODY_BYTES = 16 * 1024;
 /** Upper bound for POST /v1/me/changes (500 ops of ~150 bytes, with headroom). */
 export const MAX_CHANGES_BODY_BYTES = 256 * 1024;
+/** Requests per client IP per minute across `/v1/ai/*` (the daily per-user quota applies on top). */
+export const AI_RATE_LIMIT_PER_MIN = 20;
+
+const ruFirst = (...tags: (string | undefined)[]) =>
+  tags.find((t) => t?.toLowerCase().startsWith('ru')) ?? tags.find((t) => t !== undefined);
 
 export function createApp(deps: AppDeps) {
   const app = new OpenAPIHono<AppEnv>({ defaultHook: validationHook });
@@ -119,6 +127,34 @@ export function createApp(deps: AppDeps) {
     '/',
     createRecommendationsRouter({ recommendations: createRecommendationService(deps.catalog) }),
   );
+
+  // AI features: signed-in users only, limited per IP before the session lookup and per user per day.
+  if (deps.ai) {
+    const { gateway, countryOf } = deps.ai;
+    const ipOptions = {
+      trustedProxyHops: deps.env.TRUST_PROXY_HOPS,
+      edgeProxySecret: deps.env.EDGE_PROXY_SECRET,
+    };
+    app.use(
+      '/v1/ai/*',
+      limiter('ai', AI_RATE_LIMIT_PER_MIN),
+      jsonBodyLimit(MAX_JSON_BODY_BYTES),
+      requireSession(deps.auth),
+    );
+    app.route(
+      '/',
+      createAiRouter({
+        substitutes: createSubstitutesService(deps.catalog, gateway),
+        caller: (c, locale) => ({
+          userId: c.get('userId'),
+          country: countryOf(clientIp(c, ipOptions)),
+          // Either language signal in Russian counts: the UI can be English while the browser asks for Russian.
+          locale: ruFirst(locale, primaryLanguage(c.req.header('accept-language'))),
+          requestId: c.get('requestId'),
+        }),
+      }),
+    );
+  }
 
   // API reference: behind HTTP Basic when credentials are configured, hidden in production otherwise.
   const { API_DOCS_USERNAME: docsUser, API_DOCS_PASSWORD: docsPassword } = deps.env;

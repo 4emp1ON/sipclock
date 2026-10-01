@@ -5,6 +5,7 @@ const FORWARDED_REQUEST_HEADERS = [
   'cookie',
   'content-type',
   'accept',
+  'accept-language',
   'origin',
   'user-agent',
   'idempotency-key',
@@ -25,7 +26,7 @@ const DROPPED_RESPONSE_HEADERS = new Set([
 
 /**
  * Maps a public path to the API path, or null when the proxy must not serve it.
- * `/api/auth/*` -> `/api/auth/*`, `/api/me/*` -> `/v1/me/*`.
+ * `/api/auth/*` -> `/api/auth/*`, `/api/me/*` -> `/v1/me/*`, `/api/ai/*` -> `/v1/ai/*`.
  */
 export function mapProxyPath(pathname: string): string | null {
   if (pathname.includes('\\') || /%(2e|2f|5c)/i.test(pathname)) return null;
@@ -36,7 +37,14 @@ export function mapProxyPath(pathname: string): string | null {
   if (/^\/api\/auth(\/|$)/.test(pathname)) return pathname;
   const me = /^\/api\/me(\/.*)?$/.exec(pathname);
   if (me) return `/v1/me${me[1] ?? ''}`;
+  const ai = /^\/api\/ai(\/.*)?$/.exec(pathname);
+  if (ai) return `/v1/ai${ai[1] ?? ''}`;
   return null;
+}
+
+/** Upstream timeout: LLM calls need longer than the plain data endpoints. */
+export function proxyTimeoutMs(pathname: string): number {
+  return /^\/api\/ai(\/|$)/.test(pathname) ? 30_000 : 15_000;
 }
 
 /** Client IP as seen by Vercel: first `x-forwarded-for` entry, else `x-real-ip`. */

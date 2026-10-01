@@ -1,5 +1,10 @@
 import type { NextRequest } from 'next/server';
-import { buildDownstreamHeaders, buildUpstreamHeaders, mapProxyPath } from '@/lib/api-proxy';
+import {
+  buildDownstreamHeaders,
+  buildUpstreamHeaders,
+  mapProxyPath,
+  proxyTimeoutMs,
+} from '@/lib/api-proxy';
 
 // Same-origin proxy to the Sipclock API so session cookies are first-party (docs/adr/0006).
 export const runtime = 'nodejs';
@@ -9,7 +14,6 @@ export const dynamic = 'force-dynamic';
 const API_ORIGIN = (
   process.env.API_ORIGIN ?? (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8787')
 ).replace(/\/+$/, '');
-const TIMEOUT_MS = 15_000;
 
 function problem(status: number, title: string) {
   return Response.json(
@@ -37,7 +41,7 @@ async function forward(request: NextRequest): Promise<Response> {
       body: hasBody ? await request.arrayBuffer() : undefined,
       redirect: 'manual',
       cache: 'no-store',
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+      signal: AbortSignal.timeout(proxyTimeoutMs(request.nextUrl.pathname)),
     });
     const headers = buildDownstreamHeaders(upstream.headers);
     headers.set('cache-control', 'no-store');

@@ -1,4 +1,8 @@
 import { serve } from '@hono/node-server';
+import { createAiGateway } from './ai/gateway.ts';
+import { createModelRegistry } from './ai/providers.ts';
+import { createCountryLookup, unknownCountry } from './ai/region.ts';
+import { createAiStore } from './ai/store.ts';
 import { createApp } from './app.ts';
 import { createAuth, toAuthHandler } from './auth.ts';
 import { createDb } from './db/client.ts';
@@ -18,6 +22,13 @@ const rateLimitStore = createMemoryRateLimitStore();
 const auth = toAuthHandler(createAuth(database.db, env, logger));
 const catalog = createBundledCatalogService(process.env.CATALOG_DIR);
 const userData = createUserDataService(database.db, catalog);
+const aiGateway = createAiGateway({
+  registry: createModelRegistry(env),
+  store: createAiStore(database.db),
+  logger,
+  dailyLimits: { free: env.AI_FREE_DAILY_REQUESTS },
+});
+const countryOf = env.GEOIP_DB_PATH ? createCountryLookup(env.GEOIP_DB_PATH) : unknownCountry;
 const app = createApp({
   env,
   auth,
@@ -26,10 +37,17 @@ const app = createApp({
   catalog,
   userData,
   rateLimitStore,
+  ai: { gateway: aiGateway, countryOf },
 });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
-  logger.info('server listening', { port: info.port, env: env.NODE_ENV, sentry: sentryEnabled });
+  logger.info('server listening', {
+    port: info.port,
+    env: env.NODE_ENV,
+    sentry: sentryEnabled,
+    ai: aiGateway.enabled,
+    geoip: env.GEOIP_DB_PATH !== undefined,
+  });
 });
 
 let shuttingDown = false;

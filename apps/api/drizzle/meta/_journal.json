@@ -15,6 +15,13 @@
       "when": 1790760838552,
       "tag": "0001_accounts_and_sync",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790846235314,
+      "tag": "0002_ai_gateway",
+      "breakpoints": true
     }
   ]
 }

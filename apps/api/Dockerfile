@@ -22,16 +22,29 @@ COPY packages/engine ./packages/engine
 COPY apps/api ./apps/api
 RUN pnpm --filter @sipclock/api build
 
-# Runtime: the bundle, SQL migrations and the catalog files. No node_modules.
+# Country database for AI provider routing (docs/adr/0007): DB-IP Lite, CC BY 4.0, https://db-ip.com.
+# Monthly files; fall back to last month's early in a month. Refreshed on every image build.
+FROM node:24-alpine AS geoip
+WORKDIR /geoip
+RUN set -e; \
+    for month in $(node -e "const d=new Date(),f=(x)=>x.toISOString().slice(0,7);console.log(f(d),f(new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()-1,1))))"); do \
+      wget -qO country.mmdb.gz "https://download.db-ip.com/free/dbip-country-lite-$month.mmdb.gz" && break; \
+    done; \
+    gunzip country.mmdb.gz; \
+    test -s country.mmdb
+
+# Runtime: the bundle, SQL migrations, the catalog files and the country database. No node_modules.
 FROM node:24-alpine AS runtime
 ENV NODE_ENV=production \
     CATALOG_DIR=/app/catalog \
     MIGRATIONS_DIR=/app/drizzle \
+    GEOIP_DB_PATH=/app/geoip/country.mmdb \
     NODE_OPTIONS=--enable-source-maps
 WORKDIR /app
 COPY --from=build --chown=node:node /repo/apps/api/dist ./dist
 COPY --from=build --chown=node:node /repo/apps/api/drizzle ./drizzle
 COPY --from=build --chown=node:node /repo/packages/catalog/generated ./catalog
+COPY --from=geoip --chown=node:node /geoip/country.mmdb ./geoip/country.mmdb
 USER node
 EXPOSE 8787
 LABEL org.opencontainers.image.source="https://github.com/4emp1ON/sipclock" \

@@ -56,6 +56,29 @@ export const envSchema = z
       unsetIfEmpty,
       z.string().min(32, 'must be at least 32 characters').optional(),
     ),
+    // AI gateway (docs/adr/0007). Without a Yandex key AI routes answer from the catalog only.
+    /** Yandex AI Studio API key (service account, scope yc.ai.foundationModels.execute). */
+    YANDEX_API_KEY: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
+    YANDEX_FOLDER_ID: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
+    /** Model name inside the folder (`gpt://<folder>/<model>`). */
+    YANDEX_MODEL: z.preprocess(unsetIfEmpty, z.string().min(1).default('aliceai-llm/latest')),
+    /** Anthropic API key (Console). Unset: every user is served by Yandex. */
+    ANTHROPIC_API_KEY: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
+    /** Relay in a supported region in front of api.anthropic.com (must end with /v1). */
+    ANTHROPIC_BASE_URL: z.preprocess(
+      unsetIfEmpty,
+      z.url({ protocol: /^https$/, error: 'must be an https:// URL' }).optional(),
+    ),
+    /** Sent to the relay as X-Proxy-Key; the relay strips it. */
+    ANTHROPIC_RELAY_KEY: z.preprocess(unsetIfEmpty, z.string().min(16).optional()),
+    ANTHROPIC_MODEL: z.preprocess(unsetIfEmpty, z.string().min(1).default('claude-haiku-4-5')),
+    /** Path to a country MaxMind-format database (DB-IP Lite). Unset: country unknown → Yandex. */
+    GEOIP_DB_PATH: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
+    /** AI requests per user per UTC day on the free plan. */
+    AI_FREE_DAILY_REQUESTS: z.coerce.number().int().min(0).max(10_000).default(50),
+    /** Monthly spend caps; past them a provider is not called (Anthropic falls back to Yandex). */
+    AI_BUDGET_YANDEX_RUB: z.coerce.number().min(0).default(1000),
+    AI_BUDGET_ANTHROPIC_USD: z.coerce.number().min(0).default(10),
   })
   // Without these production looks healthy but nobody can sign in (codes are never sent), and every web
   // user shares the rate limits of the web host's egress IP.
