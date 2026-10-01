@@ -1,3 +1,4 @@
+import { ingredientsById } from '@sipclock/catalog';
 import { glassLabel, methodLabel } from '@sipclock/i18n';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -109,7 +110,10 @@ export default async function RecipePage({ params }: PageProps<'/[locale]/recipe
         <SwapFinder
           recipeId={recipe.id}
           locale={locale}
-          ingredientIds={recipe.ingredients.filter((i) => !i.garnish).map((i) => i.ingredient)}
+          ingredientIds={recipe.ingredients
+            // Staples (ice, water) are in every bar: nothing to swap.
+            .filter((i) => !i.garnish && ingredientsById.get(i.ingredient)?.staple !== true)
+            .map((i) => i.ingredient)}
         />
 
         <h2 className="mt-10 font-display text-xl font-semibold">{ui.recipes.steps}</h2>

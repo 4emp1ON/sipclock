@@ -1,3 +1,4 @@
+import { ingredientsById } from '@sipclock/catalog';
 import type { Recipe } from '@sipclock/domain';
 import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
@@ -38,7 +39,8 @@ export function SwapFinder({ recipe, barIds }: { recipe: Recipe; barIds: readonl
 
   const inBar = new Set(barIds);
   const candidates = recipe.ingredients
-    .filter((i) => !i.garnish)
+    // Staples (ice, water) are in every bar: nothing to swap.
+    .filter((i) => !i.garnish && ingredientsById.get(i.ingredient)?.staple !== true)
     .map((i) => i.ingredient)
     .sort((a, b) => Number(inBar.has(a)) - Number(inBar.has(b)));
 

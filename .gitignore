@@ -23,3 +23,6 @@ android/
 test-results/
 playwright-report/
 .vercel
+
+# Claude Code per-machine settings
+.claude/settings.local.json

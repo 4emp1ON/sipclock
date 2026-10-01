@@ -1,4 +1,8 @@
 import { expect, test } from '@playwright/test';
+import manifest from '@sipclock/catalog/manifest.json';
+
+// Recipe count from the generated catalog, so the test does not change with every catalog release.
+const RECIPES = manifest.recipes;
 
 test('root redirects by Accept-Language', async ({ browser }) => {
   const ru = await browser.newContext({
@@ -73,14 +77,16 @@ test('unknown localized path renders the localized 404', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Страница не найдена' })).toBeVisible();
 });
 
-test('recipes index lists 50 cards and the alcohol-free filter reduces it', async ({ page }) => {
+test('recipes index lists every recipe and the alcohol-free filter reduces it', async ({
+  page,
+}) => {
   await page.goto('/en/recipes');
   const cards = page.getByTestId('recipe-card');
-  await expect(cards).toHaveCount(50);
+  await expect(cards).toHaveCount(RECIPES);
   await page.getByRole('button', { name: 'Alcohol-free' }).click();
   const n = await cards.count();
   expect(n).toBeGreaterThan(0);
-  expect(n).toBeLessThan(50);
+  expect(n).toBeLessThan(RECIPES);
   await page.getByRole('button', { name: 'Date' }).click();
   expect(await cards.count()).toBeLessThanOrEqual(n);
 });
