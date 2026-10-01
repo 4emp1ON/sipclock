@@ -1,6 +1,6 @@
 import type { Daypart, Moment, Strength, Weather, WeatherFit } from '@sipclock/domain';
 
-export const RULES_VERSION = '2026.09.29';
+export const RULES_VERSION = '2026.10.01';
 
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
 

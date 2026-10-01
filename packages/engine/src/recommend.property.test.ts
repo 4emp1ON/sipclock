@@ -2,6 +2,7 @@ import type { Amount, RecommendInput } from '@sipclock/domain';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { fixtureCatalog } from './__fixtures__/catalog.ts';
+import { estimateAbv } from './abv.ts';
 import { availability, availabilityRank, missingCount } from './availability.ts';
 import { createIndex } from './graph.ts';
 import { recommend } from './recommend.ts';
@@ -167,10 +168,15 @@ describe('recommend: properties', () => {
   it('when not alcohol-free and a zero-proof candidate exists, an alcohol-free alternative is offered', () => {
     fc.assert(
       fc.property(inputArb, fc.integer({ min: 1, max: 5 }), (i, n) => {
-        const base = { ...i, alcoholFree: false, alternatives: n };
-        const everything = recommend({ ...base, alternatives: 50 }, fixtureCatalog);
-        const zeroExists = everything.alternatives.some((a) => a.abv === 0);
-        const rec = recommend(base, fixtureCatalog);
+        const rec = recommend({ ...i, alcoholFree: false, alternatives: n }, fixtureCatalog);
+        // Any zero-proof recipe within the missing cap qualifies, even one missing an ingredient
+        // when the missing slot is already taken.
+        const avail = fixtureCatalog.recipes.map((r) => ({ r, a: availability(r, i.bar, index) }));
+        const withinCap = avail.filter(({ a }) => missingCount(a) <= defaultRules.maxMissing);
+        const pool = withinCap.length > 0 ? withinCap : avail;
+        const zeroExists = pool.some(
+          ({ r }) => r.id !== rec.pick?.recipeId && estimateAbv(r, index) === 0,
+        );
         if (zeroExists) expect(rec.alternatives.some((a) => a.abv === 0)).toBe(true);
       }),
     );

@@ -58,6 +58,30 @@ describe('references', () => {
     }
   });
 
+  it('substitutes outside the ingredient family, alcohol-free for alcohol-free ingredients', () => {
+    const lineage = (id: string) => {
+      const out: string[] = [];
+      for (let cur = ingredientsById.get(id)?.parent; cur; cur = ingredientsById.get(cur)?.parent) {
+        out.push(cur);
+      }
+      return out;
+    };
+    for (const i of catalog.ingredients) {
+      for (const s of i.substitutes) {
+        // A relative already satisfies the need, so the service would drop it as a candidate.
+        expect(lineage(i.id), `${i.id} substitute ${s.id} is an ancestor`).not.toContain(s.id);
+        expect(lineage(s.id), `${i.id} substitute ${s.id} is a descendant`).not.toContain(i.id);
+        // Zero-proof drinks must stay zero-proof after a swap.
+        if (i.abv <= 0.5) {
+          expect(
+            ingredientsById.get(s.id)?.abv ?? 0,
+            `${i.id} substitute ${s.id}`,
+          ).toBeLessThanOrEqual(0.5);
+        }
+      }
+    }
+  });
+
   it('has valid zeroProofTwin targets', () => {
     for (const r of catalog.recipes) {
       if (!r.zeroProofTwin) continue;

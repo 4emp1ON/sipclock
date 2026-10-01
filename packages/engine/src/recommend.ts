@@ -168,8 +168,12 @@ function selectAlternatives(
   }
   const top = eligible.slice(0, count);
   if (!wantZeroProof || top.some((c) => c.abv === 0)) return top;
-  const zero = eligible.slice(count).find((c) => c.abv === 0);
-  return zero ? [...top.slice(0, count - 1), zero] : top;
+  const zero = rest.find((c) => c.abv === 0 && !top.includes(c));
+  if (!zero) return top;
+  // A zero-proof drink that is missing something takes the slot of the missing one, keeping the cap.
+  const missingAt = capMissing && isMissing(zero) ? top.findIndex(isMissing) : -1;
+  const kept = missingAt >= 0 ? top.filter((_, k) => k !== missingAt) : top.slice(0, count - 1);
+  return [...kept, zero];
 }
 
 export function recommend(

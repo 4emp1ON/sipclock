@@ -5,12 +5,21 @@ const spirits: IngredientInput[] = [
     subs: [['vodka', 'Less botanical, still works', 'Меньше трав, но подойдёт']],
   }),
   ing('london-dry-gin', 'spirit', 42, 'London dry gin', 'Лондонский сухой джин', { parent: 'gin' }),
-  ing('vodka', 'spirit', 40, 'Vodka', 'Водка'),
-  ing('rum', 'spirit', 40, 'Rum', 'Ром'),
+  ing('vodka', 'spirit', 40, 'Vodka', 'Водка', {
+    subs: [
+      ['white-rum', 'A touch sweeter', 'Чуть слаще'],
+      ['gin', 'Adds juniper and herbs', 'Добавит можжевельник и травы'],
+    ],
+  }),
+  ing('rum', 'spirit', 40, 'Rum', 'Ром', {
+    subs: [['cachaca', 'Grassier and funkier', 'Травянистее и ярче']],
+  }),
   ing('white-rum', 'spirit', 40, 'White rum', 'Белый ром', { parent: 'rum' }),
   ing('dark-rum', 'spirit', 40, 'Dark rum', 'Тёмный ром', { parent: 'rum' }),
   ing('spiced-rum', 'spirit', 35, 'Spiced rum', 'Пряный ром', { parent: 'rum' }),
-  ing('whisky', 'spirit', 40, 'Whisky', 'Виски'),
+  ing('whisky', 'spirit', 40, 'Whisky', 'Виски', {
+    subs: [['brandy', 'Fruitier and rounder', 'Фруктовее и округлее']],
+  }),
   ing('bourbon', 'spirit', 45, 'Bourbon', 'Бурбон', {
     parent: 'whisky',
     subs: [['rye-whiskey', 'Drier and spicier', 'Суше и прянее']],
@@ -19,9 +28,14 @@ const spirits: IngredientInput[] = [
     parent: 'whisky',
     subs: [['bourbon', 'Softer and sweeter', 'Мягче и слаще']],
   }),
-  ing('scotch-whisky', 'spirit', 40, 'Scotch whisky', 'Шотландский виски', { parent: 'whisky' }),
+  ing('scotch-whisky', 'spirit', 40, 'Scotch whisky', 'Шотландский виски', {
+    parent: 'whisky',
+    subs: [['irish-whiskey', 'Lighter and smoother', 'Легче и мягче']],
+  }),
   ing('irish-whiskey', 'spirit', 40, 'Irish whiskey', 'Ирландский виски', { parent: 'whisky' }),
-  ing('tequila', 'spirit', 40, 'Tequila', 'Текила'),
+  ing('tequila', 'spirit', 40, 'Tequila', 'Текила', {
+    subs: [['mezcal', 'Adds smoke', 'Добавит дымок']],
+  }),
   ing('blanco-tequila', 'spirit', 40, 'Blanco tequila', 'Текила бланко', { parent: 'tequila' }),
   ing('reposado-tequila', 'spirit', 40, 'Reposado tequila', 'Текила репосадо', {
     parent: 'tequila',
@@ -32,12 +46,18 @@ const spirits: IngredientInput[] = [
   ing('cachaca', 'spirit', 40, 'Cachaça', 'Кашаса', {
     subs: [['white-rum', 'Close enough, less grassy', 'Похоже, но менее травянисто']],
   }),
-  ing('brandy', 'spirit', 40, 'Brandy', 'Бренди'),
+  ing('brandy', 'spirit', 40, 'Brandy', 'Бренди', {
+    subs: [
+      ['bourbon', 'Spicier, more oak', 'Прянее, больше дуба'],
+      ['dark-rum', 'Sweeter, with molasses', 'Слаще, с нотой патоки'],
+    ],
+  }),
   ing('cognac', 'spirit', 40, 'Cognac', 'Коньяк', { parent: 'brandy' }),
   ing('old-tom-gin', 'spirit', 43, 'Old Tom gin', 'Джин олд том', { parent: 'gin' }),
   ing('canadian-whisky', 'spirit', 40, 'Canadian whisky', 'Канадский виски', { parent: 'whisky' }),
   ing('peated-scotch-whisky', 'spirit', 46, 'Peated Scotch whisky', 'Торфяной шотландский виски', {
     parent: 'scotch-whisky',
+    subs: [['mezcal', 'Smoke from agave, not peat', 'Дымок от агавы, а не от торфа']],
   }),
   ing('apple-brandy', 'spirit', 40, 'Apple brandy', 'Яблочный бренди', {
     parent: 'brandy',
@@ -61,11 +81,36 @@ const liqueurs: IngredientInput[] = [
   ing('orange-aperitivo', 'liqueur', 11, 'Orange aperitivo', 'Апельсиновый аперитиво', {
     subs: [['red-bitter-aperitif', 'More bitter and stronger', 'Горче и крепче']],
   }),
-  ing('coffee-liqueur', 'liqueur', 20, 'Coffee liqueur', 'Кофейный ликёр'),
+  ing('coffee-liqueur', 'liqueur', 20, 'Coffee liqueur', 'Кофейный ликёр', {
+    subs: [
+      [
+        'cold-brew-concentrate',
+        'Add sugar syrup; lower in alcohol',
+        'Добавьте сахарный сироп; напиток станет слабее',
+      ],
+      [
+        'espresso',
+        'Add sugar syrup; lower in alcohol',
+        'Добавьте сахарный сироп; напиток станет слабее',
+      ],
+    ],
+  }),
   ing('cream-liqueur', 'liqueur', 17, 'Cream liqueur', 'Сливочный ликёр'),
-  ing('maraschino-liqueur', 'liqueur', 32, 'Maraschino liqueur', 'Ликёр мараскино'),
-  ing('elderflower-liqueur', 'liqueur', 20, 'Elderflower liqueur', 'Ликёр из бузины'),
-  ing('green-herbal-liqueur', 'liqueur', 55, 'Green herbal liqueur', 'Зелёный травяной ликёр'),
+  ing('maraschino-liqueur', 'liqueur', 32, 'Maraschino liqueur', 'Ликёр мараскино', {
+    subs: [['cherry-liqueur', 'Fruitier and sweeter', 'Фруктовее и слаще']],
+  }),
+  ing('elderflower-liqueur', 'liqueur', 20, 'Elderflower liqueur', 'Ликёр из бузины', {
+    subs: [
+      [
+        'elderflower-syrup',
+        'Alcohol-free and sweeter: use less',
+        'Без алкоголя и слаще: возьмите меньше',
+      ],
+    ],
+  }),
+  ing('green-herbal-liqueur', 'liqueur', 55, 'Green herbal liqueur', 'Зелёный травяной ликёр', {
+    subs: [['yellow-herbal-liqueur', 'Softer and sweeter', 'Мягче и слаще']],
+  }),
   ing('violet-liqueur', 'liqueur', 22, 'Violet liqueur', 'Фиалковый ликёр'),
   ing('amaretto', 'liqueur', 24, 'Amaretto', 'Амаретто'),
   ing('amaro', 'liqueur', 30, 'Amaro', 'Амаро', {
@@ -125,7 +170,15 @@ const liqueurs: IngredientInput[] = [
     subs: [['raspberry-liqueur']],
   }),
   ing('melon-liqueur', 'liqueur', 20, 'Melon liqueur', 'Дынный ликёр'),
-  ing('passion-fruit-liqueur', 'liqueur', 20, 'Passion fruit liqueur', 'Ликёр маракуйи'),
+  ing('passion-fruit-liqueur', 'liqueur', 20, 'Passion fruit liqueur', 'Ликёр маракуйи', {
+    subs: [
+      [
+        'passion-fruit-syrup',
+        'Alcohol-free and sweeter: use less',
+        'Без алкоголя и слаще: возьмите меньше',
+      ],
+    ],
+  }),
   ing('mint-liqueur', 'liqueur', 24, 'Mint liqueur', 'Мятный ликёр'),
   ing('cacao-liqueur', 'liqueur', 24, 'Dark cacao liqueur', 'Тёмный какао-ликёр', {
     subs: [['white-cacao-liqueur']],
@@ -143,12 +196,21 @@ const liqueurs: IngredientInput[] = [
 ];
 
 const wines: IngredientInput[] = [
-  ing('sweet-vermouth', 'wine', 16, 'Sweet vermouth', 'Сладкий вермут'),
-  ing('dry-vermouth', 'wine', 18, 'Dry vermouth', 'Сухой вермут'),
+  ing('sweet-vermouth', 'wine', 16, 'Sweet vermouth', 'Сладкий вермут', {
+    subs: [['vermouth-amaro', 'More bitter', 'Горче']],
+  }),
+  ing('dry-vermouth', 'wine', 18, 'Dry vermouth', 'Сухой вермут', {
+    subs: [
+      ['bianco-vermouth', 'Sweeter: use a little less', 'Слаще: возьмите чуть меньше'],
+      ['fino-sherry', 'Nuttier and saltier', 'Ореховее и солонее'],
+    ],
+  }),
   ing('sparkling-wine', 'wine', 11.5, 'Sparkling wine', 'Игристое вино', {
     subs: [['soda-water', 'Lighter, alcohol-free version', 'Легче, без алкоголя']],
   }),
-  ing('red-wine', 'wine', 13, 'Red wine', 'Красное вино'),
+  ing('red-wine', 'wine', 13, 'Red wine', 'Красное вино', {
+    subs: [['white-wine', 'Lighter: makes a white version', 'Легче: получится белая версия']],
+  }),
   ing(
     'aromatized-wine',
     'wine',
@@ -167,7 +229,9 @@ const wines: IngredientInput[] = [
     subs: [['fino-sherry', 'Lighter and saltier', 'Легче и солонее']],
   }),
   ing('ruby-port', 'wine', 20, 'Ruby port', 'Рубиновый портвейн', { subs: [['sweet-vermouth']] }),
-  ing('white-wine', 'wine', 12, 'Dry white wine', 'Сухое белое вино'),
+  ing('white-wine', 'wine', 12, 'Dry white wine', 'Сухое белое вино', {
+    subs: [['sparkling-wine', 'Lighter and fizzy', 'Легче, с пузырьками']],
+  }),
   ing(
     'alcohol-free-sparkling-wine',
     'wine',
@@ -184,7 +248,12 @@ const wines: IngredientInput[] = [
 ];
 
 const bitters: IngredientInput[] = [
-  ing('aromatic-bitters', 'bitters', 44, 'Aromatic bitters', 'Ароматический биттер'),
+  ing('aromatic-bitters', 'bitters', 44, 'Aromatic bitters', 'Ароматический биттер', {
+    subs: [
+      ['orange-bitters', 'More citrus, less spice', 'Больше цитруса, меньше пряностей'],
+      ['creole-bitters', 'Brighter, with anise', 'Ярче, с нотой аниса'],
+    ],
+  }),
   ing('orange-bitters', 'bitters', 40, 'Orange bitters', 'Апельсиновый биттер', {
     subs: [['aromatic-bitters']],
   }),
@@ -204,13 +273,18 @@ const mixers: IngredientInput[] = [
     subs: [['ginger-ale', 'Milder, less spicy', 'Мягче, менее пряный']],
   }),
   ing('tonic-water', 'mixer', 0, 'Tonic water', 'Тоник'),
-  ing('soda-water', 'mixer', 0, 'Soda water', 'Содовая'),
+  ing('soda-water', 'mixer', 0, 'Soda water', 'Содовая', {
+    subs: [
+      ['lemon-lime-soda', 'Sweeter', 'Слаще'],
+      ['tonic-water', 'Bitter and sweet', 'Горьковато и сладко'],
+    ],
+  }),
   ing('cola', 'mixer', 0, 'Cola', 'Кола'),
   ing('grapefruit-soda', 'mixer', 0, 'Grapefruit soda', 'Грейпфрутовая газировка', {
     subs: [['grapefruit-juice', 'Add soda water on top', 'Добавьте содовую сверху']],
   }),
   ing('ginger-ale', 'mixer', 0, 'Ginger ale', 'Имбирный эль', {
-    subs: [['ginger-beer', 'Spicier', 'Пряннее']],
+    subs: [['ginger-beer', 'Spicier', 'Прянее']],
   }),
   ing('lemon-lime-soda', 'mixer', 0, 'Lemon-lime soda', 'Лимонно-лаймовая газировка', {
     subs: [['soda-water', 'Add a little syrup and lemon', 'Добавьте немного сиропа и лимона']],
@@ -239,12 +313,18 @@ const juices: IngredientInput[] = [
     from: 'lemon',
     subs: [['lime-juice', 'Sharper, a bit more bitter', 'Резче и чуть горчее']],
   }),
-  ing('orange-juice', 'juice', 0, 'Orange juice', 'Апельсиновый сок', { from: 'orange' }),
+  ing('orange-juice', 'juice', 0, 'Orange juice', 'Апельсиновый сок', {
+    from: 'orange',
+    subs: [['grapefruit-juice', 'More bitter, less sweet', 'Горче и менее сладко']],
+  }),
   ing('grapefruit-juice', 'juice', 0, 'Grapefruit juice', 'Грейпфрутовый сок', {
     from: 'grapefruit',
+    subs: [['orange-juice', 'Sweeter, no bitterness', 'Слаще, без горчинки']],
   }),
-  ing('cranberry-juice', 'juice', 0, 'Cranberry juice', 'Клюквенный морс'),
-  ing('pineapple-juice', 'juice', 0, 'Pineapple juice', 'Ананасовый сок'),
+  ing('cranberry-juice', 'juice', 0, 'Cranberry juice', 'Клюквенный морс', {
+    subs: [['blackcurrant-juice', 'Richer, less tart', 'Насыщеннее, менее кисло']],
+  }),
+  ing('pineapple-juice', 'juice', 0, 'Pineapple juice', 'Ананасовый сок', { from: 'pineapple' }),
   ing('tomato-juice', 'juice', 0, 'Tomato juice', 'Томатный сок'),
   ing('peach-puree', 'juice', 0, 'Peach purée', 'Персиковое пюре', { from: 'peach' }),
   ing('passion-fruit-puree', 'juice', 0, 'Passion fruit purée', 'Пюре маракуйи', {
@@ -265,7 +345,9 @@ const fresh: IngredientInput[] = [
     subs: [['lemon', 'Works the same way', 'Работает так же']],
   }),
   ing('lemon', 'fresh', 0, 'Lemon', 'Лимон', { subs: [['lime']] }),
-  ing('orange', 'fresh', 0, 'Orange', 'Апельсин'),
+  ing('orange', 'fresh', 0, 'Orange', 'Апельсин', {
+    subs: [['orange-juice', 'Add a splash at the end', 'Добавьте немного в конце']],
+  }),
   ing('mint', 'fresh', 0, 'Mint', 'Мята'),
   ing('cucumber', 'fresh', 0, 'Cucumber', 'Огурец'),
   ing('egg-white', 'fresh', 0, 'Egg white', 'Яичный белок', { from: 'egg' }),
@@ -345,13 +427,19 @@ const dairy: IngredientInput[] = [
   ing('cream', 'dairy', 0, 'Cream', 'Сливки', {
     subs: [['milk', 'Thinner body', 'Менее плотная текстура']],
   }),
-  ing('milk', 'dairy', 0, 'Milk', 'Молоко'),
+  ing('milk', 'dairy', 0, 'Milk', 'Молоко', {
+    subs: [['cream', 'Richer: thin with water', 'Гуще: разбавьте водой']],
+  }),
   ing('butter', 'dairy', 0, 'Butter', 'Сливочное масло'),
-  ing('condensed-milk', 'dairy', 0, 'Sweetened condensed milk', 'Сгущённое молоко'),
+  ing('condensed-milk', 'dairy', 0, 'Sweetened condensed milk', 'Сгущённое молоко', {
+    subs: [['cream', 'Add sugar syrup to taste', 'Добавьте сахарный сироп по вкусу']],
+  }),
 ];
 
 const pantry: IngredientInput[] = [
-  ing('sugar', 'pantry', 0, 'Sugar', 'Сахар'),
+  ing('sugar', 'pantry', 0, 'Sugar', 'Сахар', {
+    subs: [['simple-syrup', 'About 8 ml per spoon or cube', 'Примерно 8 мл на ложку или кубик']],
+  }),
   ing('honey', 'pantry', 0, 'Honey', 'Мёд', { subs: [['honey-syrup'], ['simple-syrup']] }),
   ing('salt', 'pantry', 0, 'Salt', 'Соль'),
   ing('espresso', 'pantry', 0, 'Espresso', 'Эспрессо', {
@@ -363,15 +451,21 @@ const pantry: IngredientInput[] = [
   ing('hot-sauce', 'pantry', 0, 'Hot pepper sauce', 'Острый перечный соус'),
   ing('black-pepper', 'pantry', 0, 'Black pepper', 'Чёрный перец'),
   ing('nutmeg', 'pantry', 0, 'Nutmeg', 'Мускатный орех'),
-  ing('cinnamon-stick', 'pantry', 0, 'Cinnamon stick', 'Палочка корицы'),
+  ing('cinnamon-stick', 'pantry', 0, 'Cinnamon stick', 'Палочка корицы', {
+    subs: [['cinnamon-syrup', 'Sweeter', 'Слаще']],
+  }),
   ing('cloves', 'pantry', 0, 'Cloves', 'Гвоздика'),
   ing('star-anise', 'pantry', 0, 'Star anise', 'Звёздчатый анис'),
-  ing('coconut-cream', 'pantry', 0, 'Coconut cream', 'Кокосовые сливки'),
+  ing('coconut-cream', 'pantry', 0, 'Coconut cream', 'Кокосовые сливки', {
+    subs: [['cream-of-coconut', 'Sweeter: use a little less', 'Слаще: возьмите чуть меньше']],
+  }),
   ing('apple-juice', 'juice', 0, 'Apple juice', 'Яблочный сок'),
   ing('cream-of-coconut', 'pantry', 0, 'Cream of coconut (sweetened)', 'Кокосовый крем (сладкий)', {
     subs: [['coconut-cream', 'Add sugar syrup to taste', 'Добавьте сахарный сироп по вкусу']],
   }),
-  ing('cocoa-powder', 'pantry', 0, 'Cocoa powder', 'Какао-порошок'),
+  ing('cocoa-powder', 'pantry', 0, 'Cocoa powder', 'Какао-порошок', {
+    subs: [['dark-chocolate', 'Richer: cut the sugar', 'Насыщеннее: уменьшите сахар']],
+  }),
   ing('dark-chocolate', 'pantry', 0, 'Dark chocolate', 'Тёмный шоколад', {
     subs: [['cocoa-powder']],
   }),

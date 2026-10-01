@@ -1,5 +1,5 @@
 {
-  "version": "2026.10.01",
+  "version": "2026.10.01.1",
   "ingredients": [
     {
       "id": "gin",
@@ -40,7 +40,22 @@
       },
       "kind": "spirit",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "white-rum",
+          "note": {
+            "en": "A touch sweeter",
+            "ru": "Чуть слаще"
+          }
+        },
+        {
+          "id": "gin",
+          "note": {
+            "en": "Adds juniper and herbs",
+            "ru": "Добавит можжевельник и травы"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -51,7 +66,15 @@
       },
       "kind": "spirit",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cachaca",
+          "note": {
+            "en": "Grassier and funkier",
+            "ru": "Травянистее и ярче"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -98,7 +121,15 @@
       },
       "kind": "spirit",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "brandy",
+          "note": {
+            "en": "Fruitier and rounder",
+            "ru": "Фруктовее и округлее"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -150,7 +181,15 @@
       "kind": "spirit",
       "parent": "whisky",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "irish-whiskey",
+          "note": {
+            "en": "Lighter and smoother",
+            "ru": "Легче и мягче"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -173,7 +212,15 @@
       },
       "kind": "spirit",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "mezcal",
+          "note": {
+            "en": "Adds smoke",
+            "ru": "Добавит дымок"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -246,7 +293,22 @@
       },
       "kind": "spirit",
       "abv": 40,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "bourbon",
+          "note": {
+            "en": "Spicier, more oak",
+            "ru": "Прянее, больше дуба"
+          }
+        },
+        {
+          "id": "dark-rum",
+          "note": {
+            "en": "Sweeter, with molasses",
+            "ru": "Слаще, с нотой патоки"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -294,7 +356,15 @@
       "kind": "spirit",
       "parent": "scotch-whisky",
       "abv": 46,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "mezcal",
+          "note": {
+            "en": "Smoke from agave, not peat",
+            "ru": "Дымок от агавы, а не от торфа"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -420,7 +490,22 @@
       },
       "kind": "liqueur",
       "abv": 20,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cold-brew-concentrate",
+          "note": {
+            "en": "Add sugar syrup; lower in alcohol",
+            "ru": "Добавьте сахарный сироп; напиток станет слабее"
+          }
+        },
+        {
+          "id": "espresso",
+          "note": {
+            "en": "Add sugar syrup; lower in alcohol",
+            "ru": "Добавьте сахарный сироп; напиток станет слабее"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -442,7 +527,15 @@
       },
       "kind": "liqueur",
       "abv": 32,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cherry-liqueur",
+          "note": {
+            "en": "Fruitier and sweeter",
+            "ru": "Фруктовее и слаще"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -453,7 +546,15 @@
       },
       "kind": "liqueur",
       "abv": 20,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "elderflower-syrup",
+          "note": {
+            "en": "Alcohol-free and sweeter: use less",
+            "ru": "Без алкоголя и слаще: возьмите меньше"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -464,7 +565,15 @@
       },
       "kind": "liqueur",
       "abv": 55,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "yellow-herbal-liqueur",
+          "note": {
+            "en": "Softer and sweeter",
+            "ru": "Мягче и слаще"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -766,7 +875,15 @@
       },
       "kind": "liqueur",
       "abv": 20,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "passion-fruit-syrup",
+          "note": {
+            "en": "Alcohol-free and sweeter: use less",
+            "ru": "Без алкоголя и слаще: возьмите меньше"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -867,7 +984,15 @@
       },
       "kind": "wine",
       "abv": 16,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "vermouth-amaro",
+          "note": {
+            "en": "More bitter",
+            "ru": "Горче"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -878,7 +1003,22 @@
       },
       "kind": "wine",
       "abv": 18,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "bianco-vermouth",
+          "note": {
+            "en": "Sweeter: use a little less",
+            "ru": "Слаще: возьмите чуть меньше"
+          }
+        },
+        {
+          "id": "fino-sherry",
+          "note": {
+            "en": "Nuttier and saltier",
+            "ru": "Ореховее и солонее"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -908,7 +1048,15 @@
       },
       "kind": "wine",
       "abv": 13,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "white-wine",
+          "note": {
+            "en": "Lighter: makes a white version",
+            "ru": "Легче: получится белая версия"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -1009,7 +1157,15 @@
       },
       "kind": "wine",
       "abv": 12,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "sparkling-wine",
+          "note": {
+            "en": "Lighter and fizzy",
+            "ru": "Легче, с пузырьками"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -1050,7 +1206,22 @@
       },
       "kind": "bitters",
       "abv": 44,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "orange-bitters",
+          "note": {
+            "en": "More citrus, less spice",
+            "ru": "Больше цитруса, меньше пряностей"
+          }
+        },
+        {
+          "id": "creole-bitters",
+          "note": {
+            "en": "Brighter, with anise",
+            "ru": "Ярче, с нотой аниса"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -1151,7 +1322,22 @@
       },
       "kind": "mixer",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "lemon-lime-soda",
+          "note": {
+            "en": "Sweeter",
+            "ru": "Слаще"
+          }
+        },
+        {
+          "id": "tonic-water",
+          "note": {
+            "en": "Bitter and sweet",
+            "ru": "Горьковато и сладко"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -1197,7 +1383,7 @@
           "id": "ginger-beer",
           "note": {
             "en": "Spicier",
-            "ru": "Пряннее"
+            "ru": "Прянее"
           }
         }
       ],
@@ -1322,7 +1508,15 @@
       },
       "kind": "juice",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "grapefruit-juice",
+          "note": {
+            "en": "More bitter, less sweet",
+            "ru": "Горче и менее сладко"
+          }
+        }
+      ],
       "madeFrom": "orange",
       "staple": false
     },
@@ -1334,7 +1528,15 @@
       },
       "kind": "juice",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "orange-juice",
+          "note": {
+            "en": "Sweeter, no bitterness",
+            "ru": "Слаще, без горчинки"
+          }
+        }
+      ],
       "madeFrom": "grapefruit",
       "staple": false
     },
@@ -1346,7 +1548,15 @@
       },
       "kind": "juice",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "blackcurrant-juice",
+          "note": {
+            "en": "Richer, less tart",
+            "ru": "Насыщеннее, менее кисло"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -1358,6 +1568,7 @@
       "kind": "juice",
       "abv": 0,
       "substitutes": [],
+      "madeFrom": "pineapple",
       "staple": false
     },
     {
@@ -1491,7 +1702,15 @@
       },
       "kind": "fresh",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "orange-juice",
+          "note": {
+            "en": "Add a splash at the end",
+            "ru": "Добавьте немного в конце"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -2005,7 +2224,15 @@
       },
       "kind": "dairy",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cream",
+          "note": {
+            "en": "Richer: thin with water",
+            "ru": "Гуще: разбавьте водой"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -2027,7 +2254,15 @@
       },
       "kind": "dairy",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cream",
+          "note": {
+            "en": "Add sugar syrup to taste",
+            "ru": "Добавьте сахарный сироп по вкусу"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -2038,7 +2273,15 @@
       },
       "kind": "pantry",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "simple-syrup",
+          "note": {
+            "en": "About 8 ml per spoon or cube",
+            "ru": "Примерно 8 мл на ложку или кубик"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -2167,7 +2410,15 @@
       },
       "kind": "pantry",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cinnamon-syrup",
+          "note": {
+            "en": "Sweeter",
+            "ru": "Слаще"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -2200,7 +2451,15 @@
       },
       "kind": "pantry",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "cream-of-coconut",
+          "note": {
+            "en": "Sweeter: use a little less",
+            "ru": "Слаще: возьмите чуть меньше"
+          }
+        }
+      ],
       "staple": false
     },
     {
@@ -2241,7 +2500,15 @@
       },
       "kind": "pantry",
       "abv": 0,
-      "substitutes": [],
+      "substitutes": [
+        {
+          "id": "dark-chocolate",
+          "note": {
+            "en": "Richer: cut the sugar",
+            "ru": "Насыщеннее: уменьшите сахар"
+          }
+        }
+      ],
       "staple": false
     },
     {
