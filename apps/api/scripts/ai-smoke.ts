@@ -27,6 +27,9 @@ const cases: SubstitutesQuery[] = [
   { recipeId: 'daiquiri', ingredientId: 'lime-juice', bar: ['lemon', 'white-rum'], locale: 'ru' },
   { recipeId: 'whiskey-sour', ingredientId: 'bourbon', bar: [], locale: 'ru' },
   { recipeId: 'margarita', ingredientId: 'orange-liqueur', bar: ['blanco-tequila'], locale: 'en' },
+  { recipeId: 'whiskey-sour', ingredientId: 'bourbon', bar: [], locale: 'en' },
+  { recipeId: 'mojito', ingredientId: 'white-rum', bar: ['vodka'], locale: 'ru' },
+  { recipeId: 'espresso-martini', ingredientId: 'coffee-liqueur', bar: [], locale: 'ru' },
 ];
 
 let failures = 0;
