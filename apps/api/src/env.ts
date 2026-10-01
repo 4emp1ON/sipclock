@@ -60,8 +60,11 @@ export const envSchema = z
     /** Yandex AI Studio API key (service account, scope yc.ai.foundationModels.execute). */
     YANDEX_API_KEY: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
     YANDEX_FOLDER_ID: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
-    /** Model name inside the folder (`gpt://<folder>/<model>`). */
-    YANDEX_MODEL: z.preprocess(unsetIfEmpty, z.string().min(1).default('aliceai-llm/latest')),
+    /**
+     * Model name inside the folder (`gpt://<folder>/<model>`). Flash: same picks as Alice AI LLM on the swap
+     * checks at about a fifth of the price (2026-10-01).
+     */
+    YANDEX_MODEL: z.preprocess(unsetIfEmpty, z.string().min(1).default('aliceai-llm-flash/latest')),
     /** Anthropic API key (Console). Unset: every user is served by Yandex. */
     ANTHROPIC_API_KEY: z.preprocess(unsetIfEmpty, z.string().min(1).optional()),
     /** Relay in a supported region in front of api.anthropic.com (must end with /v1). */
