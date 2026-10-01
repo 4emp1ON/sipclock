@@ -79,6 +79,13 @@ describe('recipes', () => {
     }
   });
 
+  it('lists each ingredient once per recipe', () => {
+    for (const r of catalog.recipes) {
+      const ids = r.ingredients.map((l) => l.ingredient);
+      expect(new Set(ids).size, r.id).toBe(ids.length);
+    }
+  });
+
   it('marks garnishes as garnish', () => {
     for (const r of catalog.recipes) {
       const nonGarnish = r.ingredients.filter((l) => !l.garnish);

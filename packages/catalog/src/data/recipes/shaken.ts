@@ -1,4 +1,4 @@
-import { fill, garnish, ml, recipe } from '../helpers.ts';
+import { bsp, dash, fill, garnish, L, ml, pc, recipe } from '../helpers.ts';
 
 export const shaken = [
   recipe({
@@ -337,6 +337,1634 @@ export const shaken = [
     difficulty: 2,
     minutes: 5,
     twin: 'espresso-tonic',
+    iba: true,
+  }),
+  // Source: https://iba-world.com/iba-cocktail/clover-club/
+  recipe({
+    id: 'clover-club',
+    name: ['Clover Club', 'Кловер клаб'],
+    desc: [
+      'Gin, raspberry and lemon with a silky egg-white cap: tart, rosy and softly fruity.',
+      'Джин, малина и лимон под шелковистой шапкой из белка: кисловатый, розовый и мягко ягодный.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 45),
+      ml('raspberry-syrup', 15),
+      ml('lemon-juice', 15),
+      dash('egg-white', 3, { optional: true }),
+      fill('ice'),
+      garnish('raspberry', { unit: 'piece', value: 2 }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Add gin, raspberry syrup, lemon juice and egg white to a shaker with ice.',
+        'Налейте джин, малиновый сироп, лимонный сок и белок в шейкер со льдом.',
+      ],
+      ['Shake hard for 10 to 12 seconds.', 'Энергично встряхивайте 10–12 секунд.'],
+      [
+        'Strain into the chilled coupe and garnish with raspberries.',
+        'Процедите в охлаждённое купе и украсьте малиной.',
+      ],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['sour', 'fruity'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['mild', 'hot'],
+    difficulty: 2,
+    minutes: 4,
+    twin: 'virgin-clover-club',
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/white-lady/
+  recipe({
+    id: 'white-lady',
+    name: ['White Lady', 'Белая леди'],
+    desc: [
+      'Gin, orange liqueur and lemon: a pale, crisp sour that is zesty and quietly elegant.',
+      'Джин, апельсиновый ликёр и лимон: светлый, чёткий сауэр, цитрусовый и сдержанно элегантный.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [ml('gin', 40), ml('orange-liqueur', 30), ml('lemon-juice', 20), fill('ice')],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well for 10 seconds.', 'Хорошо встряхивайте 10 секунд.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'after-work'],
+    flavors: ['sour', 'fresh'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['mild', 'hot'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/bees-knees/
+  recipe({
+    id: 'bees-knees',
+    name: ["Bee's Knees", "Би'с нииз"],
+    desc: [
+      'Gin with honey, lemon and a splash of orange: floral, round and easy to like.',
+      'Джин с мёдом, лимоном и каплей апельсина: цветочный, округлый и очень лёгкий в восприятии.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 52.5),
+      ml('honey-syrup', 10),
+      ml('lemon-juice', 22.5),
+      ml('orange-juice', 22.5),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Stir the honey syrup with the lemon and orange juice in a shaker until combined.',
+        'Размешайте медовый сироп с лимонным и апельсиновым соком в шейкере до однородности.',
+      ],
+      [
+        'Add gin and ice and shake for 10 seconds.',
+        'Добавьте джин и лёд и встряхивайте 10 секунд.',
+      ],
+      [
+        'Strain into the chilled coupe and garnish with a zest twist.',
+        'Процедите в охлаждённое купе и украсьте жгутом цедры.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['sour', 'sweet', 'fresh'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['mild', 'hot'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/corpse-reviver-2/
+  recipe({
+    id: 'corpse-reviver-no-2',
+    name: ['Corpse Reviver No. 2', 'Корпс ривайвер №2'],
+    desc: [
+      'Equal parts gin, orange liqueur, aperitif wine and lemon with a rinse of absinthe: bright and herbal.',
+      'Равные части джина, апельсинового ликёра, аперитивного вина и лимона с каплей абсента: яркий и травяной.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 30),
+      ml('orange-liqueur', 30),
+      ml('aromatized-wine', 30),
+      ml('lemon-juice', 30),
+      dash('absinthe', 1),
+      fill('ice'),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      [
+        'Shake well and strain into the chilled coupe.',
+        'Хорошо встряхните и процедите в охлаждённое купе.',
+      ],
+      ['Garnish with an orange zest twist.', 'Украсьте жгутом апельсиновой цедры.'],
+    ],
+    occasions: ['date', 'after-work'],
+    flavors: ['sour', 'herbal', 'fresh'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['mild'],
+    difficulty: 2,
+    minutes: 4,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/pisco-sour/
+  recipe({
+    id: 'pisco-sour',
+    name: ['Pisco Sour', 'Писко сауэр'],
+    desc: [
+      'Pisco, lemon and a thick egg-white foam dotted with bitters: grapey, tart and silky.',
+      'Писко, лимон и плотная пена из белка с каплями биттера: виноградный, кислый и шелковистый.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('pisco', 60),
+      ml('lemon-juice', 30),
+      ml('simple-syrup', 20),
+      pc('egg-white', 1),
+      fill('ice'),
+      garnish('aromatic-bitters', { unit: 'dash', value: 3 }),
+    ],
+    steps: [
+      [
+        'Add pisco, lemon juice, syrup and egg white to a shaker with ice.',
+        'Налейте писко, лимонный сок, сироп и белок в шейкер со льдом.',
+      ],
+      ['Shake hard for 12 seconds.', 'Энергично встряхивайте 12 секунд.'],
+      ['Strain into a chilled glass.', 'Процедите в охлаждённый бокал.'],
+      ['Dot a few dashes of bitters on the foam.', 'Нанесите на пену несколько капель биттера.'],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['sour', 'fresh'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['mild', 'hot'],
+    difficulty: 2,
+    minutes: 5,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/brandy-crusta/
+  recipe({
+    id: 'brandy-crusta',
+    name: ['Brandy Crusta', 'Бренди краста'],
+    desc: [
+      'Brandy, maraschino and lemon in a sugar-rimmed glass with a long orange peel: a New Orleans original.',
+      'Бренди, мараскин и лимон в бокале с сахарной каймой и длинной цедрой апельсина: оригинал из Нового Орлеана.',
+    ],
+    glass: 'coupe',
+    method: 'stir',
+    ingredients: [
+      ml('brandy', 52.5),
+      ml('maraschino-liqueur', 7.5),
+      bsp('orange-liqueur', 1),
+      ml('lemon-juice', 15),
+      bsp('simple-syrup', 1),
+      dash('aromatic-bitters', 2),
+      fill('ice'),
+      garnish('sugar', { unit: 'piece', value: 1, noun: { en: 'rim', ru: 'кайма' } }),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'peel', ru: 'цедра' } }),
+    ],
+    steps: [
+      [
+        'Rub an orange slice around the rim of a slim glass and dip it in white sugar.',
+        'Проведите долькой апельсина по краю узкого бокала и обмакните в белый сахар.',
+      ],
+      [
+        'Place a long orange peel spiral inside the glass.',
+        'Уложите внутрь бокала длинную спираль апельсиновой цедры.',
+      ],
+      [
+        'Stir all ingredients with ice in a mixing glass.',
+        'Размешайте все ингредиенты со льдом в смесительном стакане.',
+      ],
+      ['Strain into the prepared glass.', 'Процедите в подготовленный бокал.'],
+    ],
+    occasions: ['date'],
+    flavors: ['boozy', 'sour'],
+    dayparts: ['evening'],
+    weather: ['cold', 'mild'],
+    difficulty: 3,
+    minutes: 6,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/between-the-sheets/
+  recipe({
+    id: 'between-the-sheets',
+    name: ['Between the Sheets', 'Бетвин зе шитс'],
+    desc: [
+      'Rum, cognac, orange liqueur and lemon: a strong, citrusy sour that is surprisingly smooth.',
+      'Ром, коньяк, апельсиновый ликёр и лимон: крепкий цитрусовый сауэр, на удивление мягкий.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('white-rum', 30),
+      ml('cognac', 30),
+      ml('orange-liqueur', 30),
+      ml('lemon-juice', 20),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well.', 'Хорошо встряхните.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['sour', 'boozy'],
+    dayparts: ['evening'],
+    weather: ['mild', 'cold'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/bramble/
+  recipe({
+    id: 'bramble',
+    name: ['Bramble', 'Брамбл'],
+    desc: [
+      'Gin sour over crushed ice with blackberry liqueur drizzled on top: tart, jammy and pretty.',
+      'Джин-сауэр на колотом льду с ежевичным ликёром сверху: кисловатый, джемовый и красивый.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 50),
+      ml('lemon-juice', 25),
+      ml('simple-syrup', 12.5),
+      fill('ice'),
+      ml('blackberry-liqueur', 15),
+      garnish('blackberry', { unit: 'piece', value: 2 }),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'slice', ru: 'долька' } }),
+    ],
+    steps: [
+      ['Fill a rocks glass with crushed ice.', 'Наполните рокс колотым льдом.'],
+      [
+        'Shake gin, lemon juice and syrup with ice.',
+        'Встряхните джин, лимонный сок и сироп со льдом.',
+      ],
+      ['Strain over the crushed ice.', 'Процедите на колотый лёд.'],
+      [
+        'Drizzle the blackberry liqueur over the top and garnish with blackberries and lemon.',
+        'Тонкой струйкой влейте сверху ежевичный ликёр и украсьте ежевикой и лимоном.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['fruity', 'sour'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['mild', 'hot'],
+    difficulty: 2,
+    minutes: 5,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/2200/southside
+  recipe({
+    id: 'southside',
+    name: ['Southside', 'Саусайд'],
+    desc: [
+      'Gin, lime and mint shaken cold: like a Mojito that went to a cocktail bar.',
+      'Джин, лайм и мята, встряхнутые со льдом: как Мохито, который заглянул в коктейльный бар.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      pc('mint', 7, L('leaves', 'листьев')),
+      ml('gin', 60),
+      ml('lime-juice', 22.5),
+      ml('rich-syrup', 15),
+      fill('ice'),
+      ml('soda-water', 10, { optional: true }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Gently muddle the mint in a shaker, just enough to bruise it.',
+        'Аккуратно разомните мяту в шейкере, лишь слегка помяв листья.',
+      ],
+      [
+        'Add gin, lime juice and syrup, then shake with ice.',
+        'Добавьте джин, сок лайма и сироп и встряхните со льдом.',
+      ],
+      [
+        'Fine strain into the coupe, top with a splash of soda and garnish with a mint leaf.',
+        'Процедите через мелкое сито в купе, долейте немного содовой и украсьте листом мяты.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['fresh', 'herbal', 'sour'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['hot', 'mild'],
+    difficulty: 2,
+    minutes: 4,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/penicillin/
+  recipe({
+    id: 'penicillin',
+    name: ['Penicillin', 'Пенициллин'],
+    desc: [
+      'Blended scotch, honey, lemon and ginger with a smoky peated float: warming and sharp at once.',
+      'Купажированный скотч, мёд, лимон и имбирь с дымным торфяным слоем сверху: согревающий и острый одновременно.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('scotch-whisky', 60),
+      ml('peated-scotch-whisky', 7.5),
+      ml('lemon-juice', 22.5),
+      ml('honey-syrup', 22.5),
+      pc('fresh-ginger', 3, L('slices', 'ломтика')),
+      fill('ice'),
+    ],
+    steps: [
+      ['Muddle the ginger in a shaker.', 'Разомните имбирь в шейкере.'],
+      [
+        'Add blended scotch, lemon juice and honey syrup, fill with ice and shake.',
+        'Добавьте купажированный скотч, лимонный сок и медовый сироп, заполните льдом и встряхните.',
+      ],
+      ['Fine strain into a rocks glass with ice.', 'Процедите через мелкое сито в рокс со льдом.'],
+      [
+        'Float the peated whisky on top and garnish with ginger.',
+        'Аккуратно налейте сверху торфяной виски и украсьте имбирём.',
+      ],
+    ],
+    occasions: ['chill', 'after-work'],
+    flavors: ['smoky', 'spicy', 'sour'],
+    dayparts: ['evening', 'late'],
+    weather: ['cold', 'rainy'],
+    difficulty: 2,
+    minutes: 5,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/paper-plane/
+  recipe({
+    id: 'paper-plane',
+    name: ['Paper Plane', 'Пейпер плейн'],
+    desc: [
+      'Bourbon, amaro, orange aperitivo and lemon in equal parts: bittersweet, bright and balanced.',
+      'Бурбон, амаро, апельсиновый аперитиво и лимон в равных частях: горько-сладкий, яркий и сбалансированный.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('bourbon', 30),
+      ml('amaro', 30),
+      ml('orange-aperitivo', 30),
+      ml('lemon-juice', 30),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well for 10 seconds.', 'Хорошо встряхивайте 10 секунд.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'after-work'],
+    flavors: ['bitter', 'sour'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['mild'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/naked-and-famous/
+  recipe({
+    id: 'naked-and-famous',
+    name: ['Naked and Famous', 'Нейкед энд фэймос'],
+    desc: [
+      'Mezcal, herbal liqueur, aperitivo and lime in equal parts: smoky, bitter and tangy.',
+      'Мескаль, травяной ликёр, аперитиво и лайм в равных частях: дымный, горчащий и кислый.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('mezcal', 22.5),
+      ml('yellow-herbal-liqueur', 22.5),
+      ml('orange-aperitivo', 22.5),
+      ml('lime-juice', 22.5),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well for 10 seconds.', 'Хорошо встряхивайте 10 секунд.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['smoky', 'herbal', 'sour'],
+    dayparts: ['evening'],
+    weather: ['mild'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/3629/gold-rush
+  recipe({
+    id: 'gold-rush',
+    name: ['Gold Rush', 'Голд раш'],
+    desc: [
+      'Bourbon, lemon and honey syrup: a Whiskey Sour with a rounder, richer sweetness.',
+      'Бурбон, лимон и медовый сироп: виски-сауэр с более круглой и насыщенной сладостью.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('bourbon', 60),
+      ml('lemon-juice', 22.5),
+      ml('honey-syrup', 22.5),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'wedge', ru: 'долька' } }),
+    ],
+    steps: [
+      ['Chill a rocks glass.', 'Охладите бокал рокс.'],
+      [
+        'Shake bourbon, lemon juice and honey syrup hard with ice.',
+        'Энергично встряхните бурбон, лимонный сок и медовый сироп со льдом.',
+      ],
+      [
+        'Fine strain into the glass over fresh ice.',
+        'Процедите через мелкое сито в бокал со свежим льдом.',
+      ],
+      ['Garnish with a lemon wedge.', 'Украсьте долькой лимона.'],
+    ],
+    occasions: ['chill', 'after-work'],
+    flavors: ['sour', 'sweet'],
+    dayparts: ['evening'],
+    weather: ['cold', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/3246/brown-derby
+  recipe({
+    id: 'brown-derby',
+    name: ['Brown Derby', 'Браун дерби'],
+    desc: [
+      'Bourbon, grapefruit and maple syrup: a bittersweet, citrusy sipper with a woody edge.',
+      'Бурбон, грейпфрут и кленовый сироп: горько-сладкий цитрусовый коктейль с древесной ноткой.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('bourbon', 45),
+      ml('grapefruit-juice', 30),
+      ml('maple-syrup', 10),
+      fill('ice'),
+      garnish('grapefruit', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Shake all ingredients with ice for 10 seconds.',
+        'Встряхивайте все ингредиенты со льдом 10 секунд.',
+      ],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Express a grapefruit zest twist over the drink and use as garnish.',
+        'Выдавите масла грейпфрутовой цедры над напитком и используйте её как украшение.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['sour', 'sweet'],
+    dayparts: ['brunch', 'evening'],
+    weather: ['mild', 'cold'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/1039/jack-rose-cocktail
+  recipe({
+    id: 'jack-rose',
+    name: ['Jack Rose', 'Джек роуз'],
+    desc: [
+      'Apple brandy, lime and grenadine: a blush-pink sour with orchard fruit and a tart finish.',
+      'Яблочный бренди, лайм и гренадин: розоватый сауэр с яблочным вкусом и кислым финалом.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('apple-brandy', 45),
+      ml('lime-juice', 22.5),
+      ml('grenadine', 15),
+      fill('ice'),
+      garnish('lime', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      ['Garnish with a lime twist.', 'Украсьте твистом из цедры лайма.'],
+    ],
+    occasions: ['date'],
+    flavors: ['sour', 'fruity'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['mild', 'cold'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/mary-pickford/
+  recipe({
+    id: 'mary-pickford',
+    name: ['Mary Pickford', 'Мэри Пикфорд'],
+    desc: [
+      'White rum, pineapple, maraschino and grenadine: a fruity, gently sweet Havana classic.',
+      'Белый ром, ананас, мараскин и гренадин: фруктовая, мягко сладкая гаванская классика.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('white-rum', 45),
+      ml('pineapple-juice', 45),
+      ml('maraschino-liqueur', 7.5),
+      ml('grenadine', 5),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well.', 'Хорошо встряхните.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['fruity', 'sweet'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['hot', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/hemingway-special/
+  recipe({
+    id: 'hemingway-daiquiri',
+    name: ['Hemingway Daiquiri', 'Хемингуэй дайкири'],
+    desc: [
+      'White rum, grapefruit, maraschino and lime: a drier, tarter take on the Daiquiri.',
+      'Белый ром, грейпфрут, мараскин и лайм: более сухая и кислая версия Дайкири.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('white-rum', 60),
+      ml('grapefruit-juice', 40),
+      ml('maraschino-liqueur', 15),
+      ml('lime-juice', 15),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well.', 'Хорошо встряхните.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['sour', 'fresh', 'fruity'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['hot', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/1548/pink-lady
+  recipe({
+    id: 'pink-lady',
+    name: ['Pink Lady', 'Пинк леди'],
+    desc: [
+      'Gin, apple brandy, lemon and grenadine with a frothy white head: delicate, tart and pink.',
+      'Джин, яблочный бренди, лимон и гренадин с пышной белой пеной: нежный, кислый и розовый.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 45),
+      ml('apple-brandy', 15),
+      ml('lemon-juice', 22.5),
+      ml('rich-syrup', 12.5),
+      ml('grenadine', 5),
+      ml('egg-white', 15),
+      fill('ice'),
+      garnish('cocktail-cherry'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Shake all ingredients with ice and strain back into the shaker.',
+        'Встряхните все ингредиенты со льдом и процедите обратно в шейкер.',
+      ],
+      ['Dry shake without ice to build foam.', 'Встряхните без льда, чтобы получилась пена.'],
+      [
+        'Fine strain into the coupe and garnish with a cherry.',
+        'Процедите через мелкое сито в купе и украсьте вишней.',
+      ],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['sour', 'fruity'],
+    dayparts: ['evening'],
+    weather: ['mild'],
+    difficulty: 2,
+    minutes: 5,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/2062/ward-eight
+  recipe({
+    id: 'ward-eight',
+    name: ['Ward Eight', 'Уорд эйт'],
+    desc: [
+      'Rye, lemon, orange and grenadine: a Boston sour with spice from the whiskey and a fruity lift.',
+      'Ржаной виски, лимон, апельсин и гренадин: бостонский сауэр с пряностью виски и фруктовой свежестью.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('rye-whiskey', 60),
+      ml('lemon-juice', 22.5),
+      ml('orange-juice', 22.5),
+      ml('rich-syrup', 7.5),
+      ml('grenadine', 5),
+      fill('ice'),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'slice', ru: 'долька' } }),
+      garnish('cocktail-cherry'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      ['Garnish with an orange slice and a cherry.', 'Украсьте долькой апельсина и вишней.'],
+    ],
+    occasions: ['chill', 'after-work'],
+    flavors: ['sour', 'fruity'],
+    dayparts: ['evening'],
+    weather: ['cold', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/mai-tai/
+  recipe({
+    id: 'mai-tai',
+    name: ['Mai Tai', 'Май тай'],
+    desc: [
+      'Two rums, orange liqueur, orgeat and lime over crushed ice: nutty, tangy and tropical.',
+      'Два рома, апельсиновый ликёр, оршад и лайм на колотом льду: ореховый, кислый и тропический.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('dark-rum', 30),
+      ml('rum', 30),
+      ml('orange-liqueur', 15),
+      ml('orgeat', 15),
+      ml('lime-juice', 30),
+      ml('simple-syrup', 7.5),
+      fill('ice'),
+      garnish('mint', { unit: 'piece', value: 3, noun: { en: 'sprigs', ru: 'веточки' } }),
+      garnish('lime', { unit: 'piece', value: 1, noun: { en: 'peel', ru: 'цедра' } }),
+      garnish('pineapple', { unit: 'piece', value: 1, noun: L('spear', 'долька') }),
+    ],
+    steps: [
+      ['Fill a double rocks glass with crushed ice.', 'Наполните большой рокс колотым льдом.'],
+      [
+        'Add all ingredients to a shaker with ice and shake.',
+        'Налейте все ингредиенты в шейкер со льдом и встряхните.',
+      ],
+      ['Strain over the crushed ice.', 'Процедите на колотый лёд.'],
+      [
+        'Garnish with mint, a lime peel and a pineapple spear.',
+        'Украсьте мятой, цедрой лайма и долькой ананаса.',
+      ],
+    ],
+    occasions: ['party', 'chill'],
+    flavors: ['fruity', 'sour'],
+    dayparts: ['evening'],
+    weather: ['hot'],
+    difficulty: 2,
+    minutes: 5,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/jungle-bird/
+  recipe({
+    id: 'jungle-bird',
+    name: ['Jungle Bird', 'Джангл бёрд'],
+    desc: [
+      'Dark rum, red bitter aperitif, pineapple and lime: a tiki drink with a bitter, tropical bite.',
+      'Тёмный ром, красный горький аперитив, ананас и лайм: тики-коктейль с горьковатым тропическим характером.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('dark-rum', 45),
+      ml('red-bitter-aperitif', 22.5),
+      ml('pineapple-juice', 45),
+      ml('lime-juice', 15),
+      ml('demerara-syrup', 15),
+      fill('ice'),
+      garnish('pineapple', { unit: 'piece', value: 1, noun: { en: 'wedge', ru: 'долька' } }),
+    ],
+    steps: [
+      ['Fill a rocks glass with ice.', 'Наполните рокс льдом.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Strain into the glass.', 'Процедите в бокал.'],
+      ['Garnish with a pineapple wedge.', 'Украсьте долькой ананаса.'],
+    ],
+    occasions: ['party', 'chill'],
+    flavors: ['bitter', 'fruity'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['hot'],
+    difficulty: 1,
+    minutes: 4,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/1087/kamikaze
+  recipe({
+    id: 'kamikaze',
+    name: ['Kamikaze', 'Камикадзе'],
+    desc: [
+      'Vodka, orange liqueur and lime in a shot: sharp, citrusy and over in one gulp.',
+      'Водка, апельсиновый ликёр и лайм в шоте: резкий, цитрусовый и выпивается одним глотком.',
+    ],
+    glass: 'shot',
+    method: 'shake',
+    ingredients: [
+      ml('vodka', 30),
+      ml('orange-liqueur', 15),
+      ml('lime-juice', 15),
+      fill('ice'),
+      garnish('lime', { unit: 'piece', value: 1, noun: { en: 'wedge', ru: 'долька' } }),
+    ],
+    steps: [
+      ['Chill a shot glass.', 'Охладите стопку.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the shot glass.', 'Процедите через мелкое сито в стопку.'],
+      ['Garnish with a lime wedge.', 'Украсьте долькой лайма.'],
+    ],
+    occasions: ['party'],
+    flavors: ['sour', 'fresh'],
+    dayparts: ['late', 'evening'],
+    weather: ['mild', 'hot'],
+    difficulty: 1,
+    minutes: 2,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/lemon-drop-martini/
+  recipe({
+    id: 'lemon-drop',
+    name: ['Lemon Drop', 'Лемон дроп'],
+    desc: [
+      'Vodka, orange liqueur and lemon: a sweet-tart, sunny martini that tastes like lemon candy.',
+      'Водка, апельсиновый ликёр и лимон: сладко-кислый солнечный мартини со вкусом лимонной карамели.',
+    ],
+    glass: 'martini',
+    method: 'shake',
+    ingredients: [ml('vodka', 30), ml('orange-liqueur', 20), ml('lemon-juice', 15), fill('ice')],
+    steps: [
+      ['Chill a martini glass.', 'Охладите бокал для мартини.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well.', 'Хорошо встряхните.'],
+      ['Strain into the chilled glass.', 'Процедите в охлаждённый бокал.'],
+    ],
+    occasions: ['party', 'date'],
+    flavors: ['sour', 'sweet'],
+    dayparts: ['evening', 'late'],
+    weather: ['mild', 'hot'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/tommys-margarita/
+  recipe({
+    id: 'tommys-margarita',
+    name: ["Tommy's Margarita", 'Томмис маргарита'],
+    desc: [
+      'Tequila, lime and agave syrup, no orange liqueur: clean, tangy and true to the agave.',
+      'Текила, лайм и агавовый сироп без апельсинового ликёра: чистый, кислый и верный вкусу агавы.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('blanco-tequila', 60),
+      ml('lime-juice', 30),
+      ml('agave-syrup', 30),
+      fill('ice'),
+      garnish('lime', { unit: 'piece', value: 1, noun: { en: 'slice', ru: 'долька' } }),
+    ],
+    steps: [
+      ['Fill a rocks glass with ice.', 'Наполните рокс льдом.'],
+      [
+        'Shake tequila, lime juice and agave syrup hard with ice.',
+        'Энергично встряхните текилу, сок лайма и агавовый сироп со льдом.',
+      ],
+      ['Strain into the glass.', 'Процедите в бокал.'],
+      ['Garnish with a lime slice.', 'Украсьте долькой лайма.'],
+    ],
+    occasions: ['party', 'chill'],
+    flavors: ['sour', 'fresh'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['hot', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/porn-star-martini/
+  recipe({
+    id: 'passion-fruit-martini',
+    name: ['Passion Fruit Martini', 'Пассион фрут мартини'],
+    desc: [
+      'Vodka, passion fruit and vanilla-like sweetness, served with sparkling wine on the side: lush and tropical.',
+      'Водка, маракуйя и ванильная сладость, с игристым вином отдельно: сочный и тропический.',
+    ],
+    glass: 'martini',
+    method: 'shake',
+    ingredients: [
+      ml('vodka', 50),
+      ml('passion-fruit-liqueur', 20),
+      ml('passion-fruit-puree', 50),
+      bsp('sugar', 2),
+      // Served in a shot glass on the side.
+      ml('sparkling-wine', 50, { optional: true }),
+      fill('ice'),
+      garnish('passion-fruit', { unit: 'piece', value: 0.5 }),
+    ],
+    steps: [
+      ['Chill a martini glass.', 'Охладите бокал для мартини.'],
+      [
+        'Shake vodka, liqueur, puree and sugar hard with ice.',
+        'Энергично встряхните водку, ликёр, пюре и сахар со льдом.',
+      ],
+      [
+        'Double strain into the chilled glass.',
+        'Процедите двойным процеживанием (через стрейнер и мелкое сито) в охлаждённый бокал.',
+      ],
+      [
+        'Float half a passion fruit on top and serve the sparkling wine on the side.',
+        'Положите сверху половинку маракуйи и подайте игристое вино отдельно.',
+      ],
+    ],
+    occasions: ['party', 'date'],
+    flavors: ['fruity', 'sweet', 'sour'],
+    dayparts: ['evening', 'late'],
+    weather: ['mild', 'hot'],
+    difficulty: 2,
+    minutes: 5,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/alexander/
+  recipe({
+    id: 'brandy-alexander',
+    name: ['Brandy Alexander', 'Бренди александр'],
+    desc: [
+      'Cognac, cacao liqueur and cream with fresh nutmeg: a rich, dessert-like classic.',
+      'Коньяк, какао-ликёр и сливки со свежим мускатным орехом: насыщенная десертная классика.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('cognac', 30),
+      ml('cacao-liqueur', 30),
+      ml('cream', 30),
+      fill('ice'),
+      garnish('nutmeg', {
+        unit: 'piece',
+        value: 1,
+        noun: { en: 'pinch, freshly grated', ru: 'щепотка' },
+      }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+      ['Grate fresh nutmeg on top.', 'Натрите сверху свежий мускатный орех.'],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['creamy', 'sweet', 'boozy'],
+    dayparts: ['evening', 'late'],
+    weather: ['cold', 'rainy'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/grasshopper/
+  recipe({
+    id: 'grasshopper',
+    name: ['Grasshopper', 'Грасхоппер'],
+    desc: [
+      'Cacao liqueur, mint liqueur and cream: a cool, minty, chocolatey after-dinner drink.',
+      'Какао-ликёр, мятный ликёр и сливки: прохладный мятный шоколадный коктейль после ужина.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('white-cacao-liqueur', 20),
+      ml('mint-liqueur', 20),
+      ml('cream', 20),
+      fill('ice'),
+      garnish('mint', { unit: 'piece', value: 1, noun: { en: 'leaf', ru: 'лист' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Shake all ingredients with ice for a few seconds.',
+        'Встряхивайте все ингредиенты со льдом несколько секунд.',
+      ],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+      ['Garnish with a mint leaf if you like.', 'При желании украсьте листом мяты.'],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['creamy', 'sweet', 'fresh'],
+    dayparts: ['evening', 'late'],
+    weather: ['mild', 'cold'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/2728/pegu-club-cocktail-diffords-recipe
+  recipe({
+    id: 'pegu-club',
+    name: ['Pegu Club', 'Пегу клаб'],
+    desc: [
+      'Gin, orange liqueur, lime and two bitters: a tart, aromatic gin cocktail from colonial Burma.',
+      'Джин, апельсиновый ликёр, лайм и два биттера: кислый ароматный джин-коктейль из колониальной Бирмы.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 45),
+      ml('orange-liqueur', 10),
+      ml('lime-juice', 5),
+      ml('lime-cordial', 5),
+      ml('simple-syrup', 5),
+      ml('water', 7.5),
+      dash('aromatic-bitters', 1),
+      dash('orange-bitters', 1),
+      fill('ice'),
+      garnish('lime', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Express a lime zest twist over the drink and discard it.',
+        'Выдавите масла лаймовой цедры над напитком, а саму цедру уберите.',
+      ],
+    ],
+    occasions: ['date', 'after-work'],
+    flavors: ['sour', 'herbal'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['mild', 'hot'],
+    difficulty: 2,
+    minutes: 4,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/530/army-and-navy
+  recipe({
+    id: 'army-and-navy',
+    name: ['Army & Navy', 'Арми энд нэви'],
+    desc: [
+      'Gin, lemon and orgeat with bitters: a nutty, tangy cousin of the Gin Sour.',
+      'Джин, лимон и оршад с биттером: ореховый кисловатый родственник Джин сауэра.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 60),
+      ml('lemon-juice', 22.5),
+      ml('orgeat', 15),
+      dash('aromatic-bitters', 2),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Express a lemon zest twist over the drink and use as garnish.',
+        'Выдавите масла лимонной цедры над напитком и используйте её как украшение.',
+      ],
+    ],
+    occasions: ['date', 'after-work'],
+    flavors: ['sour', 'sweet'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/556/blood-and-sand-diffords-recipe
+  recipe({
+    id: 'blood-and-sand',
+    name: ['Blood and Sand', 'Блад энд сэнд'],
+    desc: [
+      'Scotch, cherry liqueur, sweet vermouth and orange juice: fruity, a little smoky and unusual.',
+      'Скотч, вишнёвый ликёр, сладкий вермут и апельсиновый сок: фруктовый, слегка дымный и необычный.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('scotch-whisky', 22.5),
+      ml('peated-scotch-whisky', 5, { optional: true }),
+      ml('cherry-liqueur', 22.5),
+      ml('sweet-vermouth', 22.5),
+      ml('orange-juice', 30),
+      fill('ice'),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+      garnish('cocktail-cherry'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Squeeze an orange twist over it and garnish with a cherry.',
+        'Выдавите над напитком масла апельсиновой цедры и украсьте вишней.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['fruity', 'smoky', 'sweet'],
+    dayparts: ['evening'],
+    weather: ['cold', 'mild'],
+    difficulty: 1,
+    minutes: 4,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/monkey-gland/
+  recipe({
+    id: 'monkey-gland',
+    name: ['Monkey Gland', 'Манки гланд'],
+    desc: [
+      'Gin, orange juice, grenadine and a touch of absinthe: fruity with a faint anise whisper.',
+      'Джин, апельсиновый сок, гренадин и капля абсента: фруктовый, с едва уловимой анисовой нотой.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 45),
+      ml('orange-juice', 45),
+      pc('absinthe', 1, L('tablespoon', 'столовая ложка')),
+      pc('grenadine', 1, L('tablespoon', 'столовая ложка')),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Add all ingredients to a shaker with ice.', 'Налейте все ингредиенты в шейкер со льдом.'],
+      ['Shake well.', 'Хорошо встряхните.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['fruity', 'herbal'],
+    dayparts: ['evening', 'brunch'],
+    weather: ['mild'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/1755/scofflaw
+  recipe({
+    id: 'scofflaw',
+    name: ['Scofflaw', 'Скоффлоу'],
+    desc: [
+      'Rye, two vermouths, lemon and grenadine: dry, tangy and a little fruity.',
+      'Ржаной виски, два вермута, лимон и гренадин: сухой, кислый и слегка фруктовый.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('rye-whiskey', 45),
+      ml('dry-vermouth', 15),
+      ml('bianco-vermouth', 15),
+      ml('lemon-juice', 10),
+      ml('grenadine', 5),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Express a lemon zest twist over the drink and use as garnish.',
+        'Выдавите масла лимонной цедры над напитком и используйте её как украшение.',
+      ],
+    ],
+    occasions: ['after-work', 'date'],
+    flavors: ['boozy', 'sour'],
+    dayparts: ['evening', 'aperitif'],
+    weather: ['cold', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/325/bronx
+  recipe({
+    id: 'bronx',
+    name: ['Bronx', 'Бронкс'],
+    desc: [
+      'Gin, two vermouths and orange juice: a juicy, herbal pre-dinner classic.',
+      'Джин, два вермута и апельсиновый сок: сочная травяная классика перед ужином.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 45),
+      ml('sweet-vermouth', 22.5),
+      ml('dry-vermouth', 15),
+      ml('orange-juice', 30),
+      dash('orange-bitters', 1, { optional: true }),
+      fill('ice'),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Express an orange zest twist over the drink and use as garnish.',
+        'Выдавите масла апельсиновой цедры над напитком и используйте её как украшение.',
+      ],
+    ],
+    occasions: ['after-work', 'date'],
+    flavors: ['fruity', 'boozy'],
+    dayparts: ['aperitif', 'brunch'],
+    weather: ['mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/53/amaretto-sour
+  recipe({
+    id: 'amaretto-sour',
+    name: ['Amaretto Sour', 'Амаретто сауэр'],
+    desc: [
+      'Amaretto, lemon and a foamy egg-white top: almond-sweet with a bright tart edge.',
+      'Амаретто, лимон и пенная шапка из белка: миндально-сладкий с яркой кислинкой.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      ml('amaretto', 60),
+      ml('lemon-juice', 30),
+      dash('aromatic-bitters', 1),
+      ml('egg-white', 15),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'slice', ru: 'долька' } }),
+      garnish('cocktail-cherry'),
+    ],
+    steps: [
+      ['Chill a rocks glass.', 'Охладите бокал рокс.'],
+      [
+        'Shake all ingredients with ice and strain back into the shaker.',
+        'Встряхните все ингредиенты со льдом и процедите обратно в шейкер.',
+      ],
+      ['Dry shake without ice to build foam.', 'Встряхните без льда, чтобы получилась пена.'],
+      [
+        'Fine strain into an ice-filled glass and garnish with lemon and a cherry.',
+        'Процедите через мелкое сито в бокал со льдом и украсьте лимоном и вишней.',
+      ],
+    ],
+    occasions: ['party', 'chill'],
+    flavors: ['sweet', 'sour'],
+    dayparts: ['evening', 'late'],
+    weather: ['mild', 'cold'],
+    difficulty: 2,
+    minutes: 5,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/french-martini/
+  recipe({
+    id: 'french-martini',
+    name: ['French Martini', 'Френч мартини'],
+    desc: [
+      'Vodka, raspberry liqueur and pineapple juice: a fruity, softly sweet and silky martini.',
+      'Водка, малиновый ликёр и ананасовый сок: фруктовый, мягко сладкий и шелковистый мартини.',
+    ],
+    glass: 'martini',
+    method: 'shake',
+    ingredients: [
+      ml('vodka', 45),
+      ml('raspberry-liqueur', 15),
+      ml('pineapple-juice', 15),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a martini glass.', 'Охладите бокал для мартини.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Strain into the chilled glass.', 'Процедите в охлаждённый бокал.'],
+      [
+        'Squeeze the oil from a lemon peel over the drink.',
+        'Выдавите над напитком масла из лимонной цедры.',
+      ],
+    ],
+    occasions: ['party', 'date'],
+    flavors: ['fruity', 'sweet'],
+    dayparts: ['evening', 'late'],
+    weather: ['mild', 'hot'],
+    difficulty: 1,
+    minutes: 3,
+    iba: true,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/gin-basil-smash/
+  recipe({
+    id: 'gin-basil-smash',
+    name: ['Gin Basil Smash', 'Джин бэзил смэш'],
+    desc: [
+      'Gin, lemon and a fistful of muddled basil: green, herbal and refreshingly sharp.',
+      'Джин, лимон и горсть размятого базилика: зелёный, травяной и бодряще резкий.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 60),
+      ml('lemon-juice', 22.5),
+      ml('simple-syrup', 22.5),
+      pc('basil', 10, L('leaves', 'листьев')),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Add basil, gin, lemon juice and syrup to a shaker with ice.',
+        'Добавьте базилик, джин, лимонный сок и сироп в шейкер со льдом.',
+      ],
+      ['Shake vigorously for 12 seconds.', 'Очень энергично встряхивайте 12 секунд.'],
+      [
+        'Double strain into the chilled glass.',
+        'Процедите двойным процеживанием (через стрейнер и мелкое сито) в охлаждённый бокал.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['herbal', 'fresh', 'sour'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['hot', 'mild'],
+    difficulty: 1,
+    minutes: 4,
+    iba: true,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/3628/eastside-gimlet
+  recipe({
+    id: 'eastside',
+    name: ['Eastside', 'Ист-сайд'],
+    desc: [
+      'Gin, lime, mint and cucumber: a garden-fresh cousin of the Southside.',
+      'Джин, лайм, мята и огурец: садовый свежий родственник Саусайда.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      pc('cucumber', 2, L('slices', 'кружка')),
+      pc('mint', 8, L('leaves', 'листьев')),
+      ml('gin', 60),
+      ml('lime-juice', 22.5),
+      ml('rich-syrup', 15),
+      fill('ice'),
+      ml('soda-water', 15, { optional: true }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      [
+        'Muddle cucumber, then mint, lightly in a shaker.',
+        'Слегка разомните в шейкере сначала огурец, затем мяту.',
+      ],
+      [
+        'Add gin, lime juice and syrup and shake with ice.',
+        'Добавьте джин, сок лайма и сироп и встряхните со льдом.',
+      ],
+      [
+        'Fine strain into the coupe, top with soda and garnish with mint.',
+        'Процедите через мелкое сито в купе, долейте содовой и украсьте мятой.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['fresh', 'herbal'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['hot', 'mild'],
+    difficulty: 2,
+    minutes: 5,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/1057/japanese-slipper
+  recipe({
+    id: 'japanese-slipper',
+    name: ['Japanese Slipper', 'Джапанис слиппер'],
+    desc: [
+      'Orange liqueur, melon liqueur and lemon in equal parts: bright green, sweet and zesty.',
+      'Апельсиновый ликёр, дынный ликёр и лимон в равных частях: ярко-зелёный, сладкий и цитрусовый.',
+    ],
+    glass: 'martini',
+    method: 'shake',
+    ingredients: [
+      ml('orange-liqueur', 30),
+      ml('melon-liqueur', 30),
+      ml('lemon-juice', 30),
+      fill('ice'),
+      garnish('cocktail-cherry'),
+    ],
+    steps: [
+      ['Chill a martini glass.', 'Охладите бокал для мартини.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled glass.', 'Процедите через мелкое сито в охлаждённый бокал.'],
+      ['Drop a cherry into the drink.', 'Опустите в напиток вишню.'],
+    ],
+    occasions: ['party'],
+    flavors: ['sweet', 'fruity', 'sour'],
+    dayparts: ['evening', 'late'],
+    weather: ['hot', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/349/cable-car
+  recipe({
+    id: 'cable-car',
+    name: ['Cable Car', 'Кейбл кар'],
+    desc: [
+      'Spiced rum, orange liqueur and lemon in a cinnamon-sugar rim: warm, tangy and silky.',
+      'Пряный ром, апельсиновый ликёр и лимон в бокале с корично-сахарной каймой: тёплый, кислый и шелковистый.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('spiced-rum', 45),
+      ml('orange-liqueur', 22.5),
+      ml('lemon-juice', 30),
+      ml('simple-syrup', 10),
+      ml('egg-white', 10),
+      fill('ice'),
+      garnish('sugar', {
+        unit: 'piece',
+        value: 1,
+        noun: { en: 'cinnamon-sugar rim', ru: 'кайма из сахара и корицы' },
+      }),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      [
+        'Rim a chilled coupe with cinnamon sugar.',
+        'Сделайте кайму из корично-сахарной смеси на охлаждённом купе.',
+      ],
+      [
+        'Shake all ingredients with ice and strain back into the shaker.',
+        'Встряхните все ингредиенты со льдом и процедите обратно в шейкер.',
+      ],
+      ['Dry shake without ice.', 'Встряхните без льда.'],
+      [
+        'Fine strain into the coupe and express an orange twist over it.',
+        'Процедите через мелкое сито в купе и выдавите над ним масла апельсиновой цедры.',
+      ],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['sour', 'sweet', 'spicy'],
+    dayparts: ['evening'],
+    weather: ['mild', 'cold'],
+    difficulty: 2,
+    minutes: 5,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/3634/division-bell
+  recipe({
+    id: 'division-bell',
+    name: ['Division Bell', 'Дивижн белл'],
+    desc: [
+      'Mezcal, orange aperitivo, maraschino and lime: smoky, bittersweet and refreshingly tart.',
+      'Мескаль, апельсиновый аперитиво, мараскин и лайм: дымный, горько-сладкий и освежающе кислый.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('mezcal', 30),
+      ml('orange-aperitivo', 22.5),
+      ml('maraschino-liqueur', 15),
+      ml('lime-juice', 22.5),
+      fill('ice'),
+      garnish('grapefruit', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Strain into the chilled coupe.', 'Процедите в охлаждённое купе.'],
+      [
+        'Express a grapefruit zest twist over the drink and use as garnish.',
+        'Выдавите масла грейпфрутовой цедры над напитком и используйте её как украшение.',
+      ],
+    ],
+    occasions: ['date', 'after-work'],
+    flavors: ['smoky', 'sour', 'bitter'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/5086/siesta
+  recipe({
+    id: 'siesta',
+    name: ['Siesta', 'Сиеста'],
+    desc: [
+      'Tequila, red bitter aperitif, grapefruit and lime: a Hemingway Daiquiri cousin with a bitter twist.',
+      'Текила, красный горький аперитив, грейпфрут и лайм: родственник Дайкири Хемингуэя с горчинкой.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('blanco-tequila', 45),
+      ml('red-bitter-aperitif', 7.5),
+      ml('lime-juice', 22.5),
+      ml('grapefruit-juice', 15),
+      ml('rich-syrup', 15),
+      fill('ice'),
+      garnish('grapefruit', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Squeeze a grapefruit twist over the drink and use as garnish.',
+        'Выдавите масла грейпфрутовой цедры над напитком и используйте её как украшение.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['sour', 'bitter', 'fresh'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['hot', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/2406/final-ward
+  recipe({
+    id: 'final-ward',
+    name: ['Final Ward', 'Файнал уорд'],
+    desc: [
+      'Rye, green herbal liqueur, maraschino and lemon in equal parts: herbal, sharp and boozy.',
+      'Ржаной виски, зелёный травяной ликёр, мараскин и лимон в равных частях: травяной, резкий и крепкий.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('rye-whiskey', 22.5),
+      ml('green-herbal-liqueur', 22.5),
+      ml('maraschino-liqueur', 22.5),
+      ml('lemon-juice', 22.5),
+      fill('ice'),
+      garnish('lemon', { unit: 'piece', value: 1, noun: { en: 'zest twist', ru: 'цедра' } }),
+      garnish('cocktail-cherry'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      [
+        'Squeeze a lemon twist over it and garnish with a cherry.',
+        'Выдавите над напитком масла лимонной цедры и украсьте вишней.',
+      ],
+    ],
+    occasions: ['after-work', 'date'],
+    flavors: ['herbal', 'sour', 'boozy'],
+    dayparts: ['evening'],
+    weather: ['cold', 'mild'],
+    difficulty: 1,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/3328/trinidad-sour
+  recipe({
+    id: 'trinidad-sour',
+    name: ['Trinidad Sour', 'Тринидад сауэр'],
+    desc: [
+      'Bitters as the base with rye, orgeat and lemon: spicy, nutty and strikingly different.',
+      'Биттер в роли основы с ржаным виски, оршадом и лимоном: пряный, ореховый и необычный.',
+    ],
+    glass: 'coupe',
+    method: 'shake',
+    ingredients: [
+      ml('aromatic-bitters', 45),
+      ml('rye-whiskey', 15),
+      ml('orgeat', 30),
+      ml('lemon-juice', 22.5),
+      fill('ice'),
+    ],
+    steps: [
+      ['Chill a coupe.', 'Охладите бокал купе.'],
+      ['Shake all ingredients with ice.', 'Встряхните все ингредиенты со льдом.'],
+      ['Fine strain into the chilled coupe.', 'Процедите через мелкое сито в охлаждённое купе.'],
+      ['Serve without garnish.', 'Подавайте без украшения.'],
+    ],
+    occasions: ['after-work', 'chill'],
+    flavors: ['spicy', 'sour', 'sweet'],
+    dayparts: ['evening'],
+    weather: ['cold', 'mild'],
+    difficulty: 2,
+    minutes: 3,
+  }),
+
+  // Source: https://www.diffordsguide.com/cocktails/recipe/5591/enzoni
+  recipe({
+    id: 'enzoni',
+    name: ['Enzoni', 'Энцони'],
+    desc: [
+      'Muddled grapes, gin, red bitter aperitif and lemon: a fruity, bittersweet sour with a gin base.',
+      'Размятый виноград, джин, красный горький аперитив и лимон: фруктовый горько-сладкий сауэр на основе джина.',
+    ],
+    glass: 'rocks',
+    method: 'shake',
+    ingredients: [
+      pc('green-grape', 5),
+      ml('gin', 30),
+      ml('red-bitter-aperitif', 30),
+      ml('lemon-juice', 20),
+      ml('rich-syrup', 15),
+      fill('ice'),
+      garnish('orange', { unit: 'piece', value: 1, noun: { en: 'slice', ru: 'долька' } }),
+    ],
+    steps: [
+      ['Chill a rocks glass.', 'Охладите бокал рокс.'],
+      ['Muddle the grapes in a shaker.', 'Разомните виноград в шейкере.'],
+      [
+        'Add the other ingredients and shake with ice.',
+        'Добавьте остальные ингредиенты и встряхните со льдом.',
+      ],
+      [
+        'Fine strain into an ice-filled glass and garnish with an orange slice.',
+        'Процедите через мелкое сито в бокал со льдом и украсьте долькой апельсина.',
+      ],
+    ],
+    occasions: ['date', 'chill'],
+    flavors: ['bitter', 'fruity', 'sour'],
+    dayparts: ['aperitif', 'evening'],
+    weather: ['mild', 'hot'],
+    difficulty: 2,
+    minutes: 5,
+  }),
+
+  // Source: https://iba-world.com/iba-cocktail/vesper/
+  recipe({
+    id: 'vesper',
+    name: ['Vesper', 'Веспер'],
+    desc: [
+      'Gin, vodka and aromatized wine shaken very cold: strong, dry and made famous by Bond.',
+      'Джин, водка и ароматизированное вино, сильно охлаждённые в шейкере: крепкий, сухой и известный благодаря Бонду.',
+    ],
+    glass: 'martini',
+    method: 'shake',
+    ingredients: [
+      ml('gin', 45),
+      ml('vodka', 15),
+      ml('aromatized-wine', 7.5),
+      fill('ice'),
+      garnish('lemon'),
+    ],
+    steps: [
+      ['Chill a martini glass.', 'Охладите бокал для мартини.'],
+      [
+        'Add all ingredients to a shaker filled with ice.',
+        'Налейте все ингредиенты в шейкер, заполненный льдом.',
+      ],
+      ['Shake hard for about 12 seconds.', 'Энергично встряхивайте около 12 секунд.'],
+      ['Strain into the chilled martini glass.', 'Процедите в охлаждённый бокал для мартини.'],
+      ['Garnish with a lemon zest.', 'Украсьте лимонной цедрой.'],
+    ],
+    occasions: ['date', 'party'],
+    flavors: ['boozy', 'fresh'],
+    dayparts: ['evening'],
+    weather: ['mild', 'cold'],
+    difficulty: 2,
+    minutes: 4,
     iba: true,
   }),
 ];

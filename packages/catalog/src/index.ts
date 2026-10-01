@@ -2,7 +2,7 @@ import { type Catalog, catalog as catalogSchema } from '@sipclock/domain';
 import { ingredients } from './data/ingredients.ts';
 import { recipes } from './data/recipes/index.ts';
 
-export const CATALOG_VERSION = '2026.09.29';
+export const CATALOG_VERSION = '2026.10.01';
 
 export const catalog: Catalog = catalogSchema.parse({
   version: CATALOG_VERSION,

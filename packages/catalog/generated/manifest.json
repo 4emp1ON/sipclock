@@ -1,7 +1,7 @@
 {
-  "version": "2026.09.29",
-  "sha256": "a56d1532f6b37c56753c19e2109815c703bea561cc350a159daa55757976c498",
-  "recipes": 50,
-  "ingredients": 81,
-  "alcoholFree": 12
+  "version": "2026.10.01",
+  "sha256": "5ba44edd74eb141799ca99a2232340ebf534cef1638068b0fc7fd8f1b2b209c5",
+  "recipes": 202,
+  "ingredients": 168,
+  "alcoholFree": 32
 }
