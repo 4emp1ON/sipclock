@@ -140,6 +140,15 @@ describe('catalogSuggestions', () => {
 });
 
 describe('sanitizePicks', () => {
+  it('never rates a loose swap as close', () => {
+    const loose: SubstituteCandidate[] = [
+      { id: 'orgeat', curated: true, loose: true, note: 'Alcohol-free' },
+    ];
+    expect(
+      sanitizePicks([{ ingredientId: 'orgeat', fit: 'close', note: 'Sweeter' }], loose, 'en'),
+    ).toEqual([{ ingredientId: 'orgeat', fit: 'workable', note: 'Sweeter' }]);
+  });
+
   const candidates: SubstituteCandidate[] = 'abcdefgh'.split('').map((id) => ({
     id,
     curated: id === 'a',
