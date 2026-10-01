@@ -6,6 +6,11 @@ packages:
 allowBuilds:
   '@parcel/watcher': true
   '@sentry/cli': true
+  # promptfoo (evals) optional/heavy extras; not needed for the substitutes suite.
+  '@playwright/browser-chromium': false
+  '@swc/core': false
+  onnxruntime-node: false
+  protobufjs: false
   esbuild: true
   sharp: false
   unrs-resolver: false

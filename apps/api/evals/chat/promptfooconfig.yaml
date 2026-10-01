@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# Run from apps/api (the `evals` scripts do). Needs YANDEX_API_KEY and YANDEX_FOLDER_ID, or EVALS_MOCK=1.
+description: Sipclock Bartender chat (tools, language, guardrails)
+
+prompts:
+  - 'Chat: {{question}}' # ignored by the provider; the case comes from vars
+
+providers:
+  # aliceai-llm/latest is left out on purpose: it currently breaks on parallel tool calls in streaming.
+  - id: file://provider.ts
+    label: alice-flash
+    config:
+      model: aliceai-llm-flash/latest
+  - id: file://provider.ts
+    label: yandexgpt-rc
+    config:
+      model: yandexgpt/rc
+
+tests:
+  - path: file://tests.ts:generateTests
+
+defaultTest:
+  options:
+    # Grader for llm-rubric: Alice AI LLM through Yandex's OpenAI-compatible endpoint.
+    provider:
+      id: openai:chat:gpt://{{env.YANDEX_FOLDER_ID}}/aliceai-llm/latest
+      config:
+        apiBaseUrl: https://ai.api.cloud.yandex.net/v1
+        apiKeyEnvar: YANDEX_API_KEY
+        headers:
+          x-folder-id: '{{env.YANDEX_FOLDER_ID}}'
+  assert:
+    - type: javascript
+      value: file://asserts.ts:textIsClean
+    - type: javascript
+      value: file://asserts.ts:recipesExist

@@ -42,8 +42,9 @@ export function mapProxyPath(pathname: string): string | null {
   return null;
 }
 
-/** Upstream timeout: LLM calls need longer than the plain data endpoints. */
+/** Upstream timeout: LLM calls need longer than the plain data endpoints, and a tool-using chat the longest. */
 export function proxyTimeoutMs(pathname: string): number {
+  if (/^\/api\/ai\/chat\/?$/.test(pathname)) return 60_000;
   return /^\/api\/ai(\/|$)/.test(pathname) ? 30_000 : 15_000;
 }
 

@@ -14,7 +14,8 @@ export interface ModelHandle {
   provider: Provider;
   /** Short id for logs and cache keys (no folder ids or secrets). */
   name: string;
-  model: LanguageModel;
+  /** A model object (never a gateway id string), so it can be wrapped in middleware. */
+  model: Exclude<LanguageModel, string>;
   price: TokenPrice;
 }
 

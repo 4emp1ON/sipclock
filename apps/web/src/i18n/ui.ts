@@ -12,7 +12,14 @@ export function isLocale(value: string): value is Locale {
 export interface Ui {
   siteTitle: string;
   siteDescription: string;
-  nav: { today: string; recipes: string; language: string; signIn: string; account: string };
+  nav: {
+    today: string;
+    recipes: string;
+    bartender: string;
+    language: string;
+    signIn: string;
+    account: string;
+  };
   auth: {
     title: string;
     lead: string;
@@ -153,6 +160,37 @@ export interface Ui {
     failed: string;
     retry: string;
   };
+  bartender: {
+    title: string;
+    description: string;
+    heading: string;
+    lead: string;
+    starters: string[];
+    newChat: string;
+    conversation: string;
+    inputLabel: string;
+    placeholder: string;
+    send: string;
+    stop: string;
+    quotaLeft: (n: number) => string;
+    quotaNone: string;
+    disclaimer: string;
+    thinking: string;
+    missing: (names: string) => string;
+    signedOut: { title: string; body: string; signIn: string; today: string };
+    limit: { title: (n: number) => string; body: string; today: string };
+    failed: { title: string; body: string; retry: string };
+    busy: string;
+    tools: Record<
+      | 'get_my_bar'
+      | 'what_can_i_make'
+      | 'search_recipes'
+      | 'get_recipe'
+      | 'find_substitutes'
+      | 'recommend_now',
+      { pending: string; done: string }
+    >;
+  };
   abv: { free: string; alc: string };
   notFound: { title: string; body: string; back: string };
   footer: { warning: string; adult: string };
@@ -166,6 +204,7 @@ const en: Ui = {
   nav: {
     today: 'Today',
     recipes: 'Recipes',
+    bartender: 'Bartender',
     language: 'Language',
     signIn: 'Sign in',
     account: 'Account',
@@ -317,6 +356,58 @@ const en: Ui = {
     failed: "Couldn't load swaps.",
     retry: 'Try again',
   },
+  bartender: {
+    title: 'Bartender',
+    description:
+      'Ask the bartender what to make from your bar, how to swap an ingredient or what suits tonight.',
+    heading: 'Ask the bartender',
+    lead: 'What to make from your bar, how to swap an ingredient, what suits tonight. Answers come from our recipes and your bar.',
+    starters: [
+      'What can I make right now?',
+      'Something light and citrusy',
+      'What can replace vermouth in a Negroni?',
+      'An alcohol-free drink for tonight',
+    ],
+    newChat: 'New chat',
+    conversation: 'Conversation',
+    inputLabel: 'Message the bartender',
+    placeholder: 'Ask about drinks, swaps or your bar',
+    send: 'Send',
+    stop: 'Stop',
+    quotaLeft: (n) => `${n} question${n === 1 ? '' : 's'} left today`,
+    quotaNone: 'No questions left today',
+    disclaimer: 'Answers can be wrong. Excessive alcohol consumption is harmful to your health.',
+    thinking: 'The bartender is answering',
+    missing: (names) => `Missing: ${names}`,
+    signedOut: {
+      title: 'Sign in to ask the bartender',
+      body: 'The bartender knows your bar and favorites, so answers fit what you have at home.',
+      signIn: 'Sign in',
+      today: 'See today’s pick',
+    },
+    limit: {
+      title: (n) => `That’s all ${n} questions for today`,
+      body: 'New questions open at midnight. Recipes, your bar and catalog swaps work as usual.',
+      today: 'See today’s pick',
+    },
+    failed: {
+      title: 'Couldn’t answer right now',
+      body: 'Try again in a minute.',
+      retry: 'Try again',
+    },
+    busy: 'Still answering your last question',
+    tools: {
+      get_my_bar: { pending: 'Checking your bar…', done: 'Checked your bar' },
+      what_can_i_make: {
+        pending: 'Checking what you can make…',
+        done: 'Checked what you can make',
+      },
+      search_recipes: { pending: 'Searching recipes…', done: 'Searched recipes' },
+      get_recipe: { pending: 'Looking up the recipe…', done: 'Looked up the recipe' },
+      find_substitutes: { pending: 'Looking up swaps…', done: 'Looked up swaps' },
+      recommend_now: { pending: 'Picking for right now…', done: 'Picked for right now' },
+    },
+  },
   abv: { free: 'Free', alc: 'Alc.' },
   notFound: {
     title: 'Page not found',
@@ -343,6 +434,7 @@ const ru: Ui = {
   nav: {
     today: 'Сегодня',
     recipes: 'Рецепты',
+    bartender: 'Бармен',
     language: 'Язык',
     signIn: 'Войти',
     account: 'Аккаунт',
@@ -493,6 +585,65 @@ const ru: Ui = {
     limit: 'Дневной лимит ИИ исчерпан. Показываем подборку редакции.',
     failed: 'Не удалось загрузить замены.',
     retry: 'Повторить',
+  },
+  bartender: {
+    title: 'Бармен',
+    description:
+      'Спросите бармена, что приготовить из вашего бара, чем заменить ингредиент и что подойдёт на вечер.',
+    heading: 'Спросите бармена',
+    lead: 'Что приготовить из вашего бара, чем заменить ингредиент, что подойдёт на вечер. Ответы опираются на наши рецепты и ваш бар.',
+    starters: [
+      'Что я могу приготовить прямо сейчас?',
+      'Что-нибудь лёгкое и цитрусовое',
+      'Чем заменить вермут в Негрони?',
+      'Безалкогольный напиток на вечер',
+    ],
+    newChat: 'Новый чат',
+    conversation: 'Разговор',
+    inputLabel: 'Сообщение бармену',
+    placeholder: 'Спросите про напитки, замены или ваш бар',
+    send: 'Отправить',
+    stop: 'Остановить',
+    quotaLeft: (n) => {
+      const m = n % 100;
+      const d = n % 10;
+      if (d === 1 && m !== 11) return `Остался ${n} вопрос на сегодня`;
+      if (d >= 2 && d <= 4 && (m < 12 || m > 14)) return `Осталось ${n} вопроса на сегодня`;
+      return `Осталось ${n} вопросов на сегодня`;
+    },
+    quotaNone: 'На сегодня вопросов не осталось',
+    disclaimer:
+      'Ответы могут быть неточными. Чрезмерное употребление алкоголя вредит вашему здоровью.',
+    thinking: 'Бармен отвечает',
+    missing: (names) => `Не хватает: ${names}`,
+    signedOut: {
+      title: 'Войдите, чтобы спросить бармена',
+      body: 'Бармен знает ваш бар и избранное, поэтому ответы подходят под то, что есть дома.',
+      signIn: 'Войти',
+      today: 'Подборка на сегодня',
+    },
+    limit: {
+      title: (n) => `На сегодня все ${n} вопросов заданы`,
+      body: 'Новые вопросы откроются в полночь. Рецепты, ваш бар и замены из каталога работают как обычно.',
+      today: 'Подборка на сегодня',
+    },
+    failed: {
+      title: 'Сейчас не получается ответить',
+      body: 'Попробуйте ещё раз через минуту.',
+      retry: 'Повторить',
+    },
+    busy: 'Бармен ещё отвечает на прошлый вопрос',
+    tools: {
+      get_my_bar: { pending: 'Смотрим ваш бар…', done: 'Посмотрели ваш бар' },
+      what_can_i_make: {
+        pending: 'Проверяем, что можно приготовить…',
+        done: 'Проверили, что можно приготовить',
+      },
+      search_recipes: { pending: 'Ищем рецепты…', done: 'Поискали рецепты' },
+      get_recipe: { pending: 'Открываем рецепт…', done: 'Открыли рецепт' },
+      find_substitutes: { pending: 'Подбираем замены…', done: 'Подобрали замены' },
+      recommend_now: { pending: 'Выбираем на сейчас…', done: 'Выбрали на сейчас' },
+    },
   },
   abv: { free: 'Без алк.', alc: 'Алк.' },
   notFound: {

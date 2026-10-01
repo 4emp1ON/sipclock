@@ -1,0 +1,41 @@
+name: Evals
+
+# Live model evals cost money and are non-deterministic: run by hand or on an `evals-*` tag, never on push/PR.
+on:
+  workflow_dispatch:
+  push:
+    tags: ['evals-*']
+
+permissions:
+  contents: read
+
+env:
+  PROMPTFOO_DISABLE_TELEMETRY: 1
+  PROMPTFOO_DISABLE_UPDATE: 1
+  PROMPTFOO_DISABLE_SHARING: 1
+
+jobs:
+  substitutes:
+    name: Substitutes and chat (promptfoo)
+    runs-on: ubuntu-latest
+    env:
+      YANDEX_API_KEY: ${{ secrets.YANDEX_API_KEY }}
+      YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Runs both suites; the job fails when an assertion fails in either (writes evals-results-<suite>.json).
+      - name: Run evals
+        run: pnpm --filter @sipclock/api evals --output evals-results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evals-results
+          path: apps/api/evals-results-*.json
+          if-no-files-found: ignore
+          retention-days: 30

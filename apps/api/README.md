@@ -21,6 +21,16 @@ Checks: `pnpm --filter @sipclock/api typecheck`, `pnpm --filter @sipclock/api te
 `DATABASE_URL=postgres://sipclock:sipclock@localhost:5432/sipclock pnpm --filter @sipclock/api test`;
 they create and delete their own users and clear the `jwks` table before and after).
 
+## Evals
+
+Quality checks for the AI "Find a swap" feature (promptfoo, real service and prompt, `evals/substitutes/`).
+Locally: put `YANDEX_API_KEY` and `YANDEX_FOLDER_ID` in `apps/api/.env`, then
+`pnpm --filter @sipclock/api evals` (compares Alice AI LLM Flash and full; the rubric grader is Alice AI LLM too;
+`promptfoo view` shows the table; add `--output out.json` to save results). `evals:mock` runs the same cases with a
+canned model and no key: a pipeline check, case-specific assertions are expected to fail there.
+CI: the `Evals` workflow, manual or on an `evals-*` tag, never on push or PR; needs the `YANDEX_API_KEY` and
+`YANDEX_FOLDER_ID` secrets and uploads `evals-results.json`.
+
 ## Endpoints
 
 | Route | Description |

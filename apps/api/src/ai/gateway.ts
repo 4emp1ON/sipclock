@@ -33,9 +33,30 @@ export type AiOutcome<T> =
   | { ok: false; reason: 'quota'; remaining: 0 }
   | { ok: false; reason: 'unavailable'; remaining: number | null };
 
+/**
+ * A reserved model call whose output is streamed: the request is already counted and the budget reserved.
+ * `settle` must be called exactly once when the stream ends; later calls are ignored.
+ */
+export interface AiLease {
+  model: ModelHandle;
+  remaining: number;
+  /** Charges what the provider reported (the whole reservation when it reported nothing) and logs the call. */
+  settle(usage: TokenUsage | undefined, error?: unknown): Promise<void>;
+}
+
+export type AiLeaseOutcome =
+  | { ok: true; lease: AiLease }
+  | { ok: false; reason: 'quota'; remaining: 0 }
+  | { ok: false; reason: 'unavailable'; remaining: number | null };
+
 export interface AiGateway {
   /** At least one provider is configured. */
   readonly enabled: boolean;
+  /**
+   * Like `run`, for a streamed answer: reserves a request and budget up front and leaves the call to the
+   * caller. No fallback between providers once the stream starts, so the first model that fits is used.
+   */
+  open(caller: AiCaller, feature: string, estimate: CallEstimate): Promise<AiLeaseOutcome>;
   /**
    * One model call on behalf of a user: picks the provider for the user's region, counts it against the
    * daily quota, reserves budget, falls back from Claude to Yandex on failure and records usage.
@@ -74,31 +95,111 @@ export function createAiGateway(options: GatewayOptions): AiGateway {
   const now = options.now ?? (() => new Date());
   const enabled = registry.get('yandex') !== undefined || registry.get('anthropic') !== undefined;
 
+  /** Region, models in fallback order and one request taken from the user's daily quota. */
+  async function admit(
+    caller: AiCaller,
+  ): Promise<
+    | { ok: true; models: ModelHandle[]; day: string; month: string; remaining: number }
+    | { ok: false; reason: 'quota'; remaining: 0 }
+    | { ok: false; reason: 'unavailable'; remaining: null }
+  > {
+    const profile = await store.profile(caller.userId);
+    const decision = decideRegion(
+      { country: caller.country, locale: caller.locale, pinned: profile.pinned },
+      registry.get('anthropic') !== undefined,
+    );
+    if (decision.pin) await store.pin(caller.userId);
+
+    // Claude falls back to Yandex; a Russian user is never moved to Claude.
+    const order: Provider[] =
+      decision.provider === 'anthropic' ? ['anthropic', 'yandex'] : ['yandex'];
+    const models = order
+      .map((p) => registry.get(p))
+      .filter((m): m is ModelHandle => m !== undefined);
+    if (models.length === 0) return { ok: false, reason: 'unavailable', remaining: null };
+
+    const at = now();
+    const day = utcDay(at);
+    const limit = options.dailyLimits[profile.plan] ?? options.dailyLimits.free;
+    const remaining = await store.reserveRequest(caller.userId, day, limit);
+    if (remaining === null) return { ok: false, reason: 'quota', remaining: 0 };
+    return { ok: true, models, day, month: utcMonth(at), remaining };
+  }
+
+  async function record(
+    caller: AiCaller,
+    feature: string,
+    handle: ModelHandle,
+    at: { day: string; month: string; reserved: number; started: number },
+    usage: TokenUsage | undefined,
+    failure: unknown,
+  ): Promise<void> {
+    const cost =
+      usage?.inputTokens === undefined || usage.outputTokens === undefined
+        ? at.reserved
+        : costMicros(handle.price, usage.inputTokens, usage.outputTokens);
+    await store.settleSpend(handle.provider, at.month, at.reserved, cost);
+    await store.addTokens(caller.userId, at.day, usage?.inputTokens ?? 0, usage?.outputTokens ?? 0);
+    const fields = {
+      requestId: caller.requestId,
+      feature,
+      model: handle.name,
+      inputTokens: usage?.inputTokens,
+      outputTokens: usage?.outputTokens,
+      costMicros: cost,
+      ms: Math.round(performance.now() - at.started),
+    };
+    if (failure === undefined) logger.info('ai call', fields);
+    else {
+      logger.warn('ai call failed', {
+        ...fields,
+        error: failure instanceof Error ? failure.message : String(failure),
+      });
+    }
+  }
+
   return {
     enabled,
     store,
+    async open(caller, feature, estimate) {
+      const admitted = await admit(caller);
+      if (!admitted.ok) return admitted;
+      const { models, day, month, remaining } = admitted;
+      for (const handle of models) {
+        const reserved = costMicros(handle.price, estimate.inputTokens, estimate.maxOutputTokens);
+        const fits = await store.reserveSpend(
+          handle.provider,
+          month,
+          reserved,
+          registry.budgets[handle.provider],
+        );
+        if (!fits) {
+          logger.warn('ai budget exhausted', { provider: handle.provider, feature });
+          continue;
+        }
+        const at = { day, month, reserved, started: performance.now() };
+        let settled = false;
+        return {
+          ok: true,
+          lease: {
+            model: handle,
+            remaining,
+            async settle(usage, error) {
+              if (settled) return;
+              settled = true;
+              await record(caller, feature, handle, at, usage, error);
+            },
+          },
+        };
+      }
+      // No model was called: the request goes back to the user.
+      await store.releaseRequest(caller.userId, day);
+      return { ok: false, reason: 'unavailable', remaining: remaining + 1 };
+    },
     async run(caller, feature, estimate, call) {
-      const profile = await store.profile(caller.userId);
-      const decision = decideRegion(
-        { country: caller.country, locale: caller.locale, pinned: profile.pinned },
-        registry.get('anthropic') !== undefined,
-      );
-      if (decision.pin) await store.pin(caller.userId);
-
-      // Claude falls back to Yandex; a Russian user is never moved to Claude.
-      const order: Provider[] =
-        decision.provider === 'anthropic' ? ['anthropic', 'yandex'] : ['yandex'];
-      const models = order
-        .map((p) => registry.get(p))
-        .filter((m): m is ModelHandle => m !== undefined);
-      if (models.length === 0) return { ok: false, reason: 'unavailable', remaining: null };
-
-      const at = now();
-      const day = utcDay(at);
-      const month = utcMonth(at);
-      const limit = options.dailyLimits[profile.plan] ?? options.dailyLimits.free;
-      const remaining = await store.reserveRequest(caller.userId, day, limit);
-      if (remaining === null) return { ok: false, reason: 'quota', remaining: 0 };
+      const admitted = await admit(caller);
+      if (!admitted.ok) return admitted;
+      const { models, day, month, remaining } = admitted;
 
       let attempted = false;
       for (const handle of models) {
@@ -114,45 +215,19 @@ export function createAiGateway(options: GatewayOptions): AiGateway {
           continue;
         }
         attempted = true;
-        const started = performance.now();
+        const at = { day, month, reserved, started: performance.now() };
         let result: Awaited<ReturnType<typeof call>> | undefined;
         let failure: unknown;
         try {
           result = await call(handle);
         } catch (error) {
-          failure = error;
+          // A thrown `undefined` still counts as a failure in the log.
+          failure = error ?? new Error('call failed');
         }
         // A failed call may still be billed (unparsable or truncated output, a timeout after the request
         // was sent): charge what the provider reported, or the whole reservation when it reported nothing.
-        const usage = result?.usage ?? billedUsage(failure);
-        const cost =
-          usage?.inputTokens === undefined || usage.outputTokens === undefined
-            ? reserved
-            : costMicros(handle.price, usage.inputTokens, usage.outputTokens);
-        await store.settleSpend(handle.provider, month, reserved, cost);
-        await store.addTokens(
-          caller.userId,
-          day,
-          usage?.inputTokens ?? 0,
-          usage?.outputTokens ?? 0,
-        );
-        const fields = {
-          requestId: caller.requestId,
-          feature,
-          model: handle.name,
-          inputTokens: usage?.inputTokens,
-          outputTokens: usage?.outputTokens,
-          costMicros: cost,
-          ms: Math.round(performance.now() - started),
-        };
-        if (result) {
-          logger.info('ai call', fields);
-          return { ok: true, value: result.value, model: handle.name, remaining };
-        }
-        logger.warn('ai call failed', {
-          ...fields,
-          error: failure instanceof Error ? failure.message : String(failure),
-        });
+        await record(caller, feature, handle, at, result?.usage ?? billedUsage(failure), failure);
+        if (result) return { ok: true, value: result.value, model: handle.name, remaining };
       }
 
       // The quota is given back only when no model was called; a failed call still cost money.

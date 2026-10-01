@@ -9,6 +9,8 @@ import {
 // Same-origin proxy to the Sipclock API so session cookies are first-party (docs/adr/0006).
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+// The AI chat streams for up to 60 s (see proxyTimeoutMs); Vercel's default function limit is lower.
+export const maxDuration = 60;
 
 // Falls back to the local API only in development; a production deploy without it must fail loudly.
 const API_ORIGIN = (
@@ -41,12 +43,18 @@ async function forward(request: NextRequest): Promise<Response> {
       body: hasBody ? await request.arrayBuffer() : undefined,
       redirect: 'manual',
       cache: 'no-store',
-      signal: AbortSignal.timeout(proxyTimeoutMs(request.nextUrl.pathname)),
+      // The browser leaving (Stop in the chat) cancels the upstream call too, so the API stops the answer.
+      signal: AbortSignal.any([
+        request.signal,
+        AbortSignal.timeout(proxyTimeoutMs(request.nextUrl.pathname)),
+      ]),
     });
     const headers = buildDownstreamHeaders(upstream.headers);
     headers.set('cache-control', 'no-store');
     return new Response(upstream.body, { status: upstream.status, headers });
   } catch (error) {
+    // Nobody is waiting for the answer any more.
+    if (request.signal.aborted) return new Response(null, { status: 499 });
     if (error instanceof DOMException && error.name === 'TimeoutError') {
       return problem(504, 'The API took too long to respond');
     }

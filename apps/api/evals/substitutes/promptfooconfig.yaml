@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# Run from apps/api (the `evals` scripts do). Needs YANDEX_API_KEY and YANDEX_FOLDER_ID, or EVALS_MOCK=1.
+description: Sipclock "Find a swap" (AI substitutes)
+
+prompts:
+  - 'Swap {{ingredientId}} in {{recipeId}}' # ignored by the provider; the case comes from vars
+
+providers:
+  - id: file://provider.ts
+    label: alice-flash
+    config:
+      model: aliceai-llm-flash/latest
+  - id: file://provider.ts
+    label: alice-full
+    config:
+      model: aliceai-llm/latest
+
+# Cases live in tests.ts (the llm-rubric is left out when EVALS_MOCK=1).
+tests:
+  - path: file://tests.ts:generateTests
+
+defaultTest:
+  options:
+    # Grader for llm-rubric: Alice AI LLM through Yandex's OpenAI-compatible endpoint.
+    provider:
+      id: openai:chat:gpt://{{env.YANDEX_FOLDER_ID}}/aliceai-llm/latest
+      config:
+        apiBaseUrl: https://ai.api.cloud.yandex.net/v1
+        apiKeyEnvar: YANDEX_API_KEY
+        headers:
+          x-folder-id: '{{env.YANDEX_FOLDER_ID}}'
+  assert:
+    - type: javascript
+      value: file://asserts.ts:sourceIsAi
+    - type: javascript
+      value: file://asserts.ts:hasSuggestion
+    - type: javascript
+      value: file://asserts.ts:idsAreCandidates
+    - type: javascript
+      value: file://asserts.ts:notesAreClean

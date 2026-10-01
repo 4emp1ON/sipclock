@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Scalar } from '@scalar/hono-api-reference';
+import { createIndex } from '@sipclock/engine';
 import { basicAuth } from 'hono/basic-auth';
 import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
@@ -25,6 +26,7 @@ import { createCatalogRouter } from './routes/catalog.ts';
 import { createMeRouter } from './routes/me.ts';
 import { createRecommendationsRouter } from './routes/recommendations.ts';
 import { createSystemRouter } from './routes/system.ts';
+import { createBrandMasker, createChatToolFactory } from './services/chat.ts';
 import { createHealthService } from './services/health.ts';
 import { createMetaService } from './services/meta.ts';
 import { createRecommendationService } from './services/recommendations.ts';
@@ -36,6 +38,8 @@ export const AUTH_RATE_LIMIT_PER_MIN = 20;
 export const ME_RATE_LIMIT_PER_MIN = 120;
 /** Upper bound for JSON request bodies. */
 export const MAX_JSON_BODY_BYTES = 16 * 1024;
+/** A chat request carries the conversation (up to 20 lines of 2000 characters, often Cyrillic). */
+export const MAX_CHAT_BODY_BYTES = 48 * 1024;
 /** Upper bound for POST /v1/me/changes (500 ops of ~150 bytes, with headroom). */
 export const MAX_CHANGES_BODY_BYTES = 256 * 1024;
 /** Requests per client IP per minute across `/v1/ai/*` (the daily per-user quota applies on top). */
@@ -131,20 +135,25 @@ export function createApp(deps: AppDeps) {
   // AI features: signed-in users only, limited per IP before the session lookup and per user per day.
   if (deps.ai) {
     const { gateway, countryOf } = deps.ai;
+    const catalogIndex = createIndex(deps.catalog.catalog);
     const ipOptions = {
       trustedProxyHops: deps.env.TRUST_PROXY_HOPS,
       edgeProxySecret: deps.env.EDGE_PROXY_SECRET,
     };
-    app.use(
-      '/v1/ai/*',
-      limiter('ai', AI_RATE_LIMIT_PER_MIN),
-      jsonBodyLimit(MAX_JSON_BODY_BYTES),
-      requireSession(deps.auth),
-    );
+    app.use('/v1/ai/*', limiter('ai', AI_RATE_LIMIT_PER_MIN));
+    app.use('/v1/ai/chat', jsonBodyLimit(MAX_CHAT_BODY_BYTES));
+    app.use('/v1/ai/substitutes', jsonBodyLimit(MAX_JSON_BODY_BYTES));
+    app.use('/v1/ai/*', requireSession(deps.auth));
     app.route(
       '/',
       createAiRouter({
         substitutes: createSubstitutesService(deps.catalog, gateway),
+        chat: {
+          gateway,
+          tools: createChatToolFactory({ catalog: deps.catalog, userData: deps.userData }),
+          masker: (locale) => createBrandMasker(catalogIndex, locale),
+          logger: deps.logger,
+        },
         caller: (c, locale) => ({
           userId: c.get('userId'),
           country: countryOf(clientIp(c, ipOptions)),

@@ -186,4 +186,51 @@ describe('createAiGateway', () => {
     expect(out).toEqual({ ok: false, reason: 'unavailable', remaining: null });
     expect(store.usage.size).toBe(0);
   });
+
+  describe('open (streamed calls)', () => {
+    it('reserves a request and budget, then settles what the stream reported, once', async () => {
+      const { gateway, store } = setup({ providers: ['yandex'] });
+      const out = await gateway.open(caller({ country: 'RU', locale: 'ru' }), 'chat', estimate);
+      if (!out.ok) throw new Error('expected a lease');
+      expect(out.lease).toMatchObject({ model: { name: 'yandex/test' }, remaining: 2 });
+      expect(store.spend.get(`yandex:${MONTH}`)).toEqual({ reserved: 200, spent: 0 });
+
+      await out.lease.settle({ inputTokens: 10, outputTokens: 20 });
+      await out.lease.settle({ inputTokens: 1000, outputTokens: 1000 });
+      expect(store.spend.get(`yandex:${MONTH}`)).toEqual({ reserved: 0, spent: 50 });
+      expect(store.usage.get(`u1:${DAY}`)).toEqual({ requests: 1, input: 10, output: 20 });
+    });
+
+    it('charges the whole reservation when the stream reported no usage', async () => {
+      const { gateway, store } = setup({ providers: ['yandex'] });
+      const out = await gateway.open(caller(), 'chat', estimate);
+      if (!out.ok) throw new Error('expected a lease');
+      await out.lease.settle(undefined, new Error('stream broke'));
+      expect(store.spend.get(`yandex:${MONTH}`)).toEqual({ reserved: 0, spent: 200 });
+    });
+
+    it('refuses over the daily quota', async () => {
+      const { gateway } = setup({ limit: 1 });
+      expect((await gateway.open(caller(), 'chat', estimate)).ok).toBe(true);
+      expect(await gateway.open(caller(), 'chat', estimate)).toEqual({
+        ok: false,
+        reason: 'quota',
+        remaining: 0,
+      });
+    });
+
+    it('moves to the next provider when a budget is spent, and returns the request when none fits', async () => {
+      const { gateway } = setup({ budgets: { anthropic: 100 } });
+      const out = await gateway.open(caller(), 'chat', estimate);
+      expect(out.ok && out.lease.model.name).toBe('yandex/test');
+
+      const none = setup({ budgets: { anthropic: 100, yandex: 100 } });
+      expect(await none.gateway.open(caller(), 'chat', estimate)).toEqual({
+        ok: false,
+        reason: 'unavailable',
+        remaining: 3,
+      });
+      expect(none.store.usage.get(`u1:${DAY}`)?.requests ?? 0).toBe(0);
+    });
+  });
 });

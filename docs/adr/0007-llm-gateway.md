@@ -31,7 +31,7 @@ and JSON-schema output, long-lived service-account keys and card billing for ind
   so parallel requests cannot overshoot) and given back if every provider fails. A monthly spend cap per provider
   reserves the worst-case cost of a call (estimated input + `maxOutputTokens`) before it and settles the actual
   cost after; past the cap Claude falls back to Yandex and Yandex answers from the catalog. `/v1/ai/*` also has
-  a per-IP limit and a 16 KB body limit.
+  a per-IP limit and a body limit (16 KB; 48 KB for the chat, see [0008](0008-bartender-chat.md)).
 - **Grounded output.** Models choose among catalog ids (structured output with an enum, re-checked on the
   server) and write short notes. Notes pass output checks (`src/ai/guard.ts`): single line, no links, length
   cap, language matches the locale, no alcohol brands (38-FZ); a failing note is replaced by the editors' note or

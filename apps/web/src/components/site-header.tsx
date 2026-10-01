@@ -23,6 +23,12 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           >
             {ui.nav.recipes}
           </Link>
+          <Link
+            href={`/${locale}/bartender`}
+            className="inline-flex min-h-11 items-center rounded-pill px-3 text-sm font-semibold text-ink-muted hover:text-ink"
+          >
+            {ui.nav.bartender}
+          </Link>
         </nav>
         <AccountLink locale={locale} />
         <LocaleSwitcher locale={locale} label={ui.nav.language} />

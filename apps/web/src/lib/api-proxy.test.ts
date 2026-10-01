@@ -37,7 +37,10 @@ describe('mapProxyPath', () => {
 });
 
 describe('proxyTimeoutMs', () => {
-  it('gives AI paths 30 s and everything else 15 s', () => {
+  it('gives the AI chat 60 s, other AI paths 30 s and everything else 15 s', () => {
+    expect(proxyTimeoutMs('/api/ai/chat')).toBe(60_000);
+    expect(proxyTimeoutMs('/api/ai/chat/')).toBe(60_000);
+    expect(proxyTimeoutMs('/api/ai/chatty')).toBe(30_000);
     expect(proxyTimeoutMs('/api/ai/substitutes')).toBe(30_000);
     expect(proxyTimeoutMs('/api/me/data')).toBe(15_000);
     expect(proxyTimeoutMs('/api/auth/get-session')).toBe(15_000);
@@ -129,6 +132,21 @@ describe('response headers', () => {
   it('passes the AI quota header to the browser', () => {
     const out = buildDownstreamHeaders(new Headers({ 'x-ai-quota-remaining': '7' }));
     expect(out.get('x-ai-quota-remaining')).toBe('7');
+  });
+  it('keeps what an AI SDK stream response needs', () => {
+    const out = buildDownstreamHeaders(
+      new Headers({
+        'content-type': 'text/event-stream',
+        'x-vercel-ai-ui-message-stream': 'v1',
+        'x-ai-quota-remaining': '13',
+        'cache-control': 'no-cache',
+        'transfer-encoding': 'chunked',
+      }),
+    );
+    expect(out.get('content-type')).toBe('text/event-stream');
+    expect(out.get('x-vercel-ai-ui-message-stream')).toBe('v1');
+    expect(out.get('x-ai-quota-remaining')).toBe('13');
+    expect(out.has('transfer-encoding')).toBe(false);
   });
   it('strips Domain from cookies only', () => {
     expect(rewriteSetCookie('a=b; domain=x.com; Secure')).toBe('a=b; Secure');

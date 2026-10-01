@@ -164,7 +164,7 @@ test('guests can save a recipe; it persists in localStorage across reloads', asy
 test('guests are asked to sign in when logging a drink', async ({ page }) => {
   await page.goto('/en/recipes/negroni');
   await page.getByRole('button', { name: 'I made it' }).click();
-  const link = page.getByRole('link', { name: 'Sign in' }).last();
+  const link = page.getByRole('main').getByRole('link', { name: 'Sign in' }).last();
   await expect(link).toHaveAttribute('href', /\/en\/sign-in\?next=%2Fen%2Frecipes%2Fnegroni$/);
   expect(await page.evaluate(() => localStorage.getItem('sipclock.history'))).toBeNull();
 });
@@ -182,4 +182,16 @@ test('the API proxy refuses paths it does not map', async ({ request }) => {
   const res = await request.get('/api/health');
   expect(res.status()).toBe(404);
   expect(res.headers()['content-type']).toContain('application/problem+json');
+});
+
+test('/en/bartender shows the signed-out state with a sign-in link back to the page', async ({
+  page,
+}) => {
+  await page.route('**/api/auth/get-session', (route) => route.fulfill({ json: null }));
+  await page.goto('/en/bartender');
+  await expect(page.getByRole('heading', { name: 'Sign in to ask the bartender' })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('link', { name: 'Sign in' })).toHaveAttribute(
+    'href',
+    '/en/sign-in?next=%2Fen%2Fbartender',
+  );
 });

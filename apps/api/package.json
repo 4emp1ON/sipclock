@@ -12,7 +12,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:migrate:prod": "node src/migrate.ts",
-    "build": "node scripts/bundle.ts"
+    "build": "node scripts/bundle.ts",
+    "evals": "node evals/run.ts",
+    "evals:mock": "EVALS_MOCK=1 node evals/run.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "4.0.69",
@@ -36,6 +38,7 @@
     "@types/node": "24.19.0",
     "drizzle-kit": "0.31.11",
     "esbuild": "0.28.2",
+    "promptfoo": "0.123.1",
     "typescript": "6.0.3",
     "vitest": "5.0.2"
   }

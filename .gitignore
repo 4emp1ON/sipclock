@@ -29,3 +29,8 @@ playwright-report/
 
 # Serena MCP per-machine state
 .serena/
+
+# promptfoo
+.promptfoo/
+apps/api/evals/**/results.json
+evals-results*.json
