@@ -1,12 +1,16 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
 import { useTheme } from '@/hooks/use-theme';
+import { currentLocale } from '@/lib/locale';
+import { strings } from '@/lib/strings';
 
+// Labels come from `strings`, so the tab bar follows the app language.
 const TABS = [
-  { name: 'index', label: 'Today', sf: 'clock', md: 'schedule' },
-  { name: 'my-bar', label: 'My bar', sf: 'wineglass', md: 'local_bar' },
-  { name: 'favorites', label: 'Favorites', sf: 'heart', md: 'favorite' },
-  { name: 'search', label: 'Search', sf: 'magnifyingglass', md: 'search' },
+  { name: 'index', label: 'todayTab', sf: 'clock', md: 'schedule' },
+  { name: 'my-bar', label: 'barTitle', sf: 'wineglass', md: 'local_bar' },
+  { name: 'favorites', label: 'favoritesTitle', sf: 'heart', md: 'favorite' },
+  { name: 'search', label: 'searchTab', sf: 'magnifyingglass', md: 'search' },
+  { name: 'bartender', label: 'bartenderTab', sf: 'bubble.left.and.bubble.right', md: 'chat' },
 ] as const;
 
 export default function AppTabs() {
@@ -24,7 +28,7 @@ export default function AppTabs() {
     >
       {TABS.map((tab) => (
         <NativeTabs.Trigger key={tab.name} name={tab.name}>
-          <NativeTabs.Trigger.Label>{tab.label}</NativeTabs.Trigger.Label>
+          <NativeTabs.Trigger.Label>{strings[currentLocale()][tab.label]}</NativeTabs.Trigger.Label>
           <NativeTabs.Trigger.Icon sf={tab.sf} md={tab.md} />
         </NativeTabs.Trigger>
       ))}
