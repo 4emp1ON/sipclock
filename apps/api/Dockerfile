@@ -19,6 +19,7 @@ RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
 COPY packages/domain ./packages/domain
 COPY packages/catalog ./packages/catalog
 COPY packages/engine ./packages/engine
+COPY packages/i18n ./packages/i18n
 COPY apps/api ./apps/api
 RUN pnpm --filter @sipclock/api build
 
