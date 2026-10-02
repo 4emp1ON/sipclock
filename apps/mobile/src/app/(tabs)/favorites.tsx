@@ -47,7 +47,7 @@ export default function FavoritesScreen() {
               key={recipe.id}
               name={recipe.name[locale]}
               detail={`${glassLabel[locale][recipe.glass]} · ${methodLabel[locale][recipe.method]}`}
-              trailing={`${Math.round(estimateAbv(recipe, catalogIndex()))}%`}
+              abv={Math.round(estimateAbv(recipe, catalogIndex()))}
               onPress={() => router.push(`/recipe/${recipe.id}`)}
             />
           ))}

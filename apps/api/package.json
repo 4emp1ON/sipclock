@@ -26,6 +26,7 @@
     "@sipclock/catalog": "workspace:*",
     "@sipclock/domain": "workspace:*",
     "@sipclock/engine": "workspace:*",
+    "@sipclock/i18n": "workspace:*",
     "ai": "7.0.123",
     "better-auth": "1.7.6",
     "drizzle-orm": "0.45.3",

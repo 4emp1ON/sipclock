@@ -1,18 +1,19 @@
 import { Pressable, View } from 'react-native';
 
+import { AbvBadge } from './abv-badge';
 import { Text } from './text';
 
 export interface DrinkRowProps {
   name: string;
   /** Secondary line, e.g. glass and availability, or when it was made. */
   detail?: string | null;
-  /** Right-aligned value, e.g. strength. */
-  trailing?: string | null;
+  /** Strength of the drink in percent; renders the ABV badge (mint word when 0). */
+  abv?: number | null;
   onPress?: () => void;
 }
 
 /** Compact tappable drink row used in lists (alternatives, favorites, history). */
-export function DrinkRow({ name, detail, trailing, onPress }: DrinkRowProps) {
+export function DrinkRow({ name, detail, abv, onPress }: DrinkRowProps) {
   return (
     <Pressable
       accessibilityRole="button"
@@ -27,11 +28,7 @@ export function DrinkRow({ name, detail, trailing, onPress }: DrinkRowProps) {
           </Text>
         ) : null}
       </View>
-      {trailing ? (
-        <Text variant="label" tone="muted">
-          {trailing}
-        </Text>
-      ) : null}
+      {abv != null ? <AbvBadge percent={abv} /> : null}
     </Pressable>
   );
 }

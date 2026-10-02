@@ -56,6 +56,7 @@ export default async function RecipesPage({ params }: PageProps<'/[locale]/recip
             alcoholFree: ui.recipes.alcoholFree,
             filters: ui.recipes.filters,
             empty: ui.recipes.empty,
+            search: ui.recipes.search,
             min: ui.recipes.min,
             abv: ui.abv,
             count: ui.recipes.countTemplate,

@@ -1,4 +1,4 @@
-// Runs every eval suite in turn and fails if any fails. `--output <file>` writes one file per suite
+// Runs every eval suite in turn (promptfoo suites, then search retrieval) and fails if any fails. `--output <file>` writes one file per suite
 // (`<name>-<suite>.<ext>`); other arguments go to `promptfoo eval` unchanged.
 import { spawnSync } from 'node:child_process';
 import { parse } from 'node:path';
@@ -34,4 +34,9 @@ for (const suite of suites) {
   );
   if (run.status !== 0) status = run.status ?? 1;
 }
+// Retrieval quality of recipe search is measured directly, not through promptfoo.
+console.log('\n=== evals: search ===');
+const search = spawnSync(process.execPath, ['evals/search/run.ts'], { stdio: 'inherit' });
+if (search.status !== 0) status = search.status ?? 1;
+
 process.exit(status);

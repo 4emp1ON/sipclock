@@ -24,5 +24,15 @@ export {
   strengthOf,
   weatherFits,
 } from './rules.ts';
+export {
+  createRecipeSearcher,
+  matchStrength,
+  queryWords,
+  type RecipeSearcher,
+  type SearchField,
+  type SearchHit,
+  searchWords,
+  wordMatches,
+} from './search.ts';
 export type { DisplayAmount, DisplayContext, UnitSystem } from './units.ts';
 export { ML_PER_OZ, partsBase, scaleAmount, toDisplay } from './units.ts';

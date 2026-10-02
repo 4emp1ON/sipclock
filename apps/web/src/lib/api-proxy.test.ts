@@ -17,12 +17,16 @@ describe('mapProxyPath', () => {
     expect(mapProxyPath('/api/me')).toBe('/v1/me');
     expect(mapProxyPath('/api/ai/substitutes')).toBe('/v1/ai/substitutes');
     expect(mapProxyPath('/api/ai')).toBe('/v1/ai');
+    expect(mapProxyPath('/api/search')).toBe('/v1/search');
+    expect(mapProxyPath('/api/search/')).toBe('/v1/search');
   });
   it('rejects everything else', () => {
     expect(mapProxyPath('/api/health')).toBeNull();
     expect(mapProxyPath('/api/authx/foo')).toBeNull();
     expect(mapProxyPath('/api/meow')).toBeNull();
     expect(mapProxyPath('/api/aix/foo')).toBeNull();
+    expect(mapProxyPath('/api/search/x')).toBeNull();
+    expect(mapProxyPath('/api/searchx')).toBeNull();
     expect(mapProxyPath('/api')).toBeNull();
     expect(mapProxyPath('/v1/me/data')).toBeNull();
     // Open redirect in the expo plugin; the web never needs it.
@@ -37,6 +41,9 @@ describe('mapProxyPath', () => {
 });
 
 describe('proxyTimeoutMs', () => {
+  it('keeps the 15 s default for search', () => {
+    expect(proxyTimeoutMs('/api/search')).toBe(15_000);
+  });
   it('gives the AI chat 60 s, other AI paths 30 s and everything else 15 s', () => {
     expect(proxyTimeoutMs('/api/ai/chat')).toBe(60_000);
     expect(proxyTimeoutMs('/api/ai/chat/')).toBe(60_000);

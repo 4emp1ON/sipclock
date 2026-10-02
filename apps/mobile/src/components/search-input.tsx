@@ -7,9 +7,16 @@ export interface SearchInputProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder: string;
+  /** Defaults to the placeholder. */
+  accessibilityLabel?: string;
 }
 
-export function SearchInput({ value, onChangeText, placeholder }: SearchInputProps) {
+export function SearchInput({
+  value,
+  onChangeText,
+  placeholder,
+  accessibilityLabel,
+}: SearchInputProps) {
   const { colors } = useTheme();
   return (
     <TextInput
@@ -17,7 +24,7 @@ export function SearchInput({ value, onChangeText, placeholder }: SearchInputPro
       onChangeText={onChangeText}
       placeholder={placeholder}
       placeholderTextColor={colors['ink-muted']}
-      accessibilityLabel={placeholder}
+      accessibilityLabel={accessibilityLabel ?? placeholder}
       autoCorrect={false}
       autoCapitalize="none"
       clearButtonMode="while-editing"

@@ -26,7 +26,7 @@ and JSON-schema output, long-lived service-account keys and card billing for ind
 - **Claude is reached through a relay** in a supported region (the developer's VPS in Italy): its own nginx
   location and key (`X-Proxy-Key`, stripped before forwarding), an allowlist of the API host's address and
   request rate limits. Without `ANTHROPIC_*` settings every user is served by Yandex.
-- **Signed-in users only, with quotas** (`src/ai/gateway.ts`, `src/ai/store.ts`): a daily request quota per plan
+- **Signed-in users only, with quotas** (generation; recipe search embeddings are public, see [0009](0009-recipe-search.md)) (`src/ai/gateway.ts`, `src/ai/store.ts`): a daily request quota per plan
   (`free` until monetization), reserved atomically before the call (one `INSERT … ON CONFLICT … WHERE` statement,
   so parallel requests cannot overshoot) and given back if every provider fails. A monthly spend cap per provider
   reserves the worst-case cost of a call (estimated input + `maxOutputTokens`) before it and settles the actual

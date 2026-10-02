@@ -25,11 +25,13 @@ import { createAiRouter } from './routes/ai.ts';
 import { createCatalogRouter } from './routes/catalog.ts';
 import { createMeRouter } from './routes/me.ts';
 import { createRecommendationsRouter } from './routes/recommendations.ts';
+import { createSearchRouter } from './routes/search.ts';
 import { createSystemRouter } from './routes/system.ts';
 import { createBrandMasker, createChatToolFactory } from './services/chat.ts';
 import { createHealthService } from './services/health.ts';
 import { createMetaService } from './services/meta.ts';
 import { createRecommendationService } from './services/recommendations.ts';
+import { createMemoryEmbeddingStore, createSearchService } from './services/search.ts';
 import { createSubstitutesService } from './services/substitutes.ts';
 import type { AppDeps, AppEnv } from './types.ts';
 
@@ -44,6 +46,8 @@ export const MAX_CHAT_BODY_BYTES = 48 * 1024;
 export const MAX_CHANGES_BODY_BYTES = 256 * 1024;
 /** Requests per client IP per minute across `/v1/ai/*` (the daily per-user quota applies on top). */
 export const AI_RATE_LIMIT_PER_MIN = 20;
+/** Search requests per client IP per minute (typing is debounced on the clients). */
+export const SEARCH_RATE_LIMIT_PER_MIN = 60;
 
 const ruFirst = (...tags: (string | undefined)[]) =>
   tags.find((t) => t?.toLowerCase().startsWith('ru')) ?? tags.find((t) => t !== undefined);
@@ -132,6 +136,25 @@ export function createApp(deps: AppDeps) {
     createRecommendationsRouter({ recommendations: createRecommendationService(deps.catalog) }),
   );
 
+  // Public search: semantic similarity costs an embedding call, so it is limited per IP, whatever the method
+  // (Hono answers HEAD with the GET handler).
+  app.use('/v1/search', limiter('search', SEARCH_RATE_LIMIT_PER_MIN));
+  app.route(
+    '/',
+    createSearchRouter({
+      search:
+        deps.search ??
+        createSearchService({
+          catalog: deps.catalog,
+          store: createMemoryEmbeddingStore(),
+          embedder: undefined,
+          spend: { reserveSpend: async () => false, settleSpend: async () => {} },
+          budget: 0,
+          logger: deps.logger,
+        }),
+    }),
+  );
+
   // AI features: signed-in users only, limited per IP before the session lookup and per user per day.
   if (deps.ai) {
     const { gateway, countryOf } = deps.ai;
@@ -150,7 +173,11 @@ export function createApp(deps: AppDeps) {
         substitutes: createSubstitutesService(deps.catalog, gateway),
         chat: {
           gateway,
-          tools: createChatToolFactory({ catalog: deps.catalog, userData: deps.userData }),
+          tools: createChatToolFactory({
+            catalog: deps.catalog,
+            userData: deps.userData,
+            ...(deps.search ? { search: deps.search } : {}),
+          }),
           masker: (locale) => createBrandMasker(catalogIndex, locale),
           logger: deps.logger,
         },

@@ -360,17 +360,17 @@ function RecipeRow({ recipe, locale }: { recipe: CardRecipe; locale: Locale }) {
   return (
     <Link
       href={`/${locale}/recipes/${recipe.id}` as Route}
-      className="flex min-h-11 items-start justify-between gap-3 rounded-md bg-surface p-3 hover:bg-surface-raised"
+      className="flex min-h-11 flex-col gap-2 rounded-md bg-surface p-3 hover:bg-surface-raised"
     >
-      <span className="flex flex-col gap-1">
-        <span className="font-display font-semibold leading-snug">{recipe.name}</span>
+      <span className="font-display font-semibold leading-snug">{recipe.name}</span>
+      <span className="flex flex-wrap items-center gap-2">
+        <AbvBadge abv={recipe.abv} labels={ui.abv} />
         {showMissing && (
           <span className="text-sm text-danger">
             {ui.bartender.missing(recipe.missing.join(', '))}
           </span>
         )}
       </span>
-      <AbvBadge abv={recipe.abv} labels={ui.abv} />
     </Link>
   );
 }

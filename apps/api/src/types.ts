@@ -6,6 +6,7 @@ import type { Env } from './env.ts';
 import type { Logger } from './lib/logger.ts';
 import type { RateLimitStore } from './middleware/rate-limit.ts';
 import type { CatalogService } from './services/catalog.ts';
+import type { SearchService } from './services/search.ts';
 import type { UserDataService } from './services/user-data.ts';
 
 export interface AppDeps {
@@ -23,6 +24,8 @@ export interface AppDeps {
   auth: AuthHandler;
   /** AI gateway (`/v1/ai/*`); the routes are not mounted without it. */
   ai?: { gateway: AiGateway; countryOf: CountryLookup };
+  /** Recipe search (`/v1/search`); lexical only when omitted. */
+  search?: SearchService;
   /** Database liveness probe used by /ready. */
   ping: () => Promise<void>;
   logger: Logger;

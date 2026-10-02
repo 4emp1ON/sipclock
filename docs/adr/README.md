@@ -13,3 +13,4 @@ A superseded record stays in place with a link to the one that replaces it.
 | [0006](0006-accounts-and-sync.md) | Accounts and user data sync | Accepted |
 | [0007](0007-llm-gateway.md) | LLM gateway: Yandex + Claude by sticky region, quotas, grounded output | Accepted |
 | [0008](0008-bartender-chat.md) | Bartender chat: streamed answers over read-only tools, quota lease | Accepted |
+| [0009](0009-recipe-search.md) | Recipe search: shared lexical searcher, hybrid with pgvector on the API | Accepted |

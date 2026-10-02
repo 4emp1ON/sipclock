@@ -4,6 +4,7 @@ import {
   availability,
   type CatalogIndex,
   createIndex,
+  createRecipeSearcher,
   estimateAbv,
   hashString,
   isAlcoholFree,
@@ -14,6 +15,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import { BRANDS } from '../ai/guard.ts';
 import type { CatalogService } from './catalog.ts';
+import type { SearchService } from './search.ts';
 import { describeAmount, type Locale, substituteCandidates } from './substitutes.ts';
 import type { UserDataService } from './user-data.ts';
 
@@ -71,10 +73,12 @@ const recipeIdSchema = z.string().max(64).describe('Recipe id from a tool result
 export interface ChatToolsDeps {
   catalog: CatalogService;
   userData: Pick<UserDataService, 'snapshot'>;
+  search?: Pick<SearchService, 'search'>;
 }
 
 export function createChatToolFactory(deps: ChatToolsDeps) {
   const index: CatalogIndex = createIndex(deps.catalog.catalog);
+  const lexical = createRecipeSearcher(index);
   const recipes = deps.catalog.catalog.recipes as Recipe[];
 
   return (ctx: ChatContext): ToolSet => {
@@ -132,23 +136,23 @@ export function createChatToolFactory(deps: ChatToolsDeps) {
 
       search_recipes: tool({
         description:
-          'Search recipes by words in the name, an ingredient, a flavor or a style (e.g. "citrus", "vermouth", "highball").',
+          'Search recipes by name, ingredient, flavor or mood, in English or Russian (e.g. "vermouth", "refreshing with mint").',
         inputSchema: z.object({
           query: z.string().min(1).max(80),
           alcoholFree: z.boolean().optional(),
         }),
         execute: async ({ query, alcoholFree }) => {
-          const words = query
-            .toLowerCase()
-            .split(/[\s,]+/u)
-            .filter((w) => w.length > 1);
-          const scored = recipes
-            .filter((r) => !alcoholFree || isAlcoholFree(r, index))
-            .map((r) => ({ r, score: searchScore(r, words, index) }))
-            .filter((s) => s.score > 0)
-            .sort((a, b) => b.score - a.score);
+          // The hybrid search when the app has one, else the same lexical searcher the clients use offline.
+          const ids = deps.search
+            ? (await deps.search.search(query, 30)).results.map((r) => r.id)
+            : lexical.search(query, { limit: 30 }).map((h) => h.recipeId);
+          const found = ids
+            .map((id) => index.recipes.get(id))
+            .filter(
+              (r): r is Recipe => r !== undefined && (!alcoholFree || isAlcoholFree(r, index)),
+            );
           const have = await bar();
-          return { recipes: scored.slice(0, MAX_RECIPES).map((s) => card(s.r, have)) };
+          return { recipes: found.slice(0, MAX_RECIPES).map((r) => card(r, have)) };
         },
       }),
 
@@ -244,34 +248,6 @@ export function createChatToolFactory(deps: ChatToolsDeps) {
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
-
-function searchScore(recipe: Recipe, words: readonly string[], index: CatalogIndex): number {
-  if (words.length === 0) return 0;
-  const name = `${recipe.name.en} ${recipe.name.ru}`.toLowerCase();
-  const ingredients = recipe.ingredients
-    .map((i) => {
-      const ing = index.ingredients.get(i.ingredient);
-      return `${i.ingredient} ${ing?.name.en ?? ''} ${ing?.name.ru ?? ''}`;
-    })
-    .join(' ')
-    .toLowerCase();
-  const tags = [
-    ...recipe.tags.flavors,
-    ...recipe.tags.occasions,
-    ...recipe.tags.weather,
-    recipe.glass,
-    recipe.method,
-  ]
-    .join(' ')
-    .toLowerCase();
-  let score = 0;
-  for (const w of words) {
-    if (name.includes(w)) score += 3;
-    if (ingredients.includes(w)) score += 2;
-    if (tags.includes(w)) score += 1;
-  }
-  return score;
-}
 
 /** The user's local wall-clock time from an ISO 8601 timestamp with offset, as written (no time-zone math). */
 export function momentFrom(clientTime: string, fallback: Date): Moment {

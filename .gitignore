@@ -34,3 +34,4 @@ playwright-report/
 .promptfoo/
 apps/api/evals/**/results.json
 evals-results*.json
+apps/api/evals/search/.cache/

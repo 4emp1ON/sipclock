@@ -40,16 +40,18 @@ export function PickCard({ name, style, mood, abv, availability }: PickCardProps
           </Text>
         </View>
       ) : null}
-      <View className="absolute inset-x-0 bottom-0 flex-row items-end gap-3 bg-photo-scrim p-5">
-        <View className="flex-1 gap-1">
+      <View className="absolute inset-x-0 bottom-0 bg-photo-scrim p-5">
+        <View className="gap-2">
           <Text variant="drink-title" tone="onPhoto">
             {name}
           </Text>
-          <Text variant="body-sm" tone="onPhotoMuted">
-            {style} · {mood}
-          </Text>
+          <View className="flex-row flex-wrap items-center gap-2">
+            <AbvBadge percent={abv} />
+            <Text variant="body-sm" tone="onPhotoMuted">
+              {style} · {mood}
+            </Text>
+          </View>
         </View>
-        <AbvBadge percent={abv} />
       </View>
     </View>
   );

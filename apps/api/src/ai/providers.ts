@@ -1,6 +1,6 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-import type { LanguageModel } from 'ai';
+import { embed, type LanguageModel } from 'ai';
 import type { Env } from '../env.ts';
 import type { Provider } from './region.ts';
 
@@ -107,4 +107,54 @@ export function createModelRegistry(env: ProviderEnv): ModelRegistry {
 
 export function costMicros(price: TokenPrice, inputTokens: number, outputTokens: number): number {
   return Math.ceil(price.input * inputTokens + price.output * outputTokens);
+}
+
+/** Text embeddings for search: separate document and query models, one input per call. */
+export interface Embedder {
+  provider: Provider;
+  /** Short id stored with each vector, so a model change re-embeds the catalog. */
+  name: string;
+  /** Micro-RUB per token (Yandex text vectorization), for the monthly budget. */
+  pricePerToken: number;
+  embed(
+    kind: 'doc' | 'query',
+    text: string,
+    signal?: AbortSignal,
+  ): Promise<{ vector: number[]; tokens: number }>;
+}
+
+// Yandex text vectorization is priced per 1K tokens far below generation; overestimated on purpose.
+const YANDEX_EMBEDDING_PRICE_PER_TOKEN = 20;
+
+export function createEmbedder(
+  env: Pick<Env, 'YANDEX_API_KEY' | 'YANDEX_FOLDER_ID'>,
+): Embedder | undefined {
+  if (!env.YANDEX_API_KEY || !env.YANDEX_FOLDER_ID) return undefined;
+  const folder = env.YANDEX_FOLDER_ID;
+  const yandex = createOpenAICompatible({
+    name: 'yandex',
+    baseURL: 'https://ai.api.cloud.yandex.net/v1',
+    apiKey: env.YANDEX_API_KEY,
+    headers: { 'x-folder-id': folder },
+  });
+  // Yandex accepts exactly one string per request.
+  const models = {
+    doc: yandex.textEmbeddingModel(`emb://${folder}/text-search-doc/latest`),
+    query: yandex.textEmbeddingModel(`emb://${folder}/text-search-query/latest`),
+  };
+  return {
+    provider: 'yandex',
+    name: 'yandex/text-search/latest',
+    pricePerToken: YANDEX_EMBEDDING_PRICE_PER_TOKEN,
+    async embed(kind, text, signal) {
+      const { embedding, usage } = await embed({
+        model: models[kind],
+        value: text,
+        // Queries must answer fast; the indexer can wait out a rate limit.
+        maxRetries: kind === 'doc' ? 4 : 1,
+        ...(signal ? { abortSignal: signal } : {}),
+      });
+      return { vector: embedding, tokens: usage.tokens };
+    },
+  };
 }

@@ -297,7 +297,7 @@ function RecipeCard({ recipe }: { recipe: ChatRecipe }) {
     <DrinkRow
       name={recipesById.get(recipe.id)?.name[locale] ?? recipe.name}
       detail={detail}
-      trailing={`${Math.round(recipe.abv)}%`}
+      abv={Math.round(recipe.abv)}
       onPress={() => router.push(`/recipe/${recipe.id}`)}
     />
   );

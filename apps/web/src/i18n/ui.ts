@@ -121,6 +121,15 @@ export interface Ui {
     filters: string;
     countTemplate: string;
     empty: string;
+    search: {
+      label: string;
+      placeholder: string;
+      clear: string;
+      similar: string;
+      noMatches: string; // template with {q}
+      noMatchesHint: string;
+      clearSearch: string;
+    };
     min: string;
     metaTitle: (name: string) => string;
     ingredients: string;
@@ -191,7 +200,7 @@ export interface Ui {
       { pending: string; done: string }
     >;
   };
-  abv: { free: string; alc: string };
+  abv: { free: string; aria: string };
   notFound: { title: string; body: string; back: string };
   footer: { warning: string; adult: string };
   occasions: Record<Occasion, string>;
@@ -311,12 +320,21 @@ const en: Ui = {
   recipes: {
     title: 'Cocktail recipes',
     description:
-      'Fifty classic and modern cocktails with ingredients, steps and alcohol-free twins. Pick by occasion or go alcohol-free.',
+      'Classic and modern cocktails with ingredients, steps and alcohol-free twins. Search by name, ingredient or mood, or pick by occasion.',
     all: 'All',
     alcoholFree: 'Alcohol-free',
     filters: 'Filters',
     countTemplate: '{n} recipes',
     empty: 'No recipes match these filters.',
+    search: {
+      label: 'Search recipes',
+      placeholder: 'Name, ingredient or mood: “fresh with mint”',
+      clear: 'Clear',
+      similar: 'Similar in taste',
+      noMatches: 'No matches for “{q}”',
+      noMatchesHint: 'Try an ingredient you have, or a mood like “bitter” or “fresh”.',
+      clearSearch: 'Clear search',
+    },
     min: 'min',
     metaTitle: (name) => `${name} recipe`,
     ingredients: 'Ingredients',
@@ -408,7 +426,7 @@ const en: Ui = {
       recommend_now: { pending: 'Picking for right now…', done: 'Picked for right now' },
     },
   },
-  abv: { free: 'Free', alc: 'Alc.' },
+  abv: { free: 'Alcohol-free', aria: '{percent} percent alcohol' },
   notFound: {
     title: 'Page not found',
     body: 'This page does not exist or has moved.',
@@ -541,12 +559,22 @@ const ru: Ui = {
   recipes: {
     title: 'Рецепты коктейлей',
     description:
-      'Пятьдесят классических и современных коктейлей с ингредиентами, шагами и безалкогольными версиями. Выбирайте по поводу или без алкоголя.',
+      'Классические и современные коктейли с ингредиентами, шагами и безалкогольными версиями. Ищите по названию, ингредиенту или настроению или выбирайте по поводу.',
     all: 'Все',
     alcoholFree: 'Без алкоголя',
     filters: 'Фильтры',
     countTemplate: 'Рецептов: {n}',
     empty: 'Нет рецептов под эти фильтры.',
+    search: {
+      label: 'Поиск рецептов',
+      placeholder: 'Название, ингредиент или настроение: «свежее с мятой»',
+      clear: 'Очистить',
+      similar: 'Похоже по вкусу',
+      noMatches: 'Ничего не нашлось по запросу «{q}»',
+      noMatchesHint:
+        'Попробуйте ингредиент, который есть у вас, или настроение: «горькое», «свежее».',
+      clearSearch: 'Очистить поиск',
+    },
     min: 'мин',
     metaTitle: (name) => `${name}: рецепт`,
     ingredients: 'Ингредиенты',
@@ -645,7 +673,7 @@ const ru: Ui = {
       recommend_now: { pending: 'Выбираем на сейчас…', done: 'Выбрали на сейчас' },
     },
   },
-  abv: { free: 'Без алк.', alc: 'Алк.' },
+  abv: { free: 'Без алкоголя', aria: 'Крепость {percent}%' },
   notFound: {
     title: 'Страница не найдена',
     body: 'Такой страницы нет или она переехала.',

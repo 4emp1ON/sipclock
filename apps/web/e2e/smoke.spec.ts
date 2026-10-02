@@ -91,6 +91,19 @@ test('recipes index lists every recipe and the alcohol-free filter reduces it', 
   expect(await cards.count()).toBeLessThanOrEqual(n);
 });
 
+test('recipe search puts Negroni first and keeps the query in the URL', async ({ page }) => {
+  await page.goto('/en/recipes');
+  await page.getByRole('searchbox', { name: 'Search recipes' }).fill('negroni');
+  const cards = page.getByTestId('recipe-card');
+  await expect(cards.first()).toContainText('Negroni');
+  await expect(page).toHaveURL(/\?q=negroni$/);
+  await page.getByRole('button', { name: 'Clear', exact: true }).click();
+  await expect(cards).toHaveCount(RECIPES);
+  await expect(page).toHaveURL(/\/en\/recipes$/);
+  await page.goto('/en/recipes?q=zzzzqx');
+  await expect(page.getByText('No matches for “zzzzqx”')).toBeVisible();
+});
+
 test('sign-in page validates the email before asking for a code', async ({ page }) => {
   await page.goto('/en/sign-in');
   await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();

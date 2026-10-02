@@ -142,7 +142,7 @@ export default function TodayScreen() {
                     key={alt.recipeId}
                     name={recipe.name[locale]}
                     detail={`${glassLabel[locale][recipe.glass]}${pill ? ` · ${pill}` : ''}`}
-                    trailing={`${alt.abv}%`}
+                    abv={alt.abv}
                     onPress={() => openRecipe(alt.recipeId)}
                   />
                 );

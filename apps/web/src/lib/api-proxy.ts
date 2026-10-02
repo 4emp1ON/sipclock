@@ -26,7 +26,7 @@ const DROPPED_RESPONSE_HEADERS = new Set([
 
 /**
  * Maps a public path to the API path, or null when the proxy must not serve it.
- * `/api/auth/*` -> `/api/auth/*`, `/api/me/*` -> `/v1/me/*`, `/api/ai/*` -> `/v1/ai/*`.
+ * `/api/auth/*` -> `/api/auth/*`, `/api/me/*` -> `/v1/me/*`, `/api/ai/*` -> `/v1/ai/*`, `/api/search` -> `/v1/search`.
  */
 export function mapProxyPath(pathname: string): string | null {
   if (pathname.includes('\\') || /%(2e|2f|5c)/i.test(pathname)) return null;
@@ -39,6 +39,7 @@ export function mapProxyPath(pathname: string): string | null {
   if (me) return `/v1/me${me[1] ?? ''}`;
   const ai = /^\/api\/ai(\/.*)?$/.exec(pathname);
   if (ai) return `/v1/ai${ai[1] ?? ''}`;
+  if (/^\/api\/search\/?$/.test(pathname)) return '/v1/search';
   return null;
 }
 
