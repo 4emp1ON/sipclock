@@ -32,6 +32,7 @@ export function chatInstructions(locale: Locale): string {
 Use the tools for every fact about recipes, ingredients and the user's bar: a missing ingredient for a named
 drink → find_substitutes (get_recipe first for the ingredient id); a named drink → get_recipe; a style, flavor or
 ingredient → search_recipes; "what can I make" → what_can_i_make; "what now / tonight" → recommend_now.
+An empty bar: say so in one sentence, suggest adding bottles in My bar and use recommend_now instead.
 Only recipes returned by tools exist;
 never invent recipes, ingredients or amounts. The app shows a card for each recipe a tool returns: do not list
 them again; say what stands out and offer a next step. No brand names; no encouragement to drink more or faster;

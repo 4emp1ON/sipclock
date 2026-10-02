@@ -127,6 +127,27 @@ const chatBodySchema = z
   })
   .meta({ id: 'ChatRequest' });
 
+const chatRecipeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  abv: z.number(),
+  status: z.enum(['ready', 'swap', 'missing', 'unknown']),
+  missing: z.array(z.string()),
+});
+
+const chatAnswerSchema = z
+  .object({
+    text: z.string(),
+    tools: z
+      .array(z.object({ tool: z.string(), recipes: z.array(chatRecipeSchema) }))
+      .meta({ description: 'Tool calls in order, with the recipes each returned.' }),
+  })
+  .meta({ id: 'ChatAnswer' });
+
+/** JSON instead of a stream: the client asked for JSON and not for server-sent events. */
+const wantsJson = (accept: string | undefined) =>
+  accept?.includes('application/json') === true && !accept.includes('text/event-stream');
+
 const chatRoute = createRoute({
   method: 'post',
   path: '/v1/ai/chat',
@@ -140,8 +161,13 @@ const chatRoute = createRoute({
   },
   responses: {
     200: {
-      description: 'UI message stream (server-sent events)',
-      content: { 'text/event-stream': { schema: z.string() } },
+      description:
+        'UI message stream (server-sent events); the whole answer as JSON when the request accepts ' +
+        '`application/json` and not `text/event-stream` (clients without streaming fetch).',
+      content: {
+        'text/event-stream': { schema: z.string() },
+        'application/json': { schema: chatAnswerSchema },
+      },
       headers: z.object({
         [QUOTA_HEADER]: z.string().meta({ description: 'AI requests left today.' }),
       }),
@@ -281,6 +307,28 @@ export function createAiRouter(deps: {
       } catch (error) {
         await finish(undefined, error);
         throw error;
+      }
+      if (wantsJson(c.req.header('accept'))) {
+        // Errors and aborts are settled by the callbacks above; here they only mean "no answer".
+        await result.consumeStream({ onError: () => {} });
+        let text = '';
+        let tools: { tool: string; recipes: unknown[] }[] = [];
+        try {
+          const steps = await result.steps;
+          text = (await result.text).trim();
+          tools = steps.flatMap((step) =>
+            step.toolResults.map((r) => {
+              const out = r.output as { recipes?: unknown } | undefined;
+              return { tool: r.toolName, recipes: Array.isArray(out?.recipes) ? out.recipes : [] };
+            }),
+          );
+        } catch {
+          text = '';
+        }
+        if (!text) return fail(c, 503, 'The bartender could not answer.');
+        c.header(QUOTA_HEADER, String(lease.remaining));
+        c.header('Cache-Control', 'no-store');
+        return c.json({ text, tools }, 200) as never;
       }
       return result.toUIMessageStreamResponse({
         headers: { [QUOTA_HEADER]: String(lease.remaining), 'Cache-Control': 'no-store' },

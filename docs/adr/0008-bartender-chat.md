@@ -39,4 +39,6 @@ when it calls two tools in parallel.
   shared daily quota (15 on the free plan); the monthly budget cap still bounds the total.
 - The in-memory "one answer per user" lock and the abort handling assume a single API instance; scaling out
   needs the lock in Postgres.
-- Mobile (4c) can reuse the same endpoint; React Native needs `expo/fetch` streaming or a JSON fallback.
+- Mobile (4c) uses the same endpoint with `Accept: application/json`: the route consumes the stream and returns
+  `{ text, tools }` in one response (same quota lease, tools and brand masking). Streaming on mobile can come
+  later with `expo/fetch`.

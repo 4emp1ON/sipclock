@@ -122,6 +122,31 @@ describe('POST /v1/ai/chat', () => {
     expect(store.spend.get(`yandex:${month}`)).toEqual({ reserved: 0, spent: 360 });
   });
 
+  it('answers with JSON for clients that cannot stream', async () => {
+    const { app, store } = makeApp();
+    const res = await app.request('/v1/ai/chat', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+        'x-test-user': 'u1',
+      },
+      body: JSON.stringify(question),
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toContain('application/json');
+    expect(res.headers.get('X-AI-Quota-Remaining')).toBe('4');
+    const body = (await res.json()) as {
+      text: string;
+      tools: { tool: string; recipes: { id: string }[] }[];
+    };
+    expect(body.text).toBe('A Gin & Tonic is ready; add red bitter aperitif for a twist.');
+    expect(body.tools[0]?.tool).toBe('what_can_i_make');
+    expect(body.tools[0]?.recipes.map((r) => r.id)).toContain('gin-and-tonic');
+    const day = new Date().toISOString().slice(0, 10);
+    expect(store.usage.get(`u1:${day}`)).toMatchObject({ requests: 1, input: 300, output: 30 });
+  });
+
   it('requires a session', async () => {
     const { app, model } = makeApp();
     expect((await ask(app, question, null)).status).toBe(401);
